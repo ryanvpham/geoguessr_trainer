@@ -67,12 +67,13 @@ h1 {
 
 .input-container {
     display: flex;
-    gap: 10px;
+    flex-direction: column;
+    gap: 15px;
     margin: 30px 0;
 }
 
-#country-input {
-    flex: 1;
+#country-input, #capital-input {
+    width: 100%;
     padding: 15px 20px;
     font-size: 1.1em;
     border: 2px solid #e0e0e0;
@@ -81,16 +82,17 @@ h1 {
     transition: border-color 0.3s;
 }
 
-#country-input:focus {
+#country-input:focus, #capital-input:focus {
     border-color: #667eea;
 }
 
-#country-input:disabled {
+#country-input:disabled, #capital-input:disabled {
     background-color: #f5f5f5;
     cursor: not-allowed;
 }
 
 #submit-btn, .next-btn {
+    width: 100%;
     padding: 15px 30px;
     font-size: 1.1em;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -149,14 +151,6 @@ h1 {
     
     h1 {
         font-size: 2em;
-    }
-    
-    .input-container {
-        flex-direction: column;
-    }
-    
-    #submit-btn, .next-btn {
-        width: 100%;
     }
 }
 
