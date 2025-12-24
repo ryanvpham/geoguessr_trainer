@@ -218,7 +218,7 @@ const allCountries = [
 // Settings state
 let settings = {
     geoguessrFilter: false,
-    requireCapitals: true
+    requireCapitals: false
 };
 
 // Get filtered countries based on settings
@@ -357,26 +357,28 @@ function loadNewFlag() {
     nextBtn.style.display = 'none';
 }
 
-// Normalize string for comparison (remove punctuation, extra spaces)
+// Normalize string for comparison (remove punctuation, extra spaces, and accents)
 function normalizeString(str) {
     return str.toLowerCase()
+        .normalize('NFD') // Decompose accented characters
+        .replace(/[\u0300-\u036f]/g, '') // Remove accent marks
         .replace(/[.,;:!?'"]/g, '') // Remove punctuation
         .replace(/\s+/g, ' ') // Normalize whitespace
         .trim();
 }
 
-// Check answer (case insensitive, supports aliases)
+// Check answer (case insensitive, supports aliases, accent-insensitive)
 function checkAnswer() {
-    const userCountryAnswer = countryInput.value.trim().toLowerCase();
+    const userCountryAnswer = normalizeString(countryInput.value.trim());
     const userCapitalAnswer = normalizeString(capitalInput.value.trim());
-    const correctCountry = currentCountry.name.toLowerCase();
+    const correctCountry = normalizeString(currentCountry.name);
     const correctCapital = normalizeString(currentCountry.capital);
     
     // Check if country answer matches the country name or any of its aliases
     const allCountryAnswers = [correctCountry];
     if (currentCountry.aliases) {
         currentCountry.aliases.forEach(alias => {
-            allCountryAnswers.push(alias.toLowerCase());
+            allCountryAnswers.push(normalizeString(alias));
         });
     }
     
