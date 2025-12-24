@@ -1,5 +1,21 @@
+// GeoGuessr countries list
+const geoguessrCountries = [
+    'Albania', 'Andorra', 'Argentina', 'Australia', 'Austria', 'Bangladesh', 'Belgium', 'Bhutan',
+    'Bolivia', 'Botswana', 'Brazil', 'Bulgaria', 'Cambodia', 'Canada', 'Chile', 'Colombia',
+    'Croatia', 'Czechia', 'Denmark', 'Dominican Republic', 'Ecuador', 'Estonia', 'Eswatini',
+    'Finland', 'France', 'Germany', 'Ghana', 'Greece', 'Greenland', 'Guatemala', 'Hungary',
+    'Iceland', 'India', 'Indonesia', 'Ireland', 'Israel', 'Italy', 'Japan', 'Jordan', 'Kenya',
+    'Kyrgyzstan', 'Latvia', 'Lebanon', 'Lesotho', 'Lichtenstein', 'Lithuania', 'Luxembourg',
+    'Malaysia', 'Mexico', 'Mongolia', 'Montenegro', 'Namibia', 'Netherlands', 'New Zealand',
+    'Nigeria', 'North Macedonia', 'Norway', 'Oman', 'Palestine', 'Panama', 'Peru', 'Philippines',
+    'Poland', 'Portugal', 'Qatar', 'Romania', 'Russia', 'Rwanda', 'San Marino', 'São Tomé and Príncipe',
+    'Senegal', 'Serbia', 'Singapore', 'Slovakia', 'Slovenia', 'South Africa', 'South Korea',
+    'Spain', 'Sri Lanka', 'Sweden', 'Switzerland', 'Taiwan', 'Thailand', 'Turkey', 'Tunisia',
+    'Ukraine', 'Uganda', 'United Arab Emirates', 'United Kingdom', 'United States', 'Uruguay', 'Vietnam'
+];
+
 // List of countries with their flag codes (ISO 3166-1 alpha-2), aliases, and capitals
-const countries = [
+const allCountries = [
     { name: 'Afghanistan', code: 'AF', capital: 'Kabul' },
     { name: 'Albania', code: 'AL', capital: 'Tirana' },
     { name: 'Algeria', code: 'DZ', capital: 'Algiers' },
@@ -81,6 +97,7 @@ const countries = [
     { name: 'Iraq', code: 'IQ', capital: 'Baghdad' },
     { name: 'Ireland', code: 'IE', capital: 'Dublin', aliases: ['Eire', 'Republic of Ireland'] },
     { name: 'Israel', code: 'IL', capital: 'Jerusalem' },
+    { name: 'Ivory Coast', code: 'CI', capital: 'Yamoussoukro', aliases: ['Côte d\'Ivoire', 'Cote d\'Ivoire'] },
     { name: 'Italy', code: 'IT', capital: 'Rome' },
     { name: 'Jamaica', code: 'JM', capital: 'Kingston' },
     { name: 'Japan', code: 'JP', capital: 'Tokyo' },
@@ -198,29 +215,110 @@ const countries = [
     { name: 'Zimbabwe', code: 'ZW', capital: 'Harare' },
 ];
 
+// Settings state
+let settings = {
+    geoguessrFilter: false,
+    requireCapitals: true
+};
+
+// Get filtered countries based on settings
+function getAvailableCountries() {
+    let filtered = allCountries;
+    
+    if (settings.geoguessrFilter) {
+        // Map GeoGuessr country names to our country objects
+        // Handle special cases like "Czechia" -> "Czech Republic", "Lichtenstein" -> "Liechtenstein"
+        const nameMap = {
+            'Czechia': 'Czech Republic',
+            'Lichtenstein': 'Liechtenstein'
+        };
+        
+        // Note: Greenland is not in our countries list (it's a territory of Denmark)
+        // So we'll skip it in the filter
+        
+        filtered = allCountries.filter(country => {
+            const countryName = country.name;
+            const aliases = country.aliases || [];
+            
+            return geoguessrCountries.some(ggName => {
+                // Skip Greenland as it's not a country in our list
+                if (ggName === 'Greenland') return false;
+                
+                const mappedName = nameMap[ggName] || ggName;
+                return countryName === mappedName || 
+                       countryName === ggName ||
+                       aliases.some(alias => alias === ggName || alias === mappedName);
+            });
+        });
+    }
+    
+    return filtered;
+}
+
 let currentCountry = null;
-let score = 0;
-let streak = 0;
+let correctCount = 0;
+let totalSeen = 0;
 let usedCountries = [];
 let justSubmitted = false;
+let countries = getAvailableCountries();
 
+// DOM elements
+const menuScreen = document.getElementById('menu-screen');
+const settingsScreen = document.getElementById('settings-screen');
+const gameScreen = document.getElementById('game-screen');
+const playBtn = document.getElementById('play-btn');
+const settingsBtn = document.getElementById('settings-btn');
+const backBtn = document.getElementById('back-btn');
+const menuBackBtn = document.getElementById('menu-back-btn');
+const geoguessrFilterCheckbox = document.getElementById('geoguessr-filter');
+const requireCapitalsCheckbox = document.getElementById('require-capitals');
 const flagImg = document.getElementById('flag');
 const countryInput = document.getElementById('country-input');
 const capitalInput = document.getElementById('capital-input');
 const submitBtn = document.getElementById('submit-btn');
 const nextBtn = document.getElementById('next-btn');
 const feedbackDiv = document.getElementById('feedback');
-const scoreSpan = document.getElementById('score');
-const streakSpan = document.getElementById('streak');
+const scoreDisplay = document.getElementById('score-display');
 
-// Get a random country that hasn't been used recently
+// Screen navigation
+function showScreen(screen) {
+    menuScreen.style.display = screen === 'menu' ? 'block' : 'none';
+    settingsScreen.style.display = screen === 'settings' ? 'block' : 'none';
+    gameScreen.style.display = screen === 'game' ? 'block' : 'none';
+}
+
+// Initialize settings from checkboxes
+function updateSettings() {
+    settings.geoguessrFilter = geoguessrFilterCheckbox.checked;
+    settings.requireCapitals = requireCapitalsCheckbox.checked;
+    
+    // Update countries list
+    countries = getAvailableCountries();
+    usedCountries = []; // Reset used countries when settings change
+    
+    // Update capital input visibility
+    if (settings.requireCapitals) {
+        capitalInput.style.display = 'block';
+    } else {
+        capitalInput.style.display = 'none';
+    }
+}
+
+// Update score display
+function updateScoreDisplay() {
+    const percentage = totalSeen > 0 ? Math.round((correctCount / totalSeen) * 100) : 0;
+    scoreDisplay.textContent = `${correctCount} / ${totalSeen} (${percentage}%)`;
+}
+
+// Get a random country that hasn't been used
 function getRandomCountry() {
-    // Reset used countries if we've used all of them
-    if (usedCountries.length >= countries.length) {
-        usedCountries = [];
+    let availableCountries = countries.filter(c => !usedCountries.includes(c.name));
+    
+    if (availableCountries.length === 0) {
+        // All countries have been seen
+        return null;
     }
     
-    let availableCountries = countries.filter(c => !usedCountries.includes(c.name));
     const randomIndex = Math.floor(Math.random() * availableCountries.length);
     const country = availableCountries[randomIndex];
     usedCountries.push(country.name);
@@ -230,6 +328,20 @@ function getRandomCountry() {
 // Load a new flag
 function loadNewFlag() {
     currentCountry = getRandomCountry();
+    
+    if (currentCountry === null) {
+        // All countries have been seen
+        feedbackDiv.textContent = `Congratulations! You've seen all ${countries.length} countries!`;
+        feedbackDiv.className = 'feedback correct';
+        countryInput.disabled = true;
+        capitalInput.disabled = true;
+        submitBtn.disabled = true;
+        nextBtn.style.display = 'none';
+        flagImg.style.display = 'none';
+        return;
+    }
+    
+    flagImg.style.display = 'block';
     flagImg.src = `https://flagcdn.com/w320/${currentCountry.code.toLowerCase()}.png`;
     flagImg.alt = `${currentCountry.name} flag`;
     
@@ -269,14 +381,20 @@ function checkAnswer() {
     }
     
     const isCountryCorrect = allCountryAnswers.includes(userCountryAnswer);
-    const isCapitalCorrect = userCapitalAnswer === correctCapital;
+    const isCapitalCorrect = !settings.requireCapitals || userCapitalAnswer === correctCapital;
     
-    // Both must be correct
+    // Increment total seen
+    totalSeen++;
+    
+    // Both must be correct (or capital not required)
     if (isCountryCorrect && isCapitalCorrect) {
         // Correct answer
-        score++;
-        streak++;
-        feedbackDiv.textContent = `Correct! It's ${currentCountry.name} and the capital is ${currentCountry.capital}`;
+        correctCount++;
+        let feedbackMsg = `Correct! It's ${currentCountry.name}`;
+        if (settings.requireCapitals) {
+            feedbackMsg += ` and the capital is ${currentCountry.capital}`;
+        }
+        feedbackDiv.textContent = feedbackMsg;
         feedbackDiv.className = 'feedback correct';
         countryInput.disabled = true;
         capitalInput.disabled = true;
@@ -284,10 +402,13 @@ function checkAnswer() {
         nextBtn.style.display = 'block';
     } else {
         // Wrong answer - provide specific feedback
-        streak = 0;
         let feedbackMsg = 'Incorrect! ';
-        if (!isCountryCorrect && !isCapitalCorrect) {
-            feedbackMsg += `The country is ${currentCountry.name} and the capital is ${currentCountry.capital}`;
+        if (!isCountryCorrect && (!settings.requireCapitals || !isCapitalCorrect)) {
+            if (settings.requireCapitals) {
+                feedbackMsg += `The country is ${currentCountry.name} and the capital is ${currentCountry.capital}`;
+            } else {
+                feedbackMsg += `The country is ${currentCountry.name}`;
+            }
         } else if (!isCountryCorrect) {
             feedbackMsg += `The country is ${currentCountry.name} (capital was correct)`;
         } else {
@@ -301,8 +422,7 @@ function checkAnswer() {
         nextBtn.style.display = 'block';
     }
     
-    scoreSpan.textContent = score;
-    streakSpan.textContent = streak;
+    updateScoreDisplay();
     
     // Set flag to prevent immediate next flag trigger
     justSubmitted = true;
@@ -311,7 +431,33 @@ function checkAnswer() {
     }, 100);
 }
 
-// Event listeners
+// Start game
+function startGame() {
+    correctCount = 0;
+    totalSeen = 0;
+    usedCountries = [];
+    updateScoreDisplay();
+    updateSettings();
+    showScreen('game');
+    loadNewFlag();
+}
+
+// Event listeners for navigation
+playBtn.addEventListener('click', startGame);
+settingsBtn.addEventListener('click', () => showScreen('settings'));
+backBtn.addEventListener('click', () => showScreen('menu'));
+menuBackBtn.addEventListener('click', () => {
+    showScreen('menu');
+    correctCount = 0;
+    totalSeen = 0;
+    usedCountries = [];
+});
+
+// Settings event listeners
+geoguessrFilterCheckbox.addEventListener('change', updateSettings);
+requireCapitalsCheckbox.addEventListener('change', updateSettings);
+
+// Game event listeners
 submitBtn.addEventListener('click', checkAnswer);
 nextBtn.addEventListener('click', loadNewFlag);
 
@@ -320,8 +466,12 @@ countryInput.addEventListener('keypress', (e) => {
         if (!countryInput.disabled) {
             e.preventDefault();
             e.stopPropagation();
-            // Move focus to capital input
-            capitalInput.focus();
+            // Move focus to capital input if required, otherwise submit
+            if (settings.requireCapitals) {
+                capitalInput.focus();
+            } else {
+                checkAnswer();
+            }
         } else if (nextBtn.style.display !== 'none') {
             // Next button is visible, trigger it
             e.preventDefault();
@@ -351,12 +501,13 @@ document.addEventListener('keypress', (e) => {
     if (e.key === 'Enter' && 
         nextBtn.style.display !== 'none' && 
         countryInput.disabled &&
-        capitalInput.disabled &&
+        (!settings.requireCapitals || capitalInput.disabled) &&
         !justSubmitted) {
         e.preventDefault();
         loadNewFlag();
     }
 });
 
-// Initialize the game
-loadNewFlag();
+// Initialize
+updateSettings();
+showScreen('menu');
