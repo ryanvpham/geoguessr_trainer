@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeoGuessr Flag Trainer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌍 GeoGuessr Flag Trainer</h1>
+            <div class="score">
+                <span>Score: <span id="score">0</span></span>
+                <span>Streak: <span id="streak">0</span></span>
+            </div>
+        </header>
+        
+        <main>
+            <div class="flag-container">
+                <img id="flag" src="" alt="Country Flag" />
+            </div>
+            
+            <div class="input-container">
+                <input 
+                    type="text" 
+                    id="country-input" 
+                    placeholder="Enter country name..."
+                    autocomplete="off"
+                />
+                <button id="submit-btn">Submit</button>
+            </div>
+            
+            <div id="feedback" class="feedback"></div>
+            
+            <button id="next-btn" class="next-btn" style="display: none;">Next Flag</button>
+        </main>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
+
