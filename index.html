@@ -3,44 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GeoGuessr Flag Trainer</title>
+    <title>GeoGuessr Trainer</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>🌍 GeoGuessr Flag Trainer</h1>
-            <div class="score">
-                <span>Score: <span id="score">0</span></span>
-                <span>Streak: <span id="streak">0</span></span>
+        <!-- Menu Screen -->
+        <div id="menu-screen" class="screen">
+            <header>
+                <h1>🌍 GeoGuessr Trainer</h1>
+            </header>
+            <div class="menu-buttons">
+                <button id="play-btn" class="menu-btn">Play</button>
+                <button id="settings-btn" class="menu-btn">Settings</button>
             </div>
-        </header>
-        
-        <main>
-            <div class="flag-container">
-                <img id="flag" src="" alt="Country Flag" />
+        </div>
+
+        <!-- Settings Screen -->
+        <div id="settings-screen" class="screen" style="display: none;">
+            <header>
+                <h1>⚙️ Settings</h1>
+            </header>
+            <div class="settings-content">
+                <div class="setting-item">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="geoguessr-filter" />
+                        <span>GeoGuessr Countries Only</span>
+                    </label>
+                    <p class="setting-description">Filter to only countries that appear in GeoGuessr</p>
+                </div>
+                <div class="setting-item">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="require-capitals" checked />
+                        <span>Require Capital Cities</span>
+                    </label>
+                    <p class="setting-description">Enable capital city input requirement</p>
+                </div>
+                <button id="back-btn" class="menu-btn">Back to Menu</button>
             </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="game-screen" class="screen" style="display: none;">
+            <header>
+                <h1>🌍 GeoGuessr Trainer</h1>
+                <div class="score">
+                    <span id="score-display">0 / 0 (0%)</span>
+                </div>
+                <button id="menu-back-btn" class="menu-back-btn">Menu</button>
+            </header>
             
-            <div class="input-container">
-                <input 
-                    type="text" 
-                    id="country-input" 
-                    placeholder="Enter country name..."
-                    autocomplete="off"
-                />
-                <input 
-                    type="text" 
-                    id="capital-input" 
-                    placeholder="Enter capital city..."
-                    autocomplete="off"
-                />
-                <button id="submit-btn">Submit</button>
-            </div>
-            
-            <div id="feedback" class="feedback"></div>
-            
-            <button id="next-btn" class="next-btn" style="display: none;">Next Flag</button>
-        </main>
+            <main>
+                <div class="flag-container">
+                    <img id="flag" src="" alt="Country Flag" />
+                </div>
+                
+                <div class="input-container">
+                    <input 
+                        type="text" 
+                        id="country-input" 
+                        placeholder="Enter country name..."
+                        autocomplete="off"
+                    />
+                    <input 
+                        type="text" 
+                        id="capital-input" 
+                        placeholder="Enter capital city..."
+                        autocomplete="off"
+                    />
+                    <button id="submit-btn">Submit</button>
+                </div>
+                
+                <div id="feedback" class="feedback"></div>
+                
+                <button id="next-btn" class="next-btn" style="display: none;">Next Flag</button>
+            </main>
+        </div>
     </div>
     
     <script src="script.js"></script>
