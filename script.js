@@ -259,6 +259,11 @@ let currentCountry = null;
 let correctCount = 0;
 let totalSeen = 0;
 let usedCountries = [];
+let incorrectCountries = []; // Track countries answered incorrectly
+let currentRound = 1;
+let roundCorrectCount = 0;
+let roundTotalSeen = 0;
+let roundScores = []; // Track scores for each completed round
 let justSubmitted = false;
 let countries = getAvailableCountries();
 
@@ -279,6 +284,9 @@ const submitBtn = document.getElementById('submit-btn');
 const nextBtn = document.getElementById('next-btn');
 const feedbackDiv = document.getElementById('feedback');
 const scoreDisplay = document.getElementById('score-display');
+const roundNumber = document.getElementById('round-number');
+const roundSummary = document.getElementById('round-summary');
+const roundSummaryContent = document.getElementById('round-summary-content');
 
 // Screen navigation
 function showScreen(screen) {
@@ -307,15 +315,42 @@ function updateSettings() {
 // Update score display
 function updateScoreDisplay() {
     const percentage = totalSeen > 0 ? Math.round((correctCount / totalSeen) * 100) : 0;
-    scoreDisplay.textContent = `${correctCount} / ${totalSeen} (${percentage}%)`;
+    const roundPercentage = roundTotalSeen > 0 ? Math.round((roundCorrectCount / roundTotalSeen) * 100) : 0;
+    scoreDisplay.textContent = `${correctCount} / ${totalSeen} (${percentage}%) | Round: ${roundCorrectCount} / ${roundTotalSeen} (${roundPercentage}%)`;
+    // Only update summary when game is complete
+    if (incorrectCountries.length === 0) {
+        updateRoundSummary();
+    }
 }
 
-// Get a random country that hasn't been used
+// Get a random country that hasn't been used in current round
 function getRandomCountry() {
-    let availableCountries = countries.filter(c => !usedCountries.includes(c.name));
+    // Determine which countries are available for this round
+    let availableForRound;
+    if (currentRound === 1) {
+        // First round: use all countries
+        availableForRound = countries;
+    } else {
+        // Subsequent rounds: only incorrect countries from previous rounds
+        availableForRound = countries.filter(c => incorrectCountries.includes(c.name));
+    }
+    
+    // Filter out countries already used in this round
+    let availableCountries = availableForRound.filter(c => !usedCountries.includes(c.name));
     
     if (availableCountries.length === 0) {
-        // All countries have been seen
+        // Round complete - check if we should start next round
+        if (currentRound === 1 && incorrectCountries.length > 0) {
+            // Start round 2 with incorrect countries
+            return startNextRound();
+        } else if (currentRound > 1) {
+            // Check if there are still incorrect countries to practice
+            const stillIncorrect = countries.filter(c => incorrectCountries.includes(c.name));
+            if (stillIncorrect.length > 0) {
+                return startNextRound();
+            }
+        }
+        // All rounds complete
         return null;
     }
     
@@ -325,18 +360,100 @@ function getRandomCountry() {
     return country;
 }
 
+// Update round summary display (only show when game is complete)
+function updateRoundSummary() {
+    // Only show summary when game is complete (all countries correct)
+    if (incorrectCountries.length === 0 && roundScores.length > 0) {
+        // Save final round if it has progress
+        if (roundTotalSeen > 0 && !roundScores.some(s => s.round === currentRound)) {
+            roundScores.push({
+                round: currentRound,
+                correct: roundCorrectCount,
+                total: roundTotalSeen
+            });
+        }
+        
+        roundSummary.style.display = 'block';
+        let summaryHTML = '';
+        
+        roundScores.forEach((score, index) => {
+            const percentage = score.total > 0 ? Math.round((score.correct / score.total) * 100) : 0;
+            summaryHTML += `
+                <div class="round-summary-item">
+                    <span class="round-label">Round ${index + 1}:</span>
+                    <span class="round-score">${score.correct} / ${score.total} (${percentage}%)</span>
+                </div>
+            `;
+        });
+        
+        roundSummaryContent.innerHTML = summaryHTML;
+    } else {
+        roundSummary.style.display = 'none';
+    }
+}
+
+// Start the next round
+function startNextRound() {
+    // Save current round score before starting next round
+    if (roundTotalSeen > 0) {
+        roundScores.push({
+            round: currentRound,
+            correct: roundCorrectCount,
+            total: roundTotalSeen
+        });
+        // Don't show summary during gameplay
+        roundSummary.style.display = 'none';
+    }
+    
+    currentRound++;
+    usedCountries = []; // Reset used countries for new round
+    roundCorrectCount = 0;
+    roundTotalSeen = 0;
+    roundNumber.textContent = currentRound;
+    
+    // Filter incorrect countries to only those that are still incorrect
+    // (in case user got some right in previous rounds)
+    const stillIncorrect = countries.filter(c => incorrectCountries.includes(c.name));
+    
+    if (stillIncorrect.length === 0) {
+        return null; // No more incorrect countries to practice
+    }
+    
+    // Get a random country from remaining incorrect ones
+    const randomIndex = Math.floor(Math.random() * stillIncorrect.length);
+    const country = stillIncorrect[randomIndex];
+    usedCountries.push(country.name);
+    return country;
+}
+
 // Load a new flag
 function loadNewFlag() {
     currentCountry = getRandomCountry();
     
     if (currentCountry === null) {
-        // All countries have been seen
-        feedbackDiv.textContent = `Congratulations! You've seen all ${countries.length} countries!`;
+        // Round complete - save the round score
+        if (roundTotalSeen > 0) {
+            roundScores.push({
+                round: currentRound,
+                correct: roundCorrectCount,
+                total: roundTotalSeen
+            });
+            updateRoundSummary();
+        }
+        
+        // All rounds complete
+        if (incorrectCountries.length === 0) {
+            feedbackDiv.textContent = `Perfect! You got all ${countries.length} countries correct!`;
+        } else {
+            const remainingCount = incorrectCountries.length;
+            feedbackDiv.textContent = `Round ${currentRound} complete! You have ${remainingCount} country${remainingCount !== 1 ? 'ies' : ''} to practice. Click Next to continue.`;
+        }
         feedbackDiv.className = 'feedback correct';
         countryInput.disabled = true;
         capitalInput.disabled = true;
         submitBtn.disabled = true;
-        nextBtn.style.display = 'none';
+        nextBtn.style.display = 'block';
+        nextBtn.textContent = incorrectCountries.length > 0 ? 'Start Next Round' : 'Back to Menu';
         flagImg.style.display = 'none';
         return;
     }
@@ -355,6 +472,7 @@ function loadNewFlag() {
     feedbackDiv.textContent = '';
     feedbackDiv.className = 'feedback';
     nextBtn.style.display = 'none';
+    nextBtn.textContent = 'Next Flag';
 }
 
 // Normalize string for comparison (remove punctuation, extra spaces, and accents)
@@ -387,11 +505,19 @@ function checkAnswer() {
     
     // Increment total seen
     totalSeen++;
+    roundTotalSeen++;
     
     // Both must be correct (or capital not required)
     if (isCountryCorrect && isCapitalCorrect) {
         // Correct answer
         correctCount++;
+        roundCorrectCount++;
+        
+        // Remove from incorrect list if it was there
+        if (incorrectCountries.includes(currentCountry.name)) {
+            incorrectCountries = incorrectCountries.filter(name => name !== currentCountry.name);
+        }
+        
         let feedbackMsg = `Correct! It's ${currentCountry.name}`;
         if (settings.requireCapitals) {
             feedbackMsg += ` and the capital is ${currentCountry.capital}`;
@@ -403,7 +529,12 @@ function checkAnswer() {
         submitBtn.disabled = true;
         nextBtn.style.display = 'block';
     } else {
-        // Wrong answer - provide specific feedback
+        // Wrong answer - add to incorrect list if not already there
+        if (!incorrectCountries.includes(currentCountry.name)) {
+            incorrectCountries.push(currentCountry.name);
+        }
+        
+        // Provide specific feedback
         let feedbackMsg = 'Incorrect! ';
         if (!isCountryCorrect && (!settings.requireCapitals || !isCapitalCorrect)) {
             if (settings.requireCapitals) {
@@ -437,7 +568,13 @@ function checkAnswer() {
 function startGame() {
     correctCount = 0;
     totalSeen = 0;
+    roundCorrectCount = 0;
+    roundTotalSeen = 0;
     usedCountries = [];
+    incorrectCountries = [];
+    currentRound = 1;
+    roundScores = [];
+    roundNumber.textContent = currentRound;
     updateScoreDisplay();
     updateSettings();
     showScreen('game');
@@ -452,7 +589,13 @@ menuBackBtn.addEventListener('click', () => {
     showScreen('menu');
     correctCount = 0;
     totalSeen = 0;
+    roundCorrectCount = 0;
+    roundTotalSeen = 0;
     usedCountries = [];
+    incorrectCountries = [];
+    currentRound = 1;
+    roundScores = [];
+    roundSummary.style.display = 'none';
 });
 
 // Settings event listeners
@@ -461,7 +604,40 @@ requireCapitalsCheckbox.addEventListener('change', updateSettings);
 
 // Game event listeners
 submitBtn.addEventListener('click', checkAnswer);
-nextBtn.addEventListener('click', loadNewFlag);
+nextBtn.addEventListener('click', () => {
+    if (nextBtn.textContent === 'Start Next Round') {
+        // Start next round (round score already saved in loadNewFlag)
+        currentCountry = startNextRound();
+        if (currentCountry === null) {
+            // No more incorrect countries
+            feedbackDiv.textContent = `Perfect! You've mastered all countries!`;
+            feedbackDiv.className = 'feedback correct';
+            nextBtn.textContent = 'Back to Menu';
+            // Show round summary when game is complete
+            updateRoundSummary();
+            return;
+        }
+        // Load the first flag of the new round
+        flagImg.style.display = 'block';
+        flagImg.src = `https://flagcdn.com/w320/${currentCountry.code.toLowerCase()}.png`;
+        flagImg.alt = `${currentCountry.name} flag`;
+        countryInput.value = '';
+        capitalInput.value = '';
+        countryInput.disabled = false;
+        capitalInput.disabled = false;
+        countryInput.focus();
+        submitBtn.disabled = false;
+        feedbackDiv.textContent = '';
+        feedbackDiv.className = 'feedback';
+        nextBtn.style.display = 'none';
+        nextBtn.textContent = 'Next Flag';
+        roundSummary.style.display = 'none';
+    } else if (nextBtn.textContent === 'Back to Menu') {
+        showScreen('menu');
+    } else {
+        loadNewFlag();
+    }
+});
 
 countryInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
