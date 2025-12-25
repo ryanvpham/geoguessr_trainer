@@ -63,14 +63,20 @@ header h1 {
 
 .score {
     display: flex;
-    justify-content: space-around;
-    font-size: 1.2em;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 1.1em;
     color: #666;
     font-weight: 600;
+    align-items: center;
 }
 
 .score span {
     color: #667eea;
+}
+
+#score-display {
+    font-size: 0.95em;
 }
 
 .flag-container {
@@ -168,6 +174,53 @@ header h1 {
 .next-btn {
     margin-top: 20px;
     width: 100%;
+}
+
+/* Round Summary Styles */
+.round-summary {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    border: 2px solid #e0e0e0;
+}
+
+.round-summary h3 {
+    margin: 0 0 12px 0;
+    color: #333;
+    font-size: 1.1em;
+    font-weight: 600;
+}
+
+.round-summary-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.round-summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    font-size: 0.95em;
+}
+
+.round-summary-item.current {
+    font-weight: 600;
+    color: #667eea;
+    border-top: 1px solid #e0e0e0;
+    padding-top: 10px;
+    margin-top: 4px;
+}
+
+.round-label {
+    color: #666;
+}
+
+.round-score {
+    color: #333;
+    font-weight: 600;
 }
 
 /* Menu Styles */

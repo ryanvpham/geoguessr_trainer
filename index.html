@@ -34,7 +34,7 @@
                 </div>
                 <div class="setting-item">
                     <label class="checkbox-label">
-                        <input type="checkbox" id="require-capitals" checked />
+                        <input type="checkbox" id="require-capitals" />
                         <span>Require Capital Cities</span>
                     </label>
                     <p class="setting-description">Enable capital city input requirement</p>
@@ -48,12 +48,18 @@
             <header>
                 <h1>🌍 GeoGuessr Trainer</h1>
                 <div class="score">
+                    <span>Round: <span id="round-number">1</span></span>
                     <span id="score-display">0 / 0 (0%)</span>
                 </div>
                 <button id="menu-back-btn" class="menu-back-btn">Menu</button>
             </header>
             
             <main>
+                <div id="round-summary" class="round-summary" style="display: none;">
+                    <h3>Round Summary</h3>
+                    <div id="round-summary-content"></div>
+                </div>
+                
                 <div class="flag-container">
                     <img id="flag" src="" alt="Country Flag" />
                 </div>
