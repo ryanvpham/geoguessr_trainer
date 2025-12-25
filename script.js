@@ -16,209 +16,210 @@ const geoguessrCountries = [
 
 // List of countries with their flag codes (ISO 3166-1 alpha-2), aliases, and capitals
 const allCountries = [
-    { name: 'Afghanistan', code: 'AF', capital: 'Kabul' },
-    { name: 'Albania', code: 'AL', capital: 'Tirana' },
-    { name: 'Algeria', code: 'DZ', capital: 'Algiers' },
-    { name: 'Andorra', code: 'AD', capital: 'Andorra la Vella' },
-    { name: 'Angola', code: 'AO', capital: 'Luanda' },
+    { name: 'Afghanistan', code: 'AF', capital: 'Kabul', domain: 'af' },
+    { name: 'Albania', code: 'AL', capital: 'Tirana', domain: 'al' },
+    { name: 'Algeria', code: 'DZ', capital: 'Algiers', domain: 'dz' },
+    { name: 'Andorra', code: 'AD', capital: 'Andorra la Vella', domain: 'ad' },
+    { name: 'Angola', code: 'AO', capital: 'Luanda', domain: 'ao' },
     { name: 'Antigua and Barbuda', code: 'AG', capital: "Saint John's" },
-    { name: 'Argentina', code: 'AR', capital: 'Buenos Aires' },
-    { name: 'Armenia', code: 'AM', capital: 'Yerevan' },
-    { name: 'Australia', code: 'AU', capital: 'Canberra' },
-    { name: 'Austria', code: 'AT', capital: 'Vienna' },
-    { name: 'Azerbaijan', code: 'AZ', capital: 'Baku' },
-    { name: 'Bahamas', code: 'BS', capital: 'Nassau' },
-    { name: 'Bahrain', code: 'BH', capital: 'Manama' },
-    { name: 'Bangladesh', code: 'BD', capital: 'Dhaka' },
-    { name: 'Barbados', code: 'BB', capital: 'Bridgetown' },
-    { name: 'Belarus', code: 'BY', capital: 'Minsk' },
-    { name: 'Belgium', code: 'BE', capital: 'Brussels' },
-    { name: 'Belize', code: 'BZ', capital: 'Belmopan' },
-    { name: 'Benin', code: 'BJ', capital: 'Porto-Novo' },
-    { name: 'Bhutan', code: 'BT', capital: 'Thimphu' },
-    { name: 'Bolivia', code: 'BO', capital: 'Sucre' },
-    { name: 'Bosnia and Herzegovina', code: 'BA', capital: 'Sarajevo' },
-    { name: 'Botswana', code: 'BW', capital: 'Gaborone' },
-    { name: 'Brazil', code: 'BR', capital: 'Brasília' },
-    { name: 'Brunei', code: 'BN', capital: 'Bandar Seri Begawan' },
-    { name: 'Bulgaria', code: 'BG', capital: 'Sofia' },
-    { name: 'Burkina Faso', code: 'BF', capital: 'Ouagadougou' },
-    { name: 'Burundi', code: 'BI', capital: 'Gitega' },
-    { name: 'Cambodia', code: 'KH', capital: 'Phnom Penh' },
-    { name: 'Cameroon', code: 'CM', capital: 'Yaoundé' },
-    { name: 'Canada', code: 'CA', capital: 'Ottawa' },
-    { name: 'Cape Verde', code: 'CV', capital: 'Praia' },
-    { name: 'Central African Republic', code: 'CF', capital: 'Bangui' },
+    { name: 'Argentina', code: 'AR', capital: 'Buenos Aires', domain: 'ar' },
+    { name: 'Armenia', code: 'AM', capital: 'Yerevan', domain: 'am' },
+    { name: 'Australia', code: 'AU', capital: 'Canberra', domain: 'au' },
+    { name: 'Austria', code: 'AT', capital: 'Vienna', domain: 'at' },
+    { name: 'Azerbaijan', code: 'AZ', capital: 'Baku', domain: 'az' },
+    { name: 'Bahamas', code: 'BS', capital: 'Nassau', domain: 'bs' },
+    { name: 'Bahrain', code: 'BH', capital: 'Manama', domain: 'bh' },
+    { name: 'Bangladesh', code: 'BD', capital: 'Dhaka', domain: 'bd' },
+    { name: 'Barbados', code: 'BB', capital: 'Bridgetown', domain: 'bb' },
+    { name: 'Belarus', code: 'BY', capital: 'Minsk', domain: 'by' },
+    { name: 'Belgium', code: 'BE', capital: 'Brussels', domain: 'be' },
+    { name: 'Belize', code: 'BZ', capital: 'Belmopan', domain: 'bz' },
+    { name: 'Benin', code: 'BJ', capital: 'Porto-Novo', domain: 'bj' },
+    { name: 'Bhutan', code: 'BT', capital: 'Thimphu', domain: 'bt' },
+    { name: 'Bolivia', code: 'BO', capital: 'Sucre', domain: 'bo' },
+    { name: 'Bosnia and Herzegovina', code: 'BA', capital: 'Sarajevo', domain: 'ba' },
+    { name: 'Botswana', code: 'BW', capital: 'Gaborone', domain: 'bw' },
+    { name: 'Brazil', code: 'BR', capital: 'Brasília', domain: 'br' },
+    { name: 'Brunei', code: 'BN', capital: 'Bandar Seri Begawan', domain: 'bn' },
+    { name: 'Bulgaria', code: 'BG', capital: 'Sofia', domain: 'bg' },
+    { name: 'Burkina Faso', code: 'BF', capital: 'Ouagadougou', domain: 'bf' },
+    { name: 'Burundi', code: 'BI', capital: 'Gitega', domain: 'bi' },
+    { name: 'Cambodia', code: 'KH', capital: 'Phnom Penh', domain: 'kh' },
+    { name: 'Cameroon', code: 'CM', capital: 'Yaoundé', domain: 'cm' },
+    { name: 'Canada', code: 'CA', capital: 'Ottawa', domain: 'ca' },
+    { name: 'Cape Verde', code: 'CV', capital: 'Praia', domain: 'cv' },
+    { name: 'Central African Republic', code: 'CF', capital: 'Bangui', domain: 'cf' },
     { name: 'Chad', code: 'TD', capital: "N'Djamena" },
-    { name: 'Chile', code: 'CL', capital: 'Santiago' },
-    { name: 'China', code: 'CN', capital: 'Beijing', aliases: ['PRC', "People's Republic of China"] },
-    { name: 'Colombia', code: 'CO', capital: 'Bogotá' },
-    { name: 'Comoros', code: 'KM', capital: 'Moroni' },
-    { name: 'Congo', code: 'CG', capital: 'Brazzaville' },
-    { name: 'Costa Rica', code: 'CR', capital: 'San José' },
-    { name: 'Croatia', code: 'HR', capital: 'Zagreb' },
-    { name: 'Cuba', code: 'CU', capital: 'Havana' },
-    { name: 'Cyprus', code: 'CY', capital: 'Nicosia' },
-    { name: 'Czech Republic', code: 'CZ', capital: 'Prague', aliases: ['Czechia', 'Czech'] },
-    { name: 'Denmark', code: 'DK', capital: 'Copenhagen' },
-    { name: 'Djibouti', code: 'DJ', capital: 'Djibouti' },
-    { name: 'Dominica', code: 'DM', capital: 'Roseau' },
-    { name: 'Dominican Republic', code: 'DO', capital: 'Santo Domingo' },
-    { name: 'DR Congo', code: 'CD', capital: 'Kinshasa', aliases: ['Democratic Republic of the Congo', 'Congo-Kinshasa'] },
-    { name: 'Ecuador', code: 'EC', capital: 'Quito' },
-    { name: 'Egypt', code: 'EG', capital: 'Cairo' },
-    { name: 'El Salvador', code: 'SV', capital: 'San Salvador' },
-    { name: 'Equatorial Guinea', code: 'GQ', capital: 'Malabo' },
-    { name: 'Eritrea', code: 'ER', capital: 'Asmara' },
-    { name: 'Estonia', code: 'EE', capital: 'Tallinn' },
-    { name: 'Eswatini', code: 'SZ', capital: 'Mbabane', aliases: ['Swaziland'] },
-    { name: 'Ethiopia', code: 'ET', capital: 'Addis Ababa' },
-    { name: 'Fiji', code: 'FJ', capital: 'Suva' },
-    { name: 'Finland', code: 'FI', capital: 'Helsinki' },
-    { name: 'France', code: 'FR', capital: 'Paris' },
-    { name: 'Gabon', code: 'GA', capital: 'Libreville' },
-    { name: 'Gambia', code: 'GM', capital: 'Banjul' },
-    { name: 'Georgia', code: 'GE', capital: 'Tbilisi' },
-    { name: 'Germany', code: 'DE', capital: 'Berlin', aliases: ['Deutschland'] },
-    { name: 'Ghana', code: 'GH', capital: 'Accra' },
-    { name: 'Greece', code: 'GR', capital: 'Athens' },
+    { name: 'Chile', code: 'CL', capital: 'Santiago', domain: 'cl' },
+    { name: 'China', code: 'CN', capital: 'Beijing', domain: 'cn', aliases: ['PRC', "People's Republic of China"] },
+    { name: 'Colombia', code: 'CO', capital: 'Bogotá', domain: 'co' },
+    { name: 'Comoros', code: 'KM', capital: 'Moroni', domain: 'km' },
+    { name: 'Congo', code: 'CG', capital: 'Brazzaville', domain: 'cg' },
+    { name: 'Costa Rica', code: 'CR', capital: 'San José', domain: 'cr' },
+    { name: 'Croatia', code: 'HR', capital: 'Zagreb', domain: 'hr' },
+    { name: 'Cuba', code: 'CU', capital: 'Havana', domain: 'cu' },
+    { name: 'Cyprus', code: 'CY', capital: 'Nicosia', domain: 'cy' },
+    { name: 'Czech Republic', code: 'CZ', capital: 'Prague', domain: 'cz', aliases: ['Czechia', 'Czech'] },
+    { name: 'Denmark', code: 'DK', capital: 'Copenhagen', domain: 'dk' },
+    { name: 'Djibouti', code: 'DJ', capital: 'Djibouti', domain: 'dj' },
+    { name: 'Dominica', code: 'DM', capital: 'Roseau', domain: 'dm' },
+    { name: 'Dominican Republic', code: 'DO', capital: 'Santo Domingo', domain: 'do' },
+    { name: 'DR Congo', code: 'CD', capital: 'Kinshasa', domain: 'cd', aliases: ['Democratic Republic of the Congo', 'Congo-Kinshasa'] },
+    { name: 'Ecuador', code: 'EC', capital: 'Quito', domain: 'ec' },
+    { name: 'Egypt', code: 'EG', capital: 'Cairo', domain: 'eg' },
+    { name: 'El Salvador', code: 'SV', capital: 'San Salvador', domain: 'sv' },
+    { name: 'Equatorial Guinea', code: 'GQ', capital: 'Malabo', domain: 'gq' },
+    { name: 'Eritrea', code: 'ER', capital: 'Asmara', domain: 'er' },
+    { name: 'Estonia', code: 'EE', capital: 'Tallinn', domain: 'ee' },
+    { name: 'Eswatini', code: 'SZ', capital: 'Mbabane', domain: 'sz', aliases: ['Swaziland'] },
+    { name: 'Ethiopia', code: 'ET', capital: 'Addis Ababa', domain: 'et' },
+    { name: 'Fiji', code: 'FJ', capital: 'Suva', domain: 'fj' },
+    { name: 'Finland', code: 'FI', capital: 'Helsinki', domain: 'fi' },
+    { name: 'France', code: 'FR', capital: 'Paris', domain: 'fr' },
+    { name: 'Gabon', code: 'GA', capital: 'Libreville', domain: 'ga' },
+    { name: 'Gambia', code: 'GM', capital: 'Banjul', domain: 'gm' },
+    { name: 'Georgia', code: 'GE', capital: 'Tbilisi', domain: 'ge' },
+    { name: 'Germany', code: 'DE', capital: 'Berlin', domain: 'de', aliases: ['Deutschland'] },
+    { name: 'Ghana', code: 'GH', capital: 'Accra', domain: 'gh' },
+    { name: 'Greece', code: 'GR', capital: 'Athens', domain: 'gr' },
     { name: 'Grenada', code: 'GD', capital: "Saint George's" },
-    { name: 'Guatemala', code: 'GT', capital: 'Guatemala City' },
-    { name: 'Guinea', code: 'GN', capital: 'Conakry' },
-    { name: 'Guinea-Bissau', code: 'GW', capital: 'Bissau' },
-    { name: 'Guyana', code: 'GY', capital: 'Georgetown' },
-    { name: 'Haiti', code: 'HT', capital: 'Port-au-Prince' },
-    { name: 'Honduras', code: 'HN', capital: 'Tegucigalpa' },
-    { name: 'Hungary', code: 'HU', capital: 'Budapest' },
-    { name: 'Iceland', code: 'IS', capital: 'Reykjavik' },
-    { name: 'India', code: 'IN', capital: 'New Delhi' },
-    { name: 'Indonesia', code: 'ID', capital: 'Jakarta' },
-    { name: 'Iran', code: 'IR', capital: 'Tehran', aliases: ['Persia'] },
-    { name: 'Iraq', code: 'IQ', capital: 'Baghdad' },
-    { name: 'Ireland', code: 'IE', capital: 'Dublin', aliases: ['Eire', 'Republic of Ireland'] },
-    { name: 'Israel', code: 'IL', capital: 'Jerusalem' },
-    { name: 'Ivory Coast', code: 'CI', capital: 'Yamoussoukro', aliases: ['Côte d\'Ivoire', 'Cote d\'Ivoire'] },
-    { name: 'Italy', code: 'IT', capital: 'Rome' },
-    { name: 'Jamaica', code: 'JM', capital: 'Kingston' },
-    { name: 'Japan', code: 'JP', capital: 'Tokyo' },
-    { name: 'Jordan', code: 'JO', capital: 'Amman' },
-    { name: 'Kazakhstan', code: 'KZ', capital: 'Nur-Sultan' },
-    { name: 'Kenya', code: 'KE', capital: 'Nairobi' },
-    { name: 'Kiribati', code: 'KI', capital: 'Tarawa' },
-    { name: 'Kosovo', code: 'XK', capital: 'Pristina' },
-    { name: 'Kuwait', code: 'KW', capital: 'Kuwait City' },
-    { name: 'Kyrgyzstan', code: 'KG', capital: 'Bishkek' },
-    { name: 'Laos', code: 'LA', capital: 'Vientiane', aliases: ['Lao'] },
-    { name: 'Latvia', code: 'LV', capital: 'Riga' },
-    { name: 'Lebanon', code: 'LB', capital: 'Beirut' },
-    { name: 'Lesotho', code: 'LS', capital: 'Maseru' },
-    { name: 'Liberia', code: 'LR', capital: 'Monrovia' },
-    { name: 'Libya', code: 'LY', capital: 'Tripoli' },
-    { name: 'Liechtenstein', code: 'LI', capital: 'Vaduz' },
-    { name: 'Lithuania', code: 'LT', capital: 'Vilnius' },
-    { name: 'Luxembourg', code: 'LU', capital: 'Luxembourg' },
-    { name: 'Madagascar', code: 'MG', capital: 'Antananarivo' },
-    { name: 'Malawi', code: 'MW', capital: 'Lilongwe' },
-    { name: 'Malaysia', code: 'MY', capital: 'Kuala Lumpur' },
-    { name: 'Maldives', code: 'MV', capital: 'Malé' },
-    { name: 'Mali', code: 'ML', capital: 'Bamako' },
-    { name: 'Malta', code: 'MT', capital: 'Valletta' },
-    { name: 'Marshall Islands', code: 'MH', capital: 'Majuro' },
-    { name: 'Mauritania', code: 'MR', capital: 'Nouakchott' },
-    { name: 'Mauritius', code: 'MU', capital: 'Port Louis' },
-    { name: 'Mexico', code: 'MX', capital: 'Mexico City' },
-    { name: 'Micronesia', code: 'FM', capital: 'Palikir' },
-    { name: 'Moldova', code: 'MD', capital: 'Chișinău' },
-    { name: 'Monaco', code: 'MC', capital: 'Monaco' },
-    { name: 'Mongolia', code: 'MN', capital: 'Ulaanbaatar' },
-    { name: 'Montenegro', code: 'ME', capital: 'Podgorica' },
-    { name: 'Morocco', code: 'MA', capital: 'Rabat' },
-    { name: 'Mozambique', code: 'MZ', capital: 'Maputo' },
-    { name: 'Myanmar', code: 'MM', capital: 'Naypyidaw', aliases: ['Burma'] },
-    { name: 'Namibia', code: 'NA', capital: 'Windhoek' },
-    { name: 'Nauru', code: 'NR', capital: 'Yaren' },
-    { name: 'Nepal', code: 'NP', capital: 'Kathmandu' },
-    { name: 'Netherlands', code: 'NL', capital: 'Amsterdam', aliases: ['Holland'] },
-    { name: 'New Zealand', code: 'NZ', capital: 'Wellington' },
-    { name: 'Nicaragua', code: 'NI', capital: 'Managua' },
-    { name: 'Niger', code: 'NE', capital: 'Niamey' },
-    { name: 'Nigeria', code: 'NG', capital: 'Abuja' },
-    { name: 'North Korea', code: 'KP', capital: 'Pyongyang', aliases: ['DPRK', "Democratic People's Republic of Korea", 'North Korea'] },
-    { name: 'North Macedonia', code: 'MK', capital: 'Skopje', aliases: ['Macedonia'] },
-    { name: 'Norway', code: 'NO', capital: 'Oslo' },
-    { name: 'Oman', code: 'OM', capital: 'Muscat' },
-    { name: 'Pakistan', code: 'PK', capital: 'Islamabad' },
-    { name: 'Palau', code: 'PW', capital: 'Ngerulmud' },
-    { name: 'Palestine', code: 'PS', capital: 'East Jerusalem' },
-    { name: 'Panama', code: 'PA', capital: 'Panama City' },
-    { name: 'Papua New Guinea', code: 'PG', capital: 'Port Moresby' },
-    { name: 'Paraguay', code: 'PY', capital: 'Asunción' },
-    { name: 'Peru', code: 'PE', capital: 'Lima' },
-    { name: 'Philippines', code: 'PH', capital: 'Manila' },
-    { name: 'Poland', code: 'PL', capital: 'Warsaw' },
-    { name: 'Portugal', code: 'PT', capital: 'Lisbon' },
-    { name: 'Qatar', code: 'QA', capital: 'Doha' },
-    { name: 'Romania', code: 'RO', capital: 'Bucharest' },
-    { name: 'Russia', code: 'RU', capital: 'Moscow', aliases: ['Russian Federation', 'Russian'] },
-    { name: 'Rwanda', code: 'RW', capital: 'Kigali' },
-    { name: 'Saint Kitts and Nevis', code: 'KN', capital: 'Basseterre' },
-    { name: 'Saint Lucia', code: 'LC', capital: 'Castries' },
-    { name: 'Saint Vincent and the Grenadines', code: 'VC', capital: 'Kingstown' },
-    { name: 'Samoa', code: 'WS', capital: 'Apia' },
-    { name: 'San Marino', code: 'SM', capital: 'San Marino' },
-    { name: 'São Tomé and Príncipe', code: 'ST', capital: 'São Tomé' },
-    { name: 'Saudi Arabia', code: 'SA', capital: 'Riyadh' },
-    { name: 'Senegal', code: 'SN', capital: 'Dakar' },
-    { name: 'Serbia', code: 'RS', capital: 'Belgrade' },
-    { name: 'Seychelles', code: 'SC', capital: 'Victoria' },
-    { name: 'Sierra Leone', code: 'SL', capital: 'Freetown' },
-    { name: 'Singapore', code: 'SG', capital: 'Singapore' },
-    { name: 'Slovakia', code: 'SK', capital: 'Bratislava' },
-    { name: 'Slovenia', code: 'SI', capital: 'Ljubljana' },
-    { name: 'Solomon Islands', code: 'SB', capital: 'Honiara' },
-    { name: 'Somalia', code: 'SO', capital: 'Mogadishu' },
-    { name: 'South Africa', code: 'ZA', capital: 'Cape Town' },
-    { name: 'South Korea', code: 'KR', capital: 'Seoul', aliases: ['Korea', 'Republic of Korea', 'ROK'] },
-    { name: 'South Sudan', code: 'SS', capital: 'Juba' },
-    { name: 'Spain', code: 'ES', capital: 'Madrid' },
-    { name: 'Sri Lanka', code: 'LK', capital: 'Colombo' },
-    { name: 'Sudan', code: 'SD', capital: 'Khartoum' },
-    { name: 'Suriname', code: 'SR', capital: 'Paramaribo' },
-    { name: 'Sweden', code: 'SE', capital: 'Stockholm' },
-    { name: 'Switzerland', code: 'CH', capital: 'Bern' },
-    { name: 'Syria', code: 'SY', capital: 'Damascus' },
-    { name: 'Taiwan', code: 'TW', capital: 'Taipei', aliases: ['Republic of China', 'ROC'] },
-    { name: 'Tajikistan', code: 'TJ', capital: 'Dushanbe' },
-    { name: 'Tanzania', code: 'TZ', capital: 'Dodoma' },
-    { name: 'Thailand', code: 'TH', capital: 'Bangkok' },
-    { name: 'Timor-Leste', code: 'TL', capital: 'Dili', aliases: ['East Timor'] },
-    { name: 'Togo', code: 'TG', capital: 'Lomé' },
+    { name: 'Guatemala', code: 'GT', capital: 'Guatemala City', domain: 'gt' },
+    { name: 'Guinea', code: 'GN', capital: 'Conakry', domain: 'gn' },
+    { name: 'Guinea-Bissau', code: 'GW', capital: 'Bissau', domain: 'gw' },
+    { name: 'Guyana', code: 'GY', capital: 'Georgetown', domain: 'gy' },
+    { name: 'Haiti', code: 'HT', capital: 'Port-au-Prince', domain: 'ht' },
+    { name: 'Honduras', code: 'HN', capital: 'Tegucigalpa', domain: 'hn' },
+    { name: 'Hungary', code: 'HU', capital: 'Budapest', domain: 'hu' },
+    { name: 'Iceland', code: 'IS', capital: 'Reykjavik', domain: 'is' },
+    { name: 'India', code: 'IN', capital: 'New Delhi', domain: 'in' },
+    { name: 'Indonesia', code: 'ID', capital: 'Jakarta', domain: 'id' },
+    { name: 'Iran', code: 'IR', capital: 'Tehran', domain: 'ir', aliases: ['Persia'] },
+    { name: 'Iraq', code: 'IQ', capital: 'Baghdad', domain: 'iq' },
+    { name: 'Ireland', code: 'IE', capital: 'Dublin', domain: 'ie', aliases: ['Eire', 'Republic of Ireland'] },
+    { name: 'Israel', code: 'IL', capital: 'Jerusalem', domain: 'il' },
+    { name: 'Ivory Coast', code: 'CI', capital: 'Yamoussoukro', domain: 'ci', aliases: ['Côte d\'Ivoire', 'Cote d\'Ivoire'] },
+    { name: 'Italy', code: 'IT', capital: 'Rome', domain: 'it' },
+    { name: 'Jamaica', code: 'JM', capital: 'Kingston', domain: 'jm' },
+    { name: 'Japan', code: 'JP', capital: 'Tokyo', domain: 'jp' },
+    { name: 'Jordan', code: 'JO', capital: 'Amman', domain: 'jo' },
+    { name: 'Kazakhstan', code: 'KZ', capital: 'Nur-Sultan', domain: 'kz' },
+    { name: 'Kenya', code: 'KE', capital: 'Nairobi', domain: 'ke' },
+    { name: 'Kiribati', code: 'KI', capital: 'Tarawa', domain: 'ki' },
+    { name: 'Kosovo', code: 'XK', capital: 'Pristina', domain: 'xk' },
+    { name: 'Kuwait', code: 'KW', capital: 'Kuwait City', domain: 'kw' },
+    { name: 'Kyrgyzstan', code: 'KG', capital: 'Bishkek', domain: 'kg' },
+    { name: 'Laos', code: 'LA', capital: 'Vientiane', domain: 'la', aliases: ['Lao'] },
+    { name: 'Latvia', code: 'LV', capital: 'Riga', domain: 'lv' },
+    { name: 'Lebanon', code: 'LB', capital: 'Beirut', domain: 'lb' },
+    { name: 'Lesotho', code: 'LS', capital: 'Maseru', domain: 'ls' },
+    { name: 'Liberia', code: 'LR', capital: 'Monrovia', domain: 'lr' },
+    { name: 'Libya', code: 'LY', capital: 'Tripoli', domain: 'ly' },
+    { name: 'Liechtenstein', code: 'LI', capital: 'Vaduz', domain: 'li' },
+    { name: 'Lithuania', code: 'LT', capital: 'Vilnius', domain: 'lt' },
+    { name: 'Luxembourg', code: 'LU', capital: 'Luxembourg', domain: 'lu' },
+    { name: 'Madagascar', code: 'MG', capital: 'Antananarivo', domain: 'mg' },
+    { name: 'Malawi', code: 'MW', capital: 'Lilongwe', domain: 'mw' },
+    { name: 'Malaysia', code: 'MY', capital: 'Kuala Lumpur', domain: 'my' },
+    { name: 'Maldives', code: 'MV', capital: 'Malé', domain: 'mv' },
+    { name: 'Mali', code: 'ML', capital: 'Bamako', domain: 'ml' },
+    { name: 'Malta', code: 'MT', capital: 'Valletta', domain: 'mt' },
+    { name: 'Marshall Islands', code: 'MH', capital: 'Majuro', domain: 'mh' },
+    { name: 'Mauritania', code: 'MR', capital: 'Nouakchott', domain: 'mr' },
+    { name: 'Mauritius', code: 'MU', capital: 'Port Louis', domain: 'mu' },
+    { name: 'Mexico', code: 'MX', capital: 'Mexico City', domain: 'mx' },
+    { name: 'Micronesia', code: 'FM', capital: 'Palikir', domain: 'fm' },
+    { name: 'Moldova', code: 'MD', capital: 'Chișinău', domain: 'md' },
+    { name: 'Monaco', code: 'MC', capital: 'Monaco', domain: 'mc' },
+    { name: 'Mongolia', code: 'MN', capital: 'Ulaanbaatar', domain: 'mn' },
+    { name: 'Montenegro', code: 'ME', capital: 'Podgorica', domain: 'me' },
+    { name: 'Morocco', code: 'MA', capital: 'Rabat', domain: 'ma' },
+    { name: 'Mozambique', code: 'MZ', capital: 'Maputo', domain: 'mz' },
+    { name: 'Myanmar', code: 'MM', capital: 'Naypyidaw', domain: 'mm', aliases: ['Burma'] },
+    { name: 'Namibia', code: 'NA', capital: 'Windhoek', domain: 'na' },
+    { name: 'Nauru', code: 'NR', capital: 'Yaren', domain: 'nr' },
+    { name: 'Nepal', code: 'NP', capital: 'Kathmandu', domain: 'np' },
+    { name: 'Netherlands', code: 'NL', capital: 'Amsterdam', domain: 'nl', aliases: ['Holland'] },
+    { name: 'New Zealand', code: 'NZ', capital: 'Wellington', domain: 'nz' },
+    { name: 'Nicaragua', code: 'NI', capital: 'Managua', domain: 'ni' },
+    { name: 'Niger', code: 'NE', capital: 'Niamey', domain: 'ne' },
+    { name: 'Nigeria', code: 'NG', capital: 'Abuja', domain: 'ng' },
+    { name: 'North Korea', code: 'KP', capital: 'Pyongyang', domain: 'kp', aliases: ['DPRK', "Democratic People's Republic of Korea", 'North Korea'] },
+    { name: 'North Macedonia', code: 'MK', capital: 'Skopje', domain: 'mk', aliases: ['Macedonia'] },
+    { name: 'Norway', code: 'NO', capital: 'Oslo', domain: 'no' },
+    { name: 'Oman', code: 'OM', capital: 'Muscat', domain: 'om' },
+    { name: 'Pakistan', code: 'PK', capital: 'Islamabad', domain: 'pk' },
+    { name: 'Palau', code: 'PW', capital: 'Ngerulmud', domain: 'pw' },
+    { name: 'Palestine', code: 'PS', capital: 'East Jerusalem', domain: 'ps' },
+    { name: 'Panama', code: 'PA', capital: 'Panama City', domain: 'pa' },
+    { name: 'Papua New Guinea', code: 'PG', capital: 'Port Moresby', domain: 'pg' },
+    { name: 'Paraguay', code: 'PY', capital: 'Asunción', domain: 'py' },
+    { name: 'Peru', code: 'PE', capital: 'Lima', domain: 'pe' },
+    { name: 'Philippines', code: 'PH', capital: 'Manila', domain: 'ph' },
+    { name: 'Poland', code: 'PL', capital: 'Warsaw', domain: 'pl' },
+    { name: 'Portugal', code: 'PT', capital: 'Lisbon', domain: 'pt' },
+    { name: 'Qatar', code: 'QA', capital: 'Doha', domain: 'qa' },
+    { name: 'Romania', code: 'RO', capital: 'Bucharest', domain: 'ro' },
+    { name: 'Russia', code: 'RU', capital: 'Moscow', domain: 'ru', aliases: ['Russian Federation', 'Russian'] },
+    { name: 'Rwanda', code: 'RW', capital: 'Kigali', domain: 'rw' },
+    { name: 'Saint Kitts and Nevis', code: 'KN', capital: 'Basseterre', domain: 'kn' },
+    { name: 'Saint Lucia', code: 'LC', capital: 'Castries', domain: 'lc' },
+    { name: 'Saint Vincent and the Grenadines', code: 'VC', capital: 'Kingstown', domain: 'vc' },
+    { name: 'Samoa', code: 'WS', capital: 'Apia', domain: 'ws' },
+    { name: 'San Marino', code: 'SM', capital: 'San Marino', domain: 'sm' },
+    { name: 'São Tomé and Príncipe', code: 'ST', capital: 'São Tomé', domain: 'st' },
+    { name: 'Saudi Arabia', code: 'SA', capital: 'Riyadh', domain: 'sa' },
+    { name: 'Senegal', code: 'SN', capital: 'Dakar', domain: 'sn' },
+    { name: 'Serbia', code: 'RS', capital: 'Belgrade', domain: 'rs' },
+    { name: 'Seychelles', code: 'SC', capital: 'Victoria', domain: 'sc' },
+    { name: 'Sierra Leone', code: 'SL', capital: 'Freetown', domain: 'sl' },
+    { name: 'Singapore', code: 'SG', capital: 'Singapore', domain: 'sg' },
+    { name: 'Slovakia', code: 'SK', capital: 'Bratislava', domain: 'sk' },
+    { name: 'Slovenia', code: 'SI', capital: 'Ljubljana', domain: 'si' },
+    { name: 'Solomon Islands', code: 'SB', capital: 'Honiara', domain: 'sb' },
+    { name: 'Somalia', code: 'SO', capital: 'Mogadishu', domain: 'so' },
+    { name: 'South Africa', code: 'ZA', capital: 'Cape Town', domain: 'za' },
+    { name: 'South Korea', code: 'KR', capital: 'Seoul', domain: 'kr', aliases: ['Korea', 'Republic of Korea', 'ROK'] },
+    { name: 'South Sudan', code: 'SS', capital: 'Juba', domain: 'ss' },
+    { name: 'Spain', code: 'ES', capital: 'Madrid', domain: 'es' },
+    { name: 'Sri Lanka', code: 'LK', capital: 'Colombo', domain: 'lk' },
+    { name: 'Sudan', code: 'SD', capital: 'Khartoum', domain: 'sd' },
+    { name: 'Suriname', code: 'SR', capital: 'Paramaribo', domain: 'sr' },
+    { name: 'Sweden', code: 'SE', capital: 'Stockholm', domain: 'se' },
+    { name: 'Switzerland', code: 'CH', capital: 'Bern', domain: 'ch' },
+    { name: 'Syria', code: 'SY', capital: 'Damascus', domain: 'sy' },
+    { name: 'Taiwan', code: 'TW', capital: 'Taipei', domain: 'tw', aliases: ['Republic of China', 'ROC'] },
+    { name: 'Tajikistan', code: 'TJ', capital: 'Dushanbe', domain: 'tj' },
+    { name: 'Tanzania', code: 'TZ', capital: 'Dodoma', domain: 'tz' },
+    { name: 'Thailand', code: 'TH', capital: 'Bangkok', domain: 'th' },
+    { name: 'Timor-Leste', code: 'TL', capital: 'Dili', domain: 'tl', aliases: ['East Timor'] },
+    { name: 'Togo', code: 'TG', capital: 'Lomé', domain: 'tg' },
     { name: 'Tonga', code: 'TO', capital: "Nuku'alofa" },
-    { name: 'Trinidad and Tobago', code: 'TT', capital: 'Port of Spain' },
-    { name: 'Tunisia', code: 'TN', capital: 'Tunis' },
-    { name: 'Turkey', code: 'TR', capital: 'Ankara' },
-    { name: 'Turkmenistan', code: 'TM', capital: 'Ashgabat' },
-    { name: 'Tuvalu', code: 'TV', capital: 'Funafuti' },
-    { name: 'Uganda', code: 'UG', capital: 'Kampala' },
-    { name: 'Ukraine', code: 'UA', capital: 'Kyiv' },
-    { name: 'United Arab Emirates', code: 'AE', capital: 'Abu Dhabi', aliases: ['UAE'] },
-    { name: 'United Kingdom', code: 'GB', capital: 'London', aliases: ['UK', 'Great Britain', 'Britain', 'England'] },
-    { name: 'United States', code: 'US', capital: 'Washington, D.C.', aliases: ['USA', 'US', 'America', 'United States of America'] },
-    { name: 'Uruguay', code: 'UY', capital: 'Montevideo' },
-    { name: 'Uzbekistan', code: 'UZ', capital: 'Tashkent' },
-    { name: 'Vanuatu', code: 'VU', capital: 'Port Vila' },
-    { name: 'Vatican City', code: 'VA', capital: 'Vatican City', aliases: ['Holy See'] },
-    { name: 'Venezuela', code: 'VE', capital: 'Caracas' },
-    { name: 'Vietnam', code: 'VN', capital: 'Hanoi' },
+    { name: 'Trinidad and Tobago', code: 'TT', capital: 'Port of Spain', domain: 'tt' },
+    { name: 'Tunisia', code: 'TN', capital: 'Tunis', domain: 'tn' },
+    { name: 'Turkey', code: 'TR', capital: 'Ankara', domain: 'tr' },
+    { name: 'Turkmenistan', code: 'TM', capital: 'Ashgabat', domain: 'tm' },
+    { name: 'Tuvalu', code: 'TV', capital: 'Funafuti', domain: 'tv' },
+    { name: 'Uganda', code: 'UG', capital: 'Kampala', domain: 'ug' },
+    { name: 'Ukraine', code: 'UA', capital: 'Kyiv', domain: 'ua' },
+    { name: 'United Arab Emirates', code: 'AE', capital: 'Abu Dhabi', domain: 'ae', aliases: ['UAE'] },
+    { name: 'United Kingdom', code: 'GB', capital: 'London', domain: 'uk', aliases: ['UK', 'Great Britain', 'Britain', 'England'] },
+    { name: 'United States', code: 'US', capital: 'Washington, D.C.', domain: 'us', aliases: ['USA', 'US', 'America', 'United States of America'] },
+    { name: 'Uruguay', code: 'UY', capital: 'Montevideo', domain: 'uy' },
+    { name: 'Uzbekistan', code: 'UZ', capital: 'Tashkent', domain: 'uz' },
+    { name: 'Vanuatu', code: 'VU', capital: 'Port Vila', domain: 'vu' },
+    { name: 'Vatican City', code: 'VA', capital: 'Vatican City', domain: 'va', aliases: ['Holy See'] },
+    { name: 'Venezuela', code: 'VE', capital: 'Caracas', domain: 've' },
+    { name: 'Vietnam', code: 'VN', capital: 'Hanoi', domain: 'vn' },
     { name: 'Yemen', code: 'YE', capital: 'Sana\'a' },
-    { name: 'Zambia', code: 'ZM', capital: 'Lusaka' },
-    { name: 'Zimbabwe', code: 'ZW', capital: 'Harare' },
+    { name: 'Zambia', code: 'ZM', capital: 'Lusaka', domain: 'zm' },
+    { name: 'Zimbabwe', code: 'ZW', capital: 'Harare', domain: 'zw' },
 ];
 
 // Settings state
 let settings = {
     geoguessrFilter: false,
-    requireCapitals: false
+    requireCapitals: false,
+    requireDomains: false
 };
 
 // Get filtered countries based on settings
@@ -277,9 +278,11 @@ const backBtn = document.getElementById('back-btn');
 const menuBackBtn = document.getElementById('menu-back-btn');
 const geoguessrFilterCheckbox = document.getElementById('geoguessr-filter');
 const requireCapitalsCheckbox = document.getElementById('require-capitals');
+const requireDomainsCheckbox = document.getElementById('require-domains');
 const flagImg = document.getElementById('flag');
 const countryInput = document.getElementById('country-input');
 const capitalInput = document.getElementById('capital-input');
+const domainInput = document.getElementById('domain-input');
 const submitBtn = document.getElementById('submit-btn');
 const nextBtn = document.getElementById('next-btn');
 const feedbackDiv = document.getElementById('feedback');
@@ -299,6 +302,7 @@ function showScreen(screen) {
 function updateSettings() {
     settings.geoguessrFilter = geoguessrFilterCheckbox.checked;
     settings.requireCapitals = requireCapitalsCheckbox.checked;
+    settings.requireDomains = requireDomainsCheckbox.checked;
     
     // Update countries list
     countries = getAvailableCountries();
@@ -309,6 +313,13 @@ function updateSettings() {
         capitalInput.style.display = 'block';
     } else {
         capitalInput.style.display = 'none';
+    }
+    
+    // Update domain input visibility
+    if (settings.requireDomains) {
+        domainInput.style.display = 'block';
+    } else {
+        domainInput.style.display = 'none';
     }
 }
 
@@ -451,6 +462,7 @@ function loadNewFlag() {
         feedbackDiv.className = 'feedback correct';
         countryInput.disabled = true;
         capitalInput.disabled = true;
+        domainInput.disabled = true;
         submitBtn.disabled = true;
         nextBtn.style.display = 'block';
         nextBtn.textContent = incorrectCountries.length > 0 ? 'Start Next Round' : 'Back to Menu';
@@ -465,8 +477,10 @@ function loadNewFlag() {
     // Reset UI
     countryInput.value = '';
     capitalInput.value = '';
+    domainInput.value = '';
     countryInput.disabled = false;
     capitalInput.disabled = false;
+    domainInput.disabled = false;
     countryInput.focus();
     submitBtn.disabled = false;
     feedbackDiv.textContent = '';
@@ -489,8 +503,10 @@ function normalizeString(str) {
 function checkAnswer() {
     const userCountryAnswer = normalizeString(countryInput.value.trim());
     const userCapitalAnswer = normalizeString(capitalInput.value.trim());
+    const userDomainAnswer = normalizeString(domainInput.value.trim());
     const correctCountry = normalizeString(currentCountry.name);
     const correctCapital = normalizeString(currentCountry.capital);
+    const correctDomain = currentCountry.domain ? normalizeString(currentCountry.domain) : '';
     
     // Check if country answer matches the country name or any of its aliases
     const allCountryAnswers = [correctCountry];
@@ -502,13 +518,16 @@ function checkAnswer() {
     
     const isCountryCorrect = allCountryAnswers.includes(userCountryAnswer);
     const isCapitalCorrect = !settings.requireCapitals || userCapitalAnswer === correctCapital;
+    // Domain is correct if: not required OR (user answer matches correct domain OR both are empty)
+    const isDomainCorrect = !settings.requireDomains || 
+        (userDomainAnswer === correctDomain || (userDomainAnswer === '' && correctDomain === ''));
     
     // Increment total seen
     totalSeen++;
     roundTotalSeen++;
     
-    // Both must be correct (or capital not required)
-    if (isCountryCorrect && isCapitalCorrect) {
+    // All required fields must be correct
+    if (isCountryCorrect && isCapitalCorrect && isDomainCorrect) {
         // Correct answer
         correctCount++;
         roundCorrectCount++;
@@ -522,10 +541,14 @@ function checkAnswer() {
         if (settings.requireCapitals) {
             feedbackMsg += ` and the capital is ${currentCountry.capital}`;
         }
+        if (settings.requireDomains && currentCountry.domain) {
+            feedbackMsg += ` (domain: .${currentCountry.domain})`;
+        }
         feedbackDiv.textContent = feedbackMsg;
         feedbackDiv.className = 'feedback correct';
         countryInput.disabled = true;
         capitalInput.disabled = true;
+        domainInput.disabled = true;
         submitBtn.disabled = true;
         nextBtn.style.display = 'block';
     } else {
@@ -534,23 +557,43 @@ function checkAnswer() {
             incorrectCountries.push(currentCountry.name);
         }
         
-        // Provide specific feedback
+        // Provide specific feedback showing which inputs were wrong and correct answers
         let feedbackMsg = 'Incorrect! ';
-        if (!isCountryCorrect && (!settings.requireCapitals || !isCapitalCorrect)) {
-            if (settings.requireCapitals) {
-                feedbackMsg += `The country is ${currentCountry.name} and the capital is ${currentCountry.capital}`;
-            } else {
-                feedbackMsg += `The country is ${currentCountry.name}`;
-            }
-        } else if (!isCountryCorrect) {
-            feedbackMsg += `The country is ${currentCountry.name} (capital was correct)`;
-        } else {
-            feedbackMsg += `The capital is ${currentCountry.capital} (country was correct)`;
+        const wrongDetails = [];
+        
+        if (!isCountryCorrect) {
+            wrongDetails.push(`Country: ${currentCountry.name}`);
         }
+        if (settings.requireCapitals && !isCapitalCorrect) {
+            wrongDetails.push(`Capital: ${currentCountry.capital}`);
+        }
+        if (settings.requireDomains && !isDomainCorrect) {
+            if (currentCountry.domain) {
+                wrongDetails.push(`Domain: .${currentCountry.domain}`);
+            } else {
+                wrongDetails.push(`Domain: (none)`);
+            }
+        }
+        
+        if (wrongDetails.length > 0) {
+            feedbackMsg += wrongDetails.join(' | ');
+        }
+        
+        // Also mention what was correct
+        const correctParts = [];
+        if (isCountryCorrect) correctParts.push('country');
+        if (settings.requireCapitals && isCapitalCorrect) correctParts.push('capital');
+        if (settings.requireDomains && isDomainCorrect) correctParts.push('domain');
+        
+        if (correctParts.length > 0) {
+            feedbackMsg += ` (${correctParts.join(', ')} ${correctParts.length === 1 ? 'was' : 'were'} correct)`;
+        }
+        
         feedbackDiv.textContent = feedbackMsg;
         feedbackDiv.className = 'feedback incorrect';
         countryInput.disabled = true;
         capitalInput.disabled = true;
+        domainInput.disabled = true;
         submitBtn.disabled = true;
         nextBtn.style.display = 'block';
     }
@@ -601,6 +644,7 @@ menuBackBtn.addEventListener('click', () => {
 // Settings event listeners
 geoguessrFilterCheckbox.addEventListener('change', updateSettings);
 requireCapitalsCheckbox.addEventListener('change', updateSettings);
+requireDomainsCheckbox.addEventListener('change', updateSettings);
 
 // Game event listeners
 submitBtn.addEventListener('click', checkAnswer);
@@ -644,9 +688,11 @@ countryInput.addEventListener('keypress', (e) => {
         if (!countryInput.disabled) {
             e.preventDefault();
             e.stopPropagation();
-            // Move focus to capital input if required, otherwise submit
+            // Move focus to capital input if required, then domain, otherwise submit
             if (settings.requireCapitals) {
                 capitalInput.focus();
+            } else if (settings.requireDomains) {
+                domainInput.focus();
             } else {
                 checkAnswer();
             }
@@ -654,7 +700,7 @@ countryInput.addEventListener('keypress', (e) => {
             // Next button is visible, trigger it
             e.preventDefault();
             e.stopPropagation();
-            loadNewFlag();
+            nextBtn.click();
         }
     }
 });
@@ -664,12 +710,32 @@ capitalInput.addEventListener('keypress', (e) => {
         if (!capitalInput.disabled) {
             e.preventDefault();
             e.stopPropagation();
+            // Move focus to domain input if required, otherwise submit
+            if (settings.requireDomains) {
+                domainInput.focus();
+            } else {
+                checkAnswer();
+            }
+        } else if (nextBtn.style.display !== 'none') {
+            // Next button is visible, trigger it
+            e.preventDefault();
+            e.stopPropagation();
+            nextBtn.click();
+        }
+    }
+});
+
+domainInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        if (!domainInput.disabled) {
+            e.preventDefault();
+            e.stopPropagation();
             checkAnswer();
         } else if (nextBtn.style.display !== 'none') {
             // Next button is visible, trigger it
             e.preventDefault();
             e.stopPropagation();
-            loadNewFlag();
+            nextBtn.click();
         }
     }
 });
@@ -680,9 +746,10 @@ document.addEventListener('keypress', (e) => {
         nextBtn.style.display !== 'none' && 
         countryInput.disabled &&
         (!settings.requireCapitals || capitalInput.disabled) &&
+        (!settings.requireDomains || domainInput.disabled) &&
         !justSubmitted) {
         e.preventDefault();
-        loadNewFlag();
+        nextBtn.click();
     }
 });
 
