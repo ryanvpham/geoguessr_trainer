@@ -39,6 +39,13 @@
                     </label>
                     <p class="setting-description">Enable capital city input requirement</p>
                 </div>
+                <div class="setting-item">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="require-languages" />
+                        <span>Require National Languages</span>
+                    </label>
+                    <p class="setting-description">Enable national language input requirement</p>
+                </div>
                 <button id="back-btn" class="menu-btn">Back to Menu</button>
             </div>
         </div>
@@ -75,6 +82,12 @@
                         type="text" 
                         id="capital-input" 
                         placeholder="Enter capital city..."
+                        autocomplete="off"
+                    />
+                    <input 
+                        type="text" 
+                        id="language-input" 
+                        placeholder="Enter national language..."
                         autocomplete="off"
                     />
                     <button id="submit-btn">Submit</button>
