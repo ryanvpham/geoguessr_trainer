@@ -104,7 +104,7 @@ header h1 {
     margin: 30px 0;
 }
 
-#country-input, #capital-input {
+#country-input, #capital-input, #language-input {
     width: 100%;
     padding: 15px 20px;
     font-size: 1.1em;
@@ -114,11 +114,11 @@ header h1 {
     transition: border-color 0.3s;
 }
 
-#country-input:focus, #capital-input:focus {
+#country-input:focus, #capital-input:focus, #language-input:focus {
     border-color: #667eea;
 }
 
-#country-input:disabled, #capital-input:disabled {
+#country-input:disabled, #capital-input:disabled, #language-input:disabled {
     background-color: #f5f5f5;
     cursor: not-allowed;
 }
