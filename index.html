@@ -46,6 +46,13 @@
                     </label>
                     <p class="setting-description">Enable national language input requirement</p>
                 </div>
+                <div class="setting-item">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="require-domains" />
+                        <span>Require Internet Domain Suffix</span>
+                    </label>
+                    <p class="setting-description">Enable internet domain suffix input requirement (e.g., .uk for United Kingdom)</p>
+                </div>
                 <button id="back-btn" class="menu-btn">Back to Menu</button>
             </div>
         </div>
@@ -88,6 +95,12 @@
                         type="text" 
                         id="language-input" 
                         placeholder="Enter national language..."
+                        autocomplete="off"
+                    />
+                    <input 
+                        type="text" 
+                        id="domain-input" 
+                        placeholder="Enter domain suffix (e.g., uk)..."
                         autocomplete="off"
                     />
                     <button id="submit-btn">Submit</button>

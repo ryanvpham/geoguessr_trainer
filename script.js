@@ -16,210 +16,211 @@ const geoguessrCountries = [
 
 // List of countries with their flag codes (ISO 3166-1 alpha-2), aliases, capitals, and languages
 const allCountries = [
-    { name: 'Afghanistan', code: 'AF', capital: 'Kabul', languages: ['Pashto', 'Dari'] },
-    { name: 'Albania', code: 'AL', capital: 'Tirana', languages: ['Albanian'] },
-    { name: 'Algeria', code: 'DZ', capital: 'Algiers', languages: ['Arabic', 'Berber'] },
-    { name: 'Andorra', code: 'AD', capital: 'Andorra la Vella', languages: ['Catalan'] },
-    { name: 'Angola', code: 'AO', capital: 'Luanda', languages: ['Portuguese'] },
-    { name: 'Antigua and Barbuda', code: 'AG', capital: "Saint John's", languages: ['English'] },
-    { name: 'Argentina', code: 'AR', capital: 'Buenos Aires', languages: ['Spanish'] },
-    { name: 'Armenia', code: 'AM', capital: 'Yerevan', languages: ['Armenian'] },
-    { name: 'Australia', code: 'AU', capital: 'Canberra', languages: ['English'] },
-    { name: 'Austria', code: 'AT', capital: 'Vienna', languages: ['German'] },
-    { name: 'Azerbaijan', code: 'AZ', capital: 'Baku', languages: ['Azerbaijani'] },
-    { name: 'Bahamas', code: 'BS', capital: 'Nassau', languages: ['English'] },
-    { name: 'Bahrain', code: 'BH', capital: 'Manama', languages: ['Arabic'] },
-    { name: 'Bangladesh', code: 'BD', capital: 'Dhaka', languages: ['Bengali'] },
-    { name: 'Barbados', code: 'BB', capital: 'Bridgetown', languages: ['English'] },
-    { name: 'Belarus', code: 'BY', capital: 'Minsk', languages: ['Belarusian', 'Russian'] },
-    { name: 'Belgium', code: 'BE', capital: 'Brussels', languages: ['Dutch', 'French', 'German'] },
-    { name: 'Belize', code: 'BZ', capital: 'Belmopan', languages: ['English'] },
-    { name: 'Benin', code: 'BJ', capital: 'Porto-Novo', languages: ['French'] },
-    { name: 'Bhutan', code: 'BT', capital: 'Thimphu', languages: ['Dzongkha'] },
-    { name: 'Bolivia', code: 'BO', capital: 'Sucre', languages: ['Spanish', 'Quechua', 'Aymara'] },
-    { name: 'Bosnia and Herzegovina', code: 'BA', capital: 'Sarajevo', languages: ['Bosnian', 'Serbian', 'Croatian'] },
-    { name: 'Botswana', code: 'BW', capital: 'Gaborone', languages: ['English', 'Setswana'] },
-    { name: 'Brazil', code: 'BR', capital: 'Brasília', languages: ['Portuguese'] },
-    { name: 'Brunei', code: 'BN', capital: 'Bandar Seri Begawan', languages: ['Malay'] },
-    { name: 'Bulgaria', code: 'BG', capital: 'Sofia', languages: ['Bulgarian'] },
-    { name: 'Burkina Faso', code: 'BF', capital: 'Ouagadougou', languages: ['French'] },
-    { name: 'Burundi', code: 'BI', capital: 'Gitega', languages: ['Kirundi', 'French'] },
-    { name: 'Cambodia', code: 'KH', capital: 'Phnom Penh', languages: ['Khmer'] },
-    { name: 'Cameroon', code: 'CM', capital: 'Yaoundé', languages: ['French', 'English'] },
-    { name: 'Canada', code: 'CA', capital: 'Ottawa', languages: ['English', 'French'] },
-    { name: 'Cape Verde', code: 'CV', capital: 'Praia', languages: ['Portuguese'] },
-    { name: 'Central African Republic', code: 'CF', capital: 'Bangui', languages: ['French', 'Sango'] },
-    { name: 'Chad', code: 'TD', capital: "N'Djamena", languages: ['French', 'Arabic'] },
-    { name: 'Chile', code: 'CL', capital: 'Santiago', languages: ['Spanish'] },
-    { name: 'China', code: 'CN', capital: 'Beijing', languages: ['Mandarin'], aliases: ['PRC', "People's Republic of China"] },
-    { name: 'Colombia', code: 'CO', capital: 'Bogotá', languages: ['Spanish'] },
-    { name: 'Comoros', code: 'KM', capital: 'Moroni', languages: ['Comorian', 'Arabic', 'French'] },
-    { name: 'Congo', code: 'CG', capital: 'Brazzaville', languages: ['French'] },
-    { name: 'Costa Rica', code: 'CR', capital: 'San José', languages: ['Spanish'] },
-    { name: 'Croatia', code: 'HR', capital: 'Zagreb', languages: ['Croatian'] },
-    { name: 'Cuba', code: 'CU', capital: 'Havana', languages: ['Spanish'] },
-    { name: 'Cyprus', code: 'CY', capital: 'Nicosia', languages: ['Greek', 'Turkish'] },
-    { name: 'Czech Republic', code: 'CZ', capital: 'Prague', languages: ['Czech'], aliases: ['Czechia', 'Czech'] },
-    { name: 'Denmark', code: 'DK', capital: 'Copenhagen', languages: ['Danish'] },
-    { name: 'Djibouti', code: 'DJ', capital: 'Djibouti', languages: ['French', 'Arabic'] },
-    { name: 'Dominica', code: 'DM', capital: 'Roseau', languages: ['English'] },
-    { name: 'Dominican Republic', code: 'DO', capital: 'Santo Domingo', languages: ['Spanish'] },
-    { name: 'DR Congo', code: 'CD', capital: 'Kinshasa', languages: ['French'], aliases: ['Democratic Republic of the Congo', 'Congo-Kinshasa'] },
-    { name: 'Ecuador', code: 'EC', capital: 'Quito', languages: ['Spanish'] },
-    { name: 'Egypt', code: 'EG', capital: 'Cairo', languages: ['Arabic'] },
-    { name: 'El Salvador', code: 'SV', capital: 'San Salvador', languages: ['Spanish'] },
-    { name: 'Equatorial Guinea', code: 'GQ', capital: 'Malabo', languages: ['Spanish', 'French', 'Portuguese'] },
-    { name: 'Eritrea', code: 'ER', capital: 'Asmara', languages: ['Tigrinya', 'Arabic', 'English'] },
-    { name: 'Estonia', code: 'EE', capital: 'Tallinn', languages: ['Estonian'] },
-    { name: 'Eswatini', code: 'SZ', capital: 'Mbabane', languages: ['Swati', 'English'], aliases: ['Swaziland'] },
-    { name: 'Ethiopia', code: 'ET', capital: 'Addis Ababa', languages: ['Amharic'] },
-    { name: 'Fiji', code: 'FJ', capital: 'Suva', languages: ['English', 'Fijian', 'Hindi'] },
-    { name: 'Finland', code: 'FI', capital: 'Helsinki', languages: ['Finnish', 'Swedish'] },
-    { name: 'France', code: 'FR', capital: 'Paris', languages: ['French'] },
-    { name: 'Gabon', code: 'GA', capital: 'Libreville', languages: ['French'] },
-    { name: 'Gambia', code: 'GM', capital: 'Banjul', languages: ['English'] },
-    { name: 'Georgia', code: 'GE', capital: 'Tbilisi', languages: ['Georgian'] },
-    { name: 'Germany', code: 'DE', capital: 'Berlin', languages: ['German'], aliases: ['Deutschland'] },
-    { name: 'Ghana', code: 'GH', capital: 'Accra', languages: ['English'] },
-    { name: 'Greece', code: 'GR', capital: 'Athens', languages: ['Greek'] },
-    { name: 'Grenada', code: 'GD', capital: "Saint George's", languages: ['English'] },
-    { name: 'Guatemala', code: 'GT', capital: 'Guatemala City', languages: ['Spanish'] },
-    { name: 'Guinea', code: 'GN', capital: 'Conakry', languages: ['French'] },
-    { name: 'Guinea-Bissau', code: 'GW', capital: 'Bissau', languages: ['Portuguese'] },
-    { name: 'Guyana', code: 'GY', capital: 'Georgetown', languages: ['English'] },
-    { name: 'Haiti', code: 'HT', capital: 'Port-au-Prince', languages: ['French', 'Haitian Creole'] },
-    { name: 'Honduras', code: 'HN', capital: 'Tegucigalpa', languages: ['Spanish'] },
-    { name: 'Hungary', code: 'HU', capital: 'Budapest', languages: ['Hungarian'] },
-    { name: 'Iceland', code: 'IS', capital: 'Reykjavik', languages: ['Icelandic'] },
-    { name: 'India', code: 'IN', capital: 'New Delhi', languages: ['Hindi', 'English'] },
-    { name: 'Indonesia', code: 'ID', capital: 'Jakarta', languages: ['Indonesian'] },
-    { name: 'Iran', code: 'IR', capital: 'Tehran', languages: ['Persian'], aliases: ['Persia'] },
-    { name: 'Iraq', code: 'IQ', capital: 'Baghdad', languages: ['Arabic', 'Kurdish'] },
-    { name: 'Ireland', code: 'IE', capital: 'Dublin', languages: ['Irish', 'English'], aliases: ['Eire', 'Republic of Ireland'] },
-    { name: 'Israel', code: 'IL', capital: 'Jerusalem', languages: ['Hebrew', 'Arabic'] },
-    { name: 'Ivory Coast', code: 'CI', capital: 'Yamoussoukro', languages: ['French'], aliases: ['Côte d\'Ivoire', 'Cote d\'Ivoire'] },
-    { name: 'Italy', code: 'IT', capital: 'Rome', languages: ['Italian'] },
-    { name: 'Jamaica', code: 'JM', capital: 'Kingston', languages: ['English'] },
-    { name: 'Japan', code: 'JP', capital: 'Tokyo', languages: ['Japanese'] },
-    { name: 'Jordan', code: 'JO', capital: 'Amman', languages: ['Arabic'] },
-    { name: 'Kazakhstan', code: 'KZ', capital: 'Nur-Sultan', languages: ['Kazakh', 'Russian'] },
-    { name: 'Kenya', code: 'KE', capital: 'Nairobi', languages: ['English', 'Swahili'] },
-    { name: 'Kiribati', code: 'KI', capital: 'Tarawa', languages: ['English', 'Gilbertese'] },
-    { name: 'Kosovo', code: 'XK', capital: 'Pristina', languages: ['Albanian', 'Serbian'] },
-    { name: 'Kuwait', code: 'KW', capital: 'Kuwait City', languages: ['Arabic'] },
-    { name: 'Kyrgyzstan', code: 'KG', capital: 'Bishkek', languages: ['Kyrgyz', 'Russian'] },
-    { name: 'Laos', code: 'LA', capital: 'Vientiane', languages: ['Lao'], aliases: ['Lao'] },
-    { name: 'Latvia', code: 'LV', capital: 'Riga', languages: ['Latvian'] },
-    { name: 'Lebanon', code: 'LB', capital: 'Beirut', languages: ['Arabic', 'French'] },
-    { name: 'Lesotho', code: 'LS', capital: 'Maseru', languages: ['Sesotho', 'English'] },
-    { name: 'Liberia', code: 'LR', capital: 'Monrovia', languages: ['English'] },
-    { name: 'Libya', code: 'LY', capital: 'Tripoli', languages: ['Arabic'] },
-    { name: 'Liechtenstein', code: 'LI', capital: 'Vaduz', languages: ['German'] },
-    { name: 'Lithuania', code: 'LT', capital: 'Vilnius', languages: ['Lithuanian'] },
-    { name: 'Luxembourg', code: 'LU', capital: 'Luxembourg', languages: ['Luxembourgish', 'French', 'German'] },
-    { name: 'Madagascar', code: 'MG', capital: 'Antananarivo', languages: ['Malagasy', 'French'] },
-    { name: 'Malawi', code: 'MW', capital: 'Lilongwe', languages: ['English', 'Chichewa'] },
-    { name: 'Malaysia', code: 'MY', capital: 'Kuala Lumpur', languages: ['Malay'] },
-    { name: 'Maldives', code: 'MV', capital: 'Malé', languages: ['Dhivehi'] },
-    { name: 'Mali', code: 'ML', capital: 'Bamako', languages: ['French'] },
-    { name: 'Malta', code: 'MT', capital: 'Valletta', languages: ['Maltese', 'English'] },
-    { name: 'Marshall Islands', code: 'MH', capital: 'Majuro', languages: ['English', 'Marshallese'] },
-    { name: 'Mauritania', code: 'MR', capital: 'Nouakchott', languages: ['Arabic'] },
-    { name: 'Mauritius', code: 'MU', capital: 'Port Louis', languages: ['English', 'French'] },
-    { name: 'Mexico', code: 'MX', capital: 'Mexico City', languages: ['Spanish'] },
-    { name: 'Micronesia', code: 'FM', capital: 'Palikir', languages: ['English'] },
-    { name: 'Moldova', code: 'MD', capital: 'Chișinău', languages: ['Romanian'] },
-    { name: 'Monaco', code: 'MC', capital: 'Monaco', languages: ['French'] },
-    { name: 'Mongolia', code: 'MN', capital: 'Ulaanbaatar', languages: ['Mongolian'] },
-    { name: 'Montenegro', code: 'ME', capital: 'Podgorica', languages: ['Montenegrin'] },
-    { name: 'Morocco', code: 'MA', capital: 'Rabat', languages: ['Arabic', 'Berber'] },
-    { name: 'Mozambique', code: 'MZ', capital: 'Maputo', languages: ['Portuguese'] },
-    { name: 'Myanmar', code: 'MM', capital: 'Naypyidaw', languages: ['Burmese'], aliases: ['Burma'] },
-    { name: 'Namibia', code: 'NA', capital: 'Windhoek', languages: ['English'] },
-    { name: 'Nauru', code: 'NR', capital: 'Yaren', languages: ['English', 'Nauruan'] },
-    { name: 'Nepal', code: 'NP', capital: 'Kathmandu', languages: ['Nepali'] },
-    { name: 'Netherlands', code: 'NL', capital: 'Amsterdam', languages: ['Dutch'], aliases: ['Holland'] },
-    { name: 'New Zealand', code: 'NZ', capital: 'Wellington', languages: ['English', 'Māori'] },
-    { name: 'Nicaragua', code: 'NI', capital: 'Managua', languages: ['Spanish'] },
-    { name: 'Niger', code: 'NE', capital: 'Niamey', languages: ['French'] },
-    { name: 'Nigeria', code: 'NG', capital: 'Abuja', languages: ['English'] },
-    { name: 'North Korea', code: 'KP', capital: 'Pyongyang', languages: ['Korean'], aliases: ['DPRK', "Democratic People's Republic of Korea", 'North Korea'] },
-    { name: 'North Macedonia', code: 'MK', capital: 'Skopje', languages: ['Macedonian'], aliases: ['Macedonia'] },
-    { name: 'Norway', code: 'NO', capital: 'Oslo', languages: ['Norwegian'] },
-    { name: 'Oman', code: 'OM', capital: 'Muscat', languages: ['Arabic'] },
-    { name: 'Pakistan', code: 'PK', capital: 'Islamabad', languages: ['Urdu', 'English'] },
-    { name: 'Palau', code: 'PW', capital: 'Ngerulmud', languages: ['English', 'Palauan'] },
-    { name: 'Palestine', code: 'PS', capital: 'East Jerusalem', languages: ['Arabic'] },
-    { name: 'Panama', code: 'PA', capital: 'Panama City', languages: ['Spanish'] },
-    { name: 'Papua New Guinea', code: 'PG', capital: 'Port Moresby', languages: ['English', 'Tok Pisin', 'Hiri Motu'] },
-    { name: 'Paraguay', code: 'PY', capital: 'Asunción', languages: ['Spanish', 'Guaraní'] },
-    { name: 'Peru', code: 'PE', capital: 'Lima', languages: ['Spanish', 'Quechua'] },
-    { name: 'Philippines', code: 'PH', capital: 'Manila', languages: ['Filipino', 'English'] },
-    { name: 'Poland', code: 'PL', capital: 'Warsaw', languages: ['Polish'] },
-    { name: 'Portugal', code: 'PT', capital: 'Lisbon', languages: ['Portuguese'] },
-    { name: 'Qatar', code: 'QA', capital: 'Doha', languages: ['Arabic'] },
-    { name: 'Romania', code: 'RO', capital: 'Bucharest', languages: ['Romanian'] },
-    { name: 'Russia', code: 'RU', capital: 'Moscow', languages: ['Russian'], aliases: ['Russian Federation', 'Russian'] },
-    { name: 'Rwanda', code: 'RW', capital: 'Kigali', languages: ['Kinyarwanda', 'French', 'English'] },
-    { name: 'Saint Kitts and Nevis', code: 'KN', capital: 'Basseterre', languages: ['English'] },
-    { name: 'Saint Lucia', code: 'LC', capital: 'Castries', languages: ['English'] },
-    { name: 'Saint Vincent and the Grenadines', code: 'VC', capital: 'Kingstown', languages: ['English'] },
-    { name: 'Samoa', code: 'WS', capital: 'Apia', languages: ['Samoan', 'English'] },
-    { name: 'San Marino', code: 'SM', capital: 'San Marino', languages: ['Italian'] },
-    { name: 'São Tomé and Príncipe', code: 'ST', capital: 'São Tomé', languages: ['Portuguese'] },
-    { name: 'Saudi Arabia', code: 'SA', capital: 'Riyadh', languages: ['Arabic'] },
-    { name: 'Senegal', code: 'SN', capital: 'Dakar', languages: ['French'] },
-    { name: 'Serbia', code: 'RS', capital: 'Belgrade', languages: ['Serbian'] },
-    { name: 'Seychelles', code: 'SC', capital: 'Victoria', languages: ['Seychellois Creole', 'English', 'French'] },
-    { name: 'Sierra Leone', code: 'SL', capital: 'Freetown', languages: ['English'] },
-    { name: 'Singapore', code: 'SG', capital: 'Singapore', languages: ['English', 'Malay', 'Mandarin', 'Tamil'] },
-    { name: 'Slovakia', code: 'SK', capital: 'Bratislava', languages: ['Slovak'] },
-    { name: 'Slovenia', code: 'SI', capital: 'Ljubljana', languages: ['Slovene'] },
-    { name: 'Solomon Islands', code: 'SB', capital: 'Honiara', languages: ['English'] },
-    { name: 'Somalia', code: 'SO', capital: 'Mogadishu', languages: ['Somali', 'Arabic'] },
-    { name: 'South Africa', code: 'ZA', capital: 'Cape Town', languages: ['English', 'Afrikaans', 'Zulu', 'Xhosa'] },
-    { name: 'South Korea', code: 'KR', capital: 'Seoul', languages: ['Korean'], aliases: ['Korea', 'Republic of Korea', 'ROK'] },
-    { name: 'South Sudan', code: 'SS', capital: 'Juba', languages: ['English'] },
-    { name: 'Spain', code: 'ES', capital: 'Madrid', languages: ['Spanish'] },
-    { name: 'Sri Lanka', code: 'LK', capital: 'Colombo', languages: ['Sinhala', 'Tamil'] },
-    { name: 'Sudan', code: 'SD', capital: 'Khartoum', languages: ['Arabic', 'English'] },
-    { name: 'Suriname', code: 'SR', capital: 'Paramaribo', languages: ['Dutch'] },
-    { name: 'Sweden', code: 'SE', capital: 'Stockholm', languages: ['Swedish'] },
-    { name: 'Switzerland', code: 'CH', capital: 'Bern', languages: ['German', 'French', 'Italian', 'Romansh'] },
-    { name: 'Syria', code: 'SY', capital: 'Damascus', languages: ['Arabic'] },
-    { name: 'Taiwan', code: 'TW', capital: 'Taipei', languages: ['Mandarin'], aliases: ['Republic of China', 'ROC'] },
-    { name: 'Tajikistan', code: 'TJ', capital: 'Dushanbe', languages: ['Tajik'] },
-    { name: 'Tanzania', code: 'TZ', capital: 'Dodoma', languages: ['Swahili', 'English'] },
-    { name: 'Thailand', code: 'TH', capital: 'Bangkok', languages: ['Thai'] },
-    { name: 'Timor-Leste', code: 'TL', capital: 'Dili', languages: ['Tetum', 'Portuguese'], aliases: ['East Timor'] },
-    { name: 'Togo', code: 'TG', capital: 'Lomé', languages: ['French'] },
-    { name: 'Tonga', code: 'TO', capital: "Nuku'alofa", languages: ['Tongan', 'English'] },
-    { name: 'Trinidad and Tobago', code: 'TT', capital: 'Port of Spain', languages: ['English'] },
-    { name: 'Tunisia', code: 'TN', capital: 'Tunis', languages: ['Arabic'] },
-    { name: 'Turkey', code: 'TR', capital: 'Ankara', languages: ['Turkish'] },
-    { name: 'Turkmenistan', code: 'TM', capital: 'Ashgabat', languages: ['Turkmen'] },
-    { name: 'Tuvalu', code: 'TV', capital: 'Funafuti', languages: ['Tuvaluan', 'English'] },
-    { name: 'Uganda', code: 'UG', capital: 'Kampala', languages: ['English', 'Swahili'] },
-    { name: 'Ukraine', code: 'UA', capital: 'Kyiv', languages: ['Ukrainian'] },
-    { name: 'United Arab Emirates', code: 'AE', capital: 'Abu Dhabi', languages: ['Arabic'], aliases: ['UAE'] },
-    { name: 'United Kingdom', code: 'GB', capital: 'London', languages: ['English'], aliases: ['UK', 'Great Britain', 'Britain', 'England'] },
-    { name: 'United States', code: 'US', capital: 'Washington, D.C.', languages: ['English'], aliases: ['USA', 'US', 'America', 'United States of America'] },
-    { name: 'Uruguay', code: 'UY', capital: 'Montevideo', languages: ['Spanish'] },
-    { name: 'Uzbekistan', code: 'UZ', capital: 'Tashkent', languages: ['Uzbek'] },
-    { name: 'Vanuatu', code: 'VU', capital: 'Port Vila', languages: ['Bislama', 'English', 'French'] },
-    { name: 'Vatican City', code: 'VA', capital: 'Vatican City', languages: ['Italian', 'Latin'], aliases: ['Holy See'] },
-    { name: 'Venezuela', code: 'VE', capital: 'Caracas', languages: ['Spanish'] },
-    { name: 'Vietnam', code: 'VN', capital: 'Hanoi', languages: ['Vietnamese'] },
-    { name: 'Yemen', code: 'YE', capital: 'Sana\'a', languages: ['Arabic'] },
-    { name: 'Zambia', code: 'ZM', capital: 'Lusaka', languages: ['English'] },
-    { name: 'Zimbabwe', code: 'ZW', capital: 'Harare', languages: ['English', 'Shona', 'Ndebele'] },
+    { name: 'Afghanistan', code: 'AF', capital: 'Kabul', languages: ['Pashto', 'Dari'], domain: 'af' },
+    { name: 'Albania', code: 'AL', capital: 'Tirana', languages: ['Albanian'], domain: 'al' },
+    { name: 'Algeria', code: 'DZ', capital: 'Algiers', languages: ['Arabic', 'Berber'], domain: 'dz' },
+    { name: 'Andorra', code: 'AD', capital: 'Andorra la Vella', languages: ['Catalan'], domain: 'ad' },
+    { name: 'Angola', code: 'AO', capital: 'Luanda', languages: ['Portuguese'], domain: 'ao' },
+    { name: 'Antigua and Barbuda', code: 'AG', capital: "Saint John's", languages: ['English'], domain: 'ag' },
+    { name: 'Argentina', code: 'AR', capital: 'Buenos Aires', languages: ['Spanish'], domain: 'ar' },
+    { name: 'Armenia', code: 'AM', capital: 'Yerevan', languages: ['Armenian'], domain: 'am' },
+    { name: 'Australia', code: 'AU', capital: 'Canberra', languages: ['English'], domain: 'au' },
+    { name: 'Austria', code: 'AT', capital: 'Vienna', languages: ['German'], domain: 'at' },
+    { name: 'Azerbaijan', code: 'AZ', capital: 'Baku', languages: ['Azerbaijani'], domain: 'az' },
+    { name: 'Bahamas', code: 'BS', capital: 'Nassau', languages: ['English'], domain: 'bs' },
+    { name: 'Bahrain', code: 'BH', capital: 'Manama', languages: ['Arabic'], domain: 'bh' },
+    { name: 'Bangladesh', code: 'BD', capital: 'Dhaka', languages: ['Bengali'], domain: 'bd' },
+    { name: 'Barbados', code: 'BB', capital: 'Bridgetown', languages: ['English'], domain: 'bb' },
+    { name: 'Belarus', code: 'BY', capital: 'Minsk', languages: ['Belarusian', 'Russian'], domain: 'by' },
+    { name: 'Belgium', code: 'BE', capital: 'Brussels', languages: ['Dutch', 'French', 'German'], domain: 'be' },
+    { name: 'Belize', code: 'BZ', capital: 'Belmopan', languages: ['English'], domain: 'bz' },
+    { name: 'Benin', code: 'BJ', capital: 'Porto-Novo', languages: ['French'], domain: 'bj' },
+    { name: 'Bhutan', code: 'BT', capital: 'Thimphu', languages: ['Dzongkha'], domain: 'bt' },
+    { name: 'Bolivia', code: 'BO', capital: 'Sucre', languages: ['Spanish', 'Quechua', 'Aymara'], domain: 'bo' },
+    { name: 'Bosnia and Herzegovina', code: 'BA', capital: 'Sarajevo', languages: ['Bosnian', 'Serbian', 'Croatian'], domain: 'ba' },
+    { name: 'Botswana', code: 'BW', capital: 'Gaborone', languages: ['English', 'Setswana'], domain: 'bw' },
+    { name: 'Brazil', code: 'BR', capital: 'Brasília', languages: ['Portuguese'], domain: 'br' },
+    { name: 'Brunei', code: 'BN', capital: 'Bandar Seri Begawan', languages: ['Malay'], domain: 'bn' },
+    { name: 'Bulgaria', code: 'BG', capital: 'Sofia', languages: ['Bulgarian'], domain: 'bg' },
+    { name: 'Burkina Faso', code: 'BF', capital: 'Ouagadougou', languages: ['French'], domain: 'bf' },
+    { name: 'Burundi', code: 'BI', capital: 'Gitega', languages: ['Kirundi', 'French'], domain: 'bi' },
+    { name: 'Cambodia', code: 'KH', capital: 'Phnom Penh', languages: ['Khmer'], domain: 'kh' },
+    { name: 'Cameroon', code: 'CM', capital: 'Yaoundé', languages: ['French', 'English'], domain: 'cm' },
+    { name: 'Canada', code: 'CA', capital: 'Ottawa', languages: ['English', 'French'], domain: 'ca' },
+    { name: 'Cape Verde', code: 'CV', capital: 'Praia', languages: ['Portuguese'], domain: 'cv' },
+    { name: 'Central African Republic', code: 'CF', capital: 'Bangui', languages: ['French', 'Sango'], domain: 'cf' },
+    { name: 'Chad', code: 'TD', capital: "N'Djamena", languages: ['French', 'Arabic'], domain: 'td' },
+    { name: 'Chile', code: 'CL', capital: 'Santiago', languages: ['Spanish'], domain: 'cl' },
+    { name: 'China', code: 'CN', capital: 'Beijing', languages: ['Mandarin'], domain: 'cn', aliases: ['PRC', "People's Republic of China"] },
+    { name: 'Colombia', code: 'CO', capital: 'Bogotá', languages: ['Spanish'], domain: 'co' },
+    { name: 'Comoros', code: 'KM', capital: 'Moroni', languages: ['Comorian', 'Arabic', 'French'], domain: 'km' },
+    { name: 'Congo', code: 'CG', capital: 'Brazzaville', languages: ['French'], domain: 'cg' },
+    { name: 'Costa Rica', code: 'CR', capital: 'San José', languages: ['Spanish'], domain: 'cr' },
+    { name: 'Croatia', code: 'HR', capital: 'Zagreb', languages: ['Croatian'], domain: 'hr' },
+    { name: 'Cuba', code: 'CU', capital: 'Havana', languages: ['Spanish'], domain: 'cu' },
+    { name: 'Cyprus', code: 'CY', capital: 'Nicosia', languages: ['Greek', 'Turkish'], domain: 'cy' },
+    { name: 'Czech Republic', code: 'CZ', capital: 'Prague', languages: ['Czech'], domain: 'cz', aliases: ['Czechia', 'Czech'] },
+    { name: 'Denmark', code: 'DK', capital: 'Copenhagen', languages: ['Danish'], domain: 'dk' },
+    { name: 'Djibouti', code: 'DJ', capital: 'Djibouti', languages: ['French', 'Arabic'], domain: 'dj' },
+    { name: 'Dominica', code: 'DM', capital: 'Roseau', languages: ['English'], domain: 'dm' },
+    { name: 'Dominican Republic', code: 'DO', capital: 'Santo Domingo', languages: ['Spanish'], domain: 'do' },
+    { name: 'DR Congo', code: 'CD', capital: 'Kinshasa', languages: ['French'], domain: 'cd', aliases: ['Democratic Republic of the Congo', 'Congo-Kinshasa'] },
+    { name: 'Ecuador', code: 'EC', capital: 'Quito', languages: ['Spanish'], domain: 'ec' },
+    { name: 'Egypt', code: 'EG', capital: 'Cairo', languages: ['Arabic'], domain: 'eg' },
+    { name: 'El Salvador', code: 'SV', capital: 'San Salvador', languages: ['Spanish'], domain: 'sv' },
+    { name: 'Equatorial Guinea', code: 'GQ', capital: 'Malabo', languages: ['Spanish', 'French', 'Portuguese'], domain: 'gq' },
+    { name: 'Eritrea', code: 'ER', capital: 'Asmara', languages: ['Tigrinya', 'Arabic', 'English'], domain: 'er' },
+    { name: 'Estonia', code: 'EE', capital: 'Tallinn', languages: ['Estonian'], domain: 'ee' },
+    { name: 'Eswatini', code: 'SZ', capital: 'Mbabane', languages: ['Swati', 'English'], domain: 'sz', aliases: ['Swaziland'] },
+    { name: 'Ethiopia', code: 'ET', capital: 'Addis Ababa', languages: ['Amharic'], domain: 'et' },
+    { name: 'Fiji', code: 'FJ', capital: 'Suva', languages: ['English', 'Fijian', 'Hindi'], domain: 'fj' },
+    { name: 'Finland', code: 'FI', capital: 'Helsinki', languages: ['Finnish', 'Swedish'], domain: 'fi' },
+    { name: 'France', code: 'FR', capital: 'Paris', languages: ['French'], domain: 'fr' },
+    { name: 'Gabon', code: 'GA', capital: 'Libreville', languages: ['French'], domain: 'ga' },
+    { name: 'Gambia', code: 'GM', capital: 'Banjul', languages: ['English'], domain: 'gm' },
+    { name: 'Georgia', code: 'GE', capital: 'Tbilisi', languages: ['Georgian'], domain: 'ge' },
+    { name: 'Germany', code: 'DE', capital: 'Berlin', languages: ['German'], domain: 'de', aliases: ['Deutschland'] },
+    { name: 'Ghana', code: 'GH', capital: 'Accra', languages: ['English'], domain: 'gh' },
+    { name: 'Greece', code: 'GR', capital: 'Athens', languages: ['Greek'], domain: 'gr' },
+    { name: 'Grenada', code: 'GD', capital: "Saint George's", languages: ['English'], domain: 'gd' },
+    { name: 'Guatemala', code: 'GT', capital: 'Guatemala City', languages: ['Spanish'], domain: 'gt' },
+    { name: 'Guinea', code: 'GN', capital: 'Conakry', languages: ['French'], domain: 'gn' },
+    { name: 'Guinea-Bissau', code: 'GW', capital: 'Bissau', languages: ['Portuguese'], domain: 'gw' },
+    { name: 'Guyana', code: 'GY', capital: 'Georgetown', languages: ['English'], domain: 'gy' },
+    { name: 'Haiti', code: 'HT', capital: 'Port-au-Prince', languages: ['French', 'Haitian Creole'], domain: 'ht' },
+    { name: 'Honduras', code: 'HN', capital: 'Tegucigalpa', languages: ['Spanish'], domain: 'hn' },
+    { name: 'Hungary', code: 'HU', capital: 'Budapest', languages: ['Hungarian'], domain: 'hu' },
+    { name: 'Iceland', code: 'IS', capital: 'Reykjavik', languages: ['Icelandic'], domain: 'is' },
+    { name: 'India', code: 'IN', capital: 'New Delhi', languages: ['Hindi', 'English'], domain: 'in' },
+    { name: 'Indonesia', code: 'ID', capital: 'Jakarta', languages: ['Indonesian'], domain: 'id' },
+    { name: 'Iran', code: 'IR', capital: 'Tehran', languages: ['Persian'], domain: 'ir', aliases: ['Persia'] },
+    { name: 'Iraq', code: 'IQ', capital: 'Baghdad', languages: ['Arabic', 'Kurdish'], domain: 'iq' },
+    { name: 'Ireland', code: 'IE', capital: 'Dublin', languages: ['Irish', 'English'], domain: 'ie', aliases: ['Eire', 'Republic of Ireland'] },
+    { name: 'Israel', code: 'IL', capital: 'Jerusalem', languages: ['Hebrew', 'Arabic'], domain: 'il' },
+    { name: 'Ivory Coast', code: 'CI', capital: 'Yamoussoukro', languages: ['French'], domain: 'ci', aliases: ['Côte d\'Ivoire', 'Cote d\'Ivoire'] },
+    { name: 'Italy', code: 'IT', capital: 'Rome', languages: ['Italian'], domain: 'it' },
+    { name: 'Jamaica', code: 'JM', capital: 'Kingston', languages: ['English'], domain: 'jm' },
+    { name: 'Japan', code: 'JP', capital: 'Tokyo', languages: ['Japanese'], domain: 'jp' },
+    { name: 'Jordan', code: 'JO', capital: 'Amman', languages: ['Arabic'], domain: 'jo' },
+    { name: 'Kazakhstan', code: 'KZ', capital: 'Nur-Sultan', languages: ['Kazakh', 'Russian'], domain: 'kz' },
+    { name: 'Kenya', code: 'KE', capital: 'Nairobi', languages: ['English', 'Swahili'], domain: 'ke' },
+    { name: 'Kiribati', code: 'KI', capital: 'Tarawa', languages: ['English', 'Gilbertese'], domain: 'ki' },
+    { name: 'Kosovo', code: 'XK', capital: 'Pristina', languages: ['Albanian', 'Serbian'], domain: '' },
+    { name: 'Kuwait', code: 'KW', capital: 'Kuwait City', languages: ['Arabic'], domain: 'kw' },
+    { name: 'Kyrgyzstan', code: 'KG', capital: 'Bishkek', languages: ['Kyrgyz', 'Russian'], domain: 'kg' },
+    { name: 'Laos', code: 'LA', capital: 'Vientiane', languages: ['Lao'], domain: 'la', aliases: ['Lao'] },
+    { name: 'Latvia', code: 'LV', capital: 'Riga', languages: ['Latvian'], domain: 'lv' },
+    { name: 'Lebanon', code: 'LB', capital: 'Beirut', languages: ['Arabic', 'French'], domain: 'lb' },
+    { name: 'Lesotho', code: 'LS', capital: 'Maseru', languages: ['Sesotho', 'English'], domain: 'ls' },
+    { name: 'Liberia', code: 'LR', capital: 'Monrovia', languages: ['English'], domain: 'lr' },
+    { name: 'Libya', code: 'LY', capital: 'Tripoli', languages: ['Arabic'], domain: 'ly' },
+    { name: 'Liechtenstein', code: 'LI', capital: 'Vaduz', languages: ['German'], domain: 'li' },
+    { name: 'Lithuania', code: 'LT', capital: 'Vilnius', languages: ['Lithuanian'], domain: 'lt' },
+    { name: 'Luxembourg', code: 'LU', capital: 'Luxembourg', languages: ['Luxembourgish', 'French', 'German'], domain: 'lu' },
+    { name: 'Madagascar', code: 'MG', capital: 'Antananarivo', languages: ['Malagasy', 'French'], domain: 'mg' },
+    { name: 'Malawi', code: 'MW', capital: 'Lilongwe', languages: ['English', 'Chichewa'], domain: 'mw' },
+    { name: 'Malaysia', code: 'MY', capital: 'Kuala Lumpur', languages: ['Malay'], domain: 'my' },
+    { name: 'Maldives', code: 'MV', capital: 'Malé', languages: ['Dhivehi'], domain: 'mv' },
+    { name: 'Mali', code: 'ML', capital: 'Bamako', languages: ['French'], domain: 'ml' },
+    { name: 'Malta', code: 'MT', capital: 'Valletta', languages: ['Maltese', 'English'], domain: 'mt' },
+    { name: 'Marshall Islands', code: 'MH', capital: 'Majuro', languages: ['English', 'Marshallese'], domain: 'mh' },
+    { name: 'Mauritania', code: 'MR', capital: 'Nouakchott', languages: ['Arabic'], domain: 'mr' },
+    { name: 'Mauritius', code: 'MU', capital: 'Port Louis', languages: ['English', 'French'], domain: 'mu' },
+    { name: 'Mexico', code: 'MX', capital: 'Mexico City', languages: ['Spanish'], domain: 'mx' },
+    { name: 'Micronesia', code: 'FM', capital: 'Palikir', languages: ['English'], domain: 'fm' },
+    { name: 'Moldova', code: 'MD', capital: 'Chișinău', languages: ['Romanian'], domain: 'md' },
+    { name: 'Monaco', code: 'MC', capital: 'Monaco', languages: ['French'], domain: 'mc' },
+    { name: 'Mongolia', code: 'MN', capital: 'Ulaanbaatar', languages: ['Mongolian'], domain: 'mn' },
+    { name: 'Montenegro', code: 'ME', capital: 'Podgorica', languages: ['Montenegrin'], domain: 'me' },
+    { name: 'Morocco', code: 'MA', capital: 'Rabat', languages: ['Arabic', 'Berber'], domain: 'ma' },
+    { name: 'Mozambique', code: 'MZ', capital: 'Maputo', languages: ['Portuguese'], domain: 'mz' },
+    { name: 'Myanmar', code: 'MM', capital: 'Naypyidaw', languages: ['Burmese'], domain: 'mm', aliases: ['Burma'] },
+    { name: 'Namibia', code: 'NA', capital: 'Windhoek', languages: ['English'], domain: 'na' },
+    { name: 'Nauru', code: 'NR', capital: 'Yaren', languages: ['English', 'Nauruan'], domain: 'nr' },
+    { name: 'Nepal', code: 'NP', capital: 'Kathmandu', languages: ['Nepali'], domain: 'np' },
+    { name: 'Netherlands', code: 'NL', capital: 'Amsterdam', languages: ['Dutch'], domain: 'nl', aliases: ['Holland'] },
+    { name: 'New Zealand', code: 'NZ', capital: 'Wellington', languages: ['English', 'Māori'], domain: 'nz' },
+    { name: 'Nicaragua', code: 'NI', capital: 'Managua', languages: ['Spanish'], domain: 'ni' },
+    { name: 'Niger', code: 'NE', capital: 'Niamey', languages: ['French'], domain: 'ne' },
+    { name: 'Nigeria', code: 'NG', capital: 'Abuja', languages: ['English'], domain: 'ng' },
+    { name: 'North Korea', code: 'KP', capital: 'Pyongyang', languages: ['Korean'], domain: 'kp', aliases: ['DPRK', "Democratic People's Republic of Korea", 'North Korea'] },
+    { name: 'North Macedonia', code: 'MK', capital: 'Skopje', languages: ['Macedonian'], domain: 'mk', aliases: ['Macedonia'] },
+    { name: 'Norway', code: 'NO', capital: 'Oslo', languages: ['Norwegian'], domain: 'no' },
+    { name: 'Oman', code: 'OM', capital: 'Muscat', languages: ['Arabic'], domain: 'om' },
+    { name: 'Pakistan', code: 'PK', capital: 'Islamabad', languages: ['Urdu', 'English'], domain: 'pk' },
+    { name: 'Palau', code: 'PW', capital: 'Ngerulmud', languages: ['English', 'Palauan'], domain: 'pw' },
+    { name: 'Palestine', code: 'PS', capital: 'East Jerusalem', languages: ['Arabic'], domain: 'ps' },
+    { name: 'Panama', code: 'PA', capital: 'Panama City', languages: ['Spanish'], domain: 'pa' },
+    { name: 'Papua New Guinea', code: 'PG', capital: 'Port Moresby', languages: ['English', 'Tok Pisin', 'Hiri Motu'], domain: 'pg' },
+    { name: 'Paraguay', code: 'PY', capital: 'Asunción', languages: ['Spanish', 'Guaraní'], domain: 'py' },
+    { name: 'Peru', code: 'PE', capital: 'Lima', languages: ['Spanish', 'Quechua'], domain: 'pe' },
+    { name: 'Philippines', code: 'PH', capital: 'Manila', languages: ['Filipino', 'English'], domain: 'ph' },
+    { name: 'Poland', code: 'PL', capital: 'Warsaw', languages: ['Polish'], domain: 'pl' },
+    { name: 'Portugal', code: 'PT', capital: 'Lisbon', languages: ['Portuguese'], domain: 'pt' },
+    { name: 'Qatar', code: 'QA', capital: 'Doha', languages: ['Arabic'], domain: 'qa' },
+    { name: 'Romania', code: 'RO', capital: 'Bucharest', languages: ['Romanian'], domain: 'ro' },
+    { name: 'Russia', code: 'RU', capital: 'Moscow', languages: ['Russian'], domain: 'ru', aliases: ['Russian Federation', 'Russian'] },
+    { name: 'Rwanda', code: 'RW', capital: 'Kigali', languages: ['Kinyarwanda', 'French', 'English'], domain: 'rw' },
+    { name: 'Saint Kitts and Nevis', code: 'KN', capital: 'Basseterre', languages: ['English'], domain: 'kn' },
+    { name: 'Saint Lucia', code: 'LC', capital: 'Castries', languages: ['English'], domain: 'lc' },
+    { name: 'Saint Vincent and the Grenadines', code: 'VC', capital: 'Kingstown', languages: ['English'], domain: 'vc' },
+    { name: 'Samoa', code: 'WS', capital: 'Apia', languages: ['Samoan', 'English'], domain: 'ws' },
+    { name: 'San Marino', code: 'SM', capital: 'San Marino', languages: ['Italian'], domain: 'sm' },
+    { name: 'São Tomé and Príncipe', code: 'ST', capital: 'São Tomé', languages: ['Portuguese'], domain: 'st' },
+    { name: 'Saudi Arabia', code: 'SA', capital: 'Riyadh', languages: ['Arabic'], domain: 'sa' },
+    { name: 'Senegal', code: 'SN', capital: 'Dakar', languages: ['French'], domain: 'sn' },
+    { name: 'Serbia', code: 'RS', capital: 'Belgrade', languages: ['Serbian'], domain: 'rs' },
+    { name: 'Seychelles', code: 'SC', capital: 'Victoria', languages: ['Seychellois Creole', 'English', 'French'], domain: 'sc' },
+    { name: 'Sierra Leone', code: 'SL', capital: 'Freetown', languages: ['English'], domain: 'sl' },
+    { name: 'Singapore', code: 'SG', capital: 'Singapore', languages: ['English', 'Malay', 'Mandarin', 'Tamil'], domain: 'sg' },
+    { name: 'Slovakia', code: 'SK', capital: 'Bratislava', languages: ['Slovak'], domain: 'sk' },
+    { name: 'Slovenia', code: 'SI', capital: 'Ljubljana', languages: ['Slovene'], domain: 'si' },
+    { name: 'Solomon Islands', code: 'SB', capital: 'Honiara', languages: ['English'], domain: 'sb' },
+    { name: 'Somalia', code: 'SO', capital: 'Mogadishu', languages: ['Somali', 'Arabic'], domain: 'so' },
+    { name: 'South Africa', code: 'ZA', capital: 'Cape Town', languages: ['English', 'Afrikaans', 'Zulu', 'Xhosa'], domain: 'za' },
+    { name: 'South Korea', code: 'KR', capital: 'Seoul', languages: ['Korean'], domain: 'kr', aliases: ['Korea', 'Republic of Korea', 'ROK'] },
+    { name: 'South Sudan', code: 'SS', capital: 'Juba', languages: ['English'], domain: 'ss' },
+    { name: 'Spain', code: 'ES', capital: 'Madrid', languages: ['Spanish'], domain: 'es' },
+    { name: 'Sri Lanka', code: 'LK', capital: 'Colombo', languages: ['Sinhala', 'Tamil'], domain: 'lk' },
+    { name: 'Sudan', code: 'SD', capital: 'Khartoum', languages: ['Arabic', 'English'], domain: 'sd' },
+    { name: 'Suriname', code: 'SR', capital: 'Paramaribo', languages: ['Dutch'], domain: 'sr' },
+    { name: 'Sweden', code: 'SE', capital: 'Stockholm', languages: ['Swedish'], domain: 'se' },
+    { name: 'Switzerland', code: 'CH', capital: 'Bern', languages: ['German', 'French', 'Italian', 'Romansh'], domain: 'ch' },
+    { name: 'Syria', code: 'SY', capital: 'Damascus', languages: ['Arabic'], domain: 'sy' },
+    { name: 'Taiwan', code: 'TW', capital: 'Taipei', languages: ['Mandarin'], domain: 'tw', aliases: ['Republic of China', 'ROC'] },
+    { name: 'Tajikistan', code: 'TJ', capital: 'Dushanbe', languages: ['Tajik'], domain: 'tj' },
+    { name: 'Tanzania', code: 'TZ', capital: 'Dodoma', languages: ['Swahili', 'English'], domain: 'tz' },
+    { name: 'Thailand', code: 'TH', capital: 'Bangkok', languages: ['Thai'], domain: 'th' },
+    { name: 'Timor-Leste', code: 'TL', capital: 'Dili', languages: ['Tetum', 'Portuguese'], domain: 'tl', aliases: ['East Timor'] },
+    { name: 'Togo', code: 'TG', capital: 'Lomé', languages: ['French'], domain: 'tg' },
+    { name: 'Tonga', code: 'TO', capital: "Nuku'alofa", languages: ['Tongan', 'English'], domain: 'to' },
+    { name: 'Trinidad and Tobago', code: 'TT', capital: 'Port of Spain', languages: ['English'], domain: 'tt' },
+    { name: 'Tunisia', code: 'TN', capital: 'Tunis', languages: ['Arabic'], domain: 'tn' },
+    { name: 'Turkey', code: 'TR', capital: 'Ankara', languages: ['Turkish'], domain: 'tr' },
+    { name: 'Turkmenistan', code: 'TM', capital: 'Ashgabat', languages: ['Turkmen'], domain: 'tm' },
+    { name: 'Tuvalu', code: 'TV', capital: 'Funafuti', languages: ['Tuvaluan', 'English'], domain: 'tv' },
+    { name: 'Uganda', code: 'UG', capital: 'Kampala', languages: ['English', 'Swahili'], domain: 'ug' },
+    { name: 'Ukraine', code: 'UA', capital: 'Kyiv', languages: ['Ukrainian'], domain: 'ua' },
+    { name: 'United Arab Emirates', code: 'AE', capital: 'Abu Dhabi', languages: ['Arabic'], domain: 'ae', aliases: ['UAE'] },
+    { name: 'United Kingdom', code: 'GB', capital: 'London', languages: ['English'], domain: 'uk', aliases: ['UK', 'Great Britain', 'Britain', 'England'] },
+    { name: 'United States', code: 'US', capital: 'Washington, D.C.', languages: ['English'], domain: 'us', aliases: ['USA', 'US', 'America', 'United States of America'] },
+    { name: 'Uruguay', code: 'UY', capital: 'Montevideo', languages: ['Spanish'], domain: 'uy' },
+    { name: 'Uzbekistan', code: 'UZ', capital: 'Tashkent', languages: ['Uzbek'], domain: 'uz' },
+    { name: 'Vanuatu', code: 'VU', capital: 'Port Vila', languages: ['Bislama', 'English', 'French'], domain: 'vu' },
+    { name: 'Vatican City', code: 'VA', capital: 'Vatican City', languages: ['Italian', 'Latin'], domain: 'va', aliases: ['Holy See'] },
+    { name: 'Venezuela', code: 'VE', capital: 'Caracas', languages: ['Spanish'], domain: 've' },
+    { name: 'Vietnam', code: 'VN', capital: 'Hanoi', languages: ['Vietnamese'], domain: 'vn' },
+    { name: 'Yemen', code: 'YE', capital: 'Sana\'a', languages: ['Arabic'], domain: 'ye' },
+    { name: 'Zambia', code: 'ZM', capital: 'Lusaka', languages: ['English'], domain: 'zm' },
+    { name: 'Zimbabwe', code: 'ZW', capital: 'Harare', languages: ['English', 'Shona', 'Ndebele'], domain: 'zw' },
 ];
 
 // Settings state
 let settings = {
     geoguessrFilter: false,
     requireCapitals: false,
-    requireLanguages: false
+    requireLanguages: false,
+    requireDomains: false
 };
 
 // Get filtered countries based on settings
@@ -279,10 +280,12 @@ const menuBackBtn = document.getElementById('menu-back-btn');
 const geoguessrFilterCheckbox = document.getElementById('geoguessr-filter');
 const requireCapitalsCheckbox = document.getElementById('require-capitals');
 const requireLanguagesCheckbox = document.getElementById('require-languages');
+const requireDomainsCheckbox = document.getElementById('require-domains');
 const flagImg = document.getElementById('flag');
 const countryInput = document.getElementById('country-input');
 const capitalInput = document.getElementById('capital-input');
 const languageInput = document.getElementById('language-input');
+const domainInput = document.getElementById('domain-input');
 const submitBtn = document.getElementById('submit-btn');
 const nextBtn = document.getElementById('next-btn');
 const feedbackDiv = document.getElementById('feedback');
@@ -303,6 +306,7 @@ function updateSettings() {
     settings.geoguessrFilter = geoguessrFilterCheckbox.checked;
     settings.requireCapitals = requireCapitalsCheckbox.checked;
     settings.requireLanguages = requireLanguagesCheckbox.checked;
+    settings.requireDomains = requireDomainsCheckbox.checked;
     
     // Update countries list
     countries = getAvailableCountries();
@@ -319,6 +323,12 @@ function updateSettings() {
         languageInput.style.display = 'block';
     } else {
         languageInput.style.display = 'none';
+    }
+    
+    if (settings.requireDomains) {
+        domainInput.style.display = 'block';
+    } else {
+        domainInput.style.display = 'none';
     }
 }
 
@@ -462,6 +472,7 @@ function loadNewFlag() {
         countryInput.disabled = true;
         capitalInput.disabled = true;
         languageInput.disabled = true;
+        domainInput.disabled = true;
         submitBtn.disabled = true;
         nextBtn.style.display = 'block';
         nextBtn.textContent = incorrectCountries.length > 0 ? 'Start Next Round' : 'Back to Menu';
@@ -477,9 +488,11 @@ function loadNewFlag() {
     countryInput.value = '';
     capitalInput.value = '';
     languageInput.value = '';
+    domainInput.value = '';
     countryInput.disabled = false;
     capitalInput.disabled = false;
     languageInput.disabled = false;
+    domainInput.disabled = false;
     countryInput.focus();
     submitBtn.disabled = false;
     feedbackDiv.textContent = '';
@@ -503,9 +516,11 @@ function checkAnswer() {
     const userCountryAnswer = normalizeString(countryInput.value.trim());
     const userCapitalAnswer = normalizeString(capitalInput.value.trim());
     const userLanguageAnswer = normalizeString(languageInput.value.trim());
+    const userDomainAnswer = normalizeString(domainInput.value.trim());
     const correctCountry = normalizeString(currentCountry.name);
     const correctCapital = normalizeString(currentCountry.capital);
     const correctLanguages = currentCountry.languages ? currentCountry.languages.map(lang => normalizeString(lang)) : [];
+    const correctDomain = currentCountry.domain ? normalizeString(currentCountry.domain) : '';
     
     // Check if country answer matches the country name or any of its aliases
     const allCountryAnswers = [correctCountry];
@@ -518,13 +533,16 @@ function checkAnswer() {
     const isCountryCorrect = allCountryAnswers.includes(userCountryAnswer);
     const isCapitalCorrect = !settings.requireCapitals || userCapitalAnswer === correctCapital;
     const isLanguageCorrect = !settings.requireLanguages || correctLanguages.includes(userLanguageAnswer);
+    // Domain is correct if: not required OR (user answer matches correct domain OR both are empty)
+    const isDomainCorrect = !settings.requireDomains || 
+        (userDomainAnswer === correctDomain || (userDomainAnswer === '' && correctDomain === ''));
     
     // Increment total seen
     totalSeen++;
     roundTotalSeen++;
     
     // All required fields must be correct
-    if (isCountryCorrect && isCapitalCorrect && isLanguageCorrect) {
+    if (isCountryCorrect && isCapitalCorrect && isLanguageCorrect && isDomainCorrect) {
         // Correct answer
         correctCount++;
         roundCorrectCount++;
@@ -541,11 +559,15 @@ function checkAnswer() {
         if (settings.requireLanguages && currentCountry.languages) {
             feedbackMsg += `, language: ${currentCountry.languages[0]}`;
         }
+        if (settings.requireDomains && currentCountry.domain) {
+            feedbackMsg += ` (domain: .${currentCountry.domain})`;
+        }
         feedbackDiv.textContent = feedbackMsg;
         feedbackDiv.className = 'feedback correct';
         countryInput.disabled = true;
         capitalInput.disabled = true;
         languageInput.disabled = true;
+        domainInput.disabled = true;
         submitBtn.disabled = true;
         nextBtn.style.display = 'block';
     } else {
@@ -567,6 +589,13 @@ function checkAnswer() {
         if (settings.requireLanguages && !isLanguageCorrect && currentCountry.languages) {
             wrongDetails.push(`Language: ${currentCountry.languages[0]}`);
         }
+        if (settings.requireDomains && !isDomainCorrect) {
+            if (currentCountry.domain) {
+                wrongDetails.push(`Domain: .${currentCountry.domain}`);
+            } else {
+                wrongDetails.push(`Domain: (none)`);
+            }
+        }
         
         if (wrongDetails.length > 0) {
             feedbackMsg += wrongDetails.join(' | ');
@@ -577,6 +606,7 @@ function checkAnswer() {
         if (isCountryCorrect) correctParts.push('country');
         if (settings.requireCapitals && isCapitalCorrect) correctParts.push('capital');
         if (settings.requireLanguages && isLanguageCorrect) correctParts.push('language');
+        if (settings.requireDomains && isDomainCorrect) correctParts.push('domain');
         
         if (correctParts.length > 0) {
             feedbackMsg += ` (${correctParts.join(', ')} ${correctParts.length === 1 ? 'was' : 'were'} correct)`;
@@ -587,6 +617,7 @@ function checkAnswer() {
         countryInput.disabled = true;
         capitalInput.disabled = true;
         languageInput.disabled = true;
+        domainInput.disabled = true;
         submitBtn.disabled = true;
         nextBtn.style.display = 'block';
     }
@@ -638,6 +669,7 @@ menuBackBtn.addEventListener('click', () => {
 geoguessrFilterCheckbox.addEventListener('change', updateSettings);
 requireCapitalsCheckbox.addEventListener('change', updateSettings);
 requireLanguagesCheckbox.addEventListener('change', updateSettings);
+requireDomainsCheckbox.addEventListener('change', updateSettings);
 
 // Game event listeners
 submitBtn.addEventListener('click', checkAnswer);
@@ -661,9 +693,11 @@ nextBtn.addEventListener('click', () => {
         countryInput.value = '';
         capitalInput.value = '';
         languageInput.value = '';
+        domainInput.value = '';
         countryInput.disabled = false;
         capitalInput.disabled = false;
         languageInput.disabled = false;
+        domainInput.disabled = false;
         countryInput.focus();
         submitBtn.disabled = false;
         feedbackDiv.textContent = '';
@@ -688,6 +722,8 @@ countryInput.addEventListener('keypress', (e) => {
                 capitalInput.focus();
             } else if (settings.requireLanguages) {
                 languageInput.focus();
+            } else if (settings.requireDomains) {
+                domainInput.focus();
             } else {
                 checkAnswer();
             }
@@ -695,7 +731,7 @@ countryInput.addEventListener('keypress', (e) => {
             // Next button is visible, trigger it
             e.preventDefault();
             e.stopPropagation();
-            loadNewFlag();
+            nextBtn.click();
         }
     }
 });
@@ -705,9 +741,11 @@ capitalInput.addEventListener('keypress', (e) => {
         if (!capitalInput.disabled) {
             e.preventDefault();
             e.stopPropagation();
-            // Move focus to language input if required, otherwise submit
+            // Move focus to language input if required, then domain, otherwise submit
             if (settings.requireLanguages) {
                 languageInput.focus();
+            } else if (settings.requireDomains) {
+                domainInput.focus();
             } else {
                 checkAnswer();
             }
@@ -715,7 +753,7 @@ capitalInput.addEventListener('keypress', (e) => {
             // Next button is visible, trigger it
             e.preventDefault();
             e.stopPropagation();
-            loadNewFlag();
+            nextBtn.click();
         }
     }
 });
@@ -725,12 +763,32 @@ languageInput.addEventListener('keypress', (e) => {
         if (!languageInput.disabled) {
             e.preventDefault();
             e.stopPropagation();
+            // Move focus to domain input if required, otherwise submit
+            if (settings.requireDomains) {
+                domainInput.focus();
+            } else {
+                checkAnswer();
+            }
+        } else if (nextBtn.style.display !== 'none') {
+            // Next button is visible, trigger it
+            e.preventDefault();
+            e.stopPropagation();
+            nextBtn.click();
+        }
+    }
+});
+
+domainInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        if (!domainInput.disabled) {
+            e.preventDefault();
+            e.stopPropagation();
             checkAnswer();
         } else if (nextBtn.style.display !== 'none') {
             // Next button is visible, trigger it
             e.preventDefault();
             e.stopPropagation();
-            loadNewFlag();
+            nextBtn.click();
         }
     }
 });
@@ -742,9 +800,10 @@ document.addEventListener('keypress', (e) => {
         countryInput.disabled &&
         (!settings.requireCapitals || capitalInput.disabled) &&
         (!settings.requireLanguages || languageInput.disabled) &&
+        (!settings.requireDomains || domainInput.disabled) &&
         !justSubmitted) {
         e.preventDefault();
-        loadNewFlag();
+        nextBtn.click();
     }
 });
 
