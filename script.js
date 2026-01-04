@@ -1,17 +1,34 @@
-// GeoGuessr countries list
+// GeoGuessr countries list (from geometas.com)
 const geoguessrCountries = [
-    'Albania', 'Andorra', 'Argentina', 'Australia', 'Austria', 'Bangladesh', 'Belgium', 'Bhutan',
-    'Bolivia', 'Botswana', 'Brazil', 'Bulgaria', 'Cambodia', 'Canada', 'Chile', 'Colombia',
-    'Croatia', 'Czechia', 'Denmark', 'Dominican Republic', 'Ecuador', 'Estonia', 'Eswatini',
-    'Finland', 'France', 'Germany', 'Ghana', 'Greece', 'Greenland', 'Guatemala', 'Hungary',
-    'Iceland', 'India', 'Indonesia', 'Ireland', 'Israel', 'Italy', 'Japan', 'Jordan', 'Kenya',
-    'Kyrgyzstan', 'Latvia', 'Lebanon', 'Lesotho', 'Lichtenstein', 'Lithuania', 'Luxembourg',
-    'Malaysia', 'Mexico', 'Mongolia', 'Montenegro', 'Namibia', 'Netherlands', 'New Zealand',
-    'Nigeria', 'North Macedonia', 'Norway', 'Oman', 'Palestine', 'Panama', 'Peru', 'Philippines',
-    'Poland', 'Portugal', 'Qatar', 'Romania', 'Russia', 'Rwanda', 'San Marino', 'São Tomé and Príncipe',
-    'Senegal', 'Serbia', 'Singapore', 'Slovakia', 'Slovenia', 'South Africa', 'South Korea',
-    'Spain', 'Sri Lanka', 'Sweden', 'Switzerland', 'Taiwan', 'Thailand', 'Turkey', 'Tunisia',
-    'Ukraine', 'Uganda', 'United Arab Emirates', 'United Kingdom', 'United States', 'Uruguay', 'Vietnam'
+    // Western Europe
+    'Andorra', 'Austria', 'Belgium', 'France', 'Germany', 'Greece', 'Ireland', 'Isle of Man',
+    'Italy', 'Luxembourg', 'Malta', 'Monaco', 'Netherlands', 'Portugal', 'Spain', 'Switzerland',
+    'United Kingdom',
+    // Eastern Europe
+    'Albania', 'Bulgaria', 'Croatia', 'Czechia', 'Hungary', 'Montenegro', 'North Macedonia',
+    'Poland', 'Romania', 'Russia', 'Serbia', 'Slovakia', 'Slovenia', 'Ukraine',
+    // Nordics
+    'Denmark', 'Faroe Islands', 'Finland', 'Greenland', 'Iceland', 'Norway', 'Sweden',
+    // Baltics
+    'Estonia', 'Latvia', 'Lithuania',
+    // Latin America
+    'Argentina', 'Bolivia', 'Brazil', 'Chile', 'Colombia', 'Costa Rica', 'Curaçao',
+    'Dominican Republic', 'Ecuador', 'Guatemala', 'Mexico', 'Panama', 'Peru', 'Puerto Rico',
+    'U.S. Virgin Islands', 'Uruguay',
+    // North America
+    'Bermuda', 'Canada', 'United States',
+    // South & South-East Asia
+    'Bangladesh', 'Bhutan', 'Cambodia', 'Christmas Island', 'India', 'Indonesia', 'Laos',
+    'Malaysia', 'Pakistan', 'Philippines', 'Singapore', 'Sri Lanka', 'Thailand', 'Vietnam',
+    // Rest of Asia
+    'China', 'Hong Kong', 'Japan', 'Kazakhstan', 'Kyrgyzstan', 'Mongolia', 'South Korea', 'Taiwan',
+    // Oceania
+    'American Samoa', 'Australia', 'Guam', 'New Zealand', 'Northern Mariana Islands',
+    // Africa
+    'Botswana', 'Eswatini', 'Ghana', 'Kenya', 'Lesotho', 'Madagascar', 'Nigeria', 'Réunion',
+    'Rwanda', 'Senegal', 'South Africa', 'Uganda',
+    // Middle East
+    'Israel', 'Jordan', 'Palestine', 'Qatar', 'Tunisia', 'Turkey', 'United Arab Emirates'
 ];
 
 // List of countries with their flag codes (ISO 3166-1 alpha-2), aliases, capitals, and languages
@@ -19,6 +36,7 @@ const allCountries = [
     { name: 'Afghanistan', code: 'AF', capital: 'Kabul', languages: ['Pashto', 'Dari'], domain: 'af' },
     { name: 'Albania', code: 'AL', capital: 'Tirana', languages: ['Albanian'], domain: 'al' },
     { name: 'Algeria', code: 'DZ', capital: 'Algiers', languages: ['Arabic', 'Berber'], domain: 'dz' },
+    { name: 'American Samoa', code: 'AS', capital: 'Pago Pago', languages: ['English', 'Samoan'], domain: 'as' },
     { name: 'Andorra', code: 'AD', capital: 'Andorra la Vella', languages: ['Catalan'], domain: 'ad' },
     { name: 'Angola', code: 'AO', capital: 'Luanda', languages: ['Portuguese'], domain: 'ao' },
     { name: 'Antigua and Barbuda', code: 'AG', capital: "Saint John's", languages: ['English'], domain: 'ag' },
@@ -35,6 +53,7 @@ const allCountries = [
     { name: 'Belgium', code: 'BE', capital: 'Brussels', languages: ['Dutch', 'French', 'German'], domain: 'be' },
     { name: 'Belize', code: 'BZ', capital: 'Belmopan', languages: ['English'], domain: 'bz' },
     { name: 'Benin', code: 'BJ', capital: 'Porto-Novo', languages: ['French'], domain: 'bj' },
+    { name: 'Bermuda', code: 'BM', capital: 'Hamilton', languages: ['English'], domain: 'bm' },
     { name: 'Bhutan', code: 'BT', capital: 'Thimphu', languages: ['Dzongkha'], domain: 'bt' },
     { name: 'Bolivia', code: 'BO', capital: 'Sucre', languages: ['Spanish', 'Quechua', 'Aymara'], domain: 'bo' },
     { name: 'Bosnia and Herzegovina', code: 'BA', capital: 'Sarajevo', languages: ['Bosnian', 'Serbian', 'Croatian'], domain: 'ba' },
@@ -52,12 +71,14 @@ const allCountries = [
     { name: 'Chad', code: 'TD', capital: "N'Djamena", languages: ['French', 'Arabic'], domain: 'td' },
     { name: 'Chile', code: 'CL', capital: 'Santiago', languages: ['Spanish'], domain: 'cl' },
     { name: 'China', code: 'CN', capital: 'Beijing', languages: ['Mandarin'], domain: 'cn', aliases: ['PRC', "People's Republic of China"] },
+    { name: 'Christmas Island', code: 'CX', capital: 'Flying Fish Cove', languages: ['English'], domain: 'cx' },
     { name: 'Colombia', code: 'CO', capital: 'Bogotá', languages: ['Spanish'], domain: 'co' },
     { name: 'Comoros', code: 'KM', capital: 'Moroni', languages: ['Comorian', 'Arabic', 'French'], domain: 'km' },
     { name: 'Congo', code: 'CG', capital: 'Brazzaville', languages: ['French'], domain: 'cg' },
     { name: 'Costa Rica', code: 'CR', capital: 'San José', languages: ['Spanish'], domain: 'cr' },
     { name: 'Croatia', code: 'HR', capital: 'Zagreb', languages: ['Croatian'], domain: 'hr' },
     { name: 'Cuba', code: 'CU', capital: 'Havana', languages: ['Spanish'], domain: 'cu' },
+    { name: 'Curaçao', code: 'CW', capital: 'Willemstad', languages: ['Dutch', 'Papiamento', 'English'], domain: 'cw' },
     { name: 'Cyprus', code: 'CY', capital: 'Nicosia', languages: ['Greek', 'Turkish'], domain: 'cy' },
     { name: 'Czech Republic', code: 'CZ', capital: 'Prague', languages: ['Czech'], domain: 'cz', aliases: ['Czechia', 'Czech'] },
     { name: 'Denmark', code: 'DK', capital: 'Copenhagen', languages: ['Danish'], domain: 'dk' },
@@ -73,6 +94,7 @@ const allCountries = [
     { name: 'Estonia', code: 'EE', capital: 'Tallinn', languages: ['Estonian'], domain: 'ee' },
     { name: 'Eswatini', code: 'SZ', capital: 'Mbabane', languages: ['Swati', 'English'], domain: 'sz', aliases: ['Swaziland'] },
     { name: 'Ethiopia', code: 'ET', capital: 'Addis Ababa', languages: ['Amharic'], domain: 'et' },
+    { name: 'Faroe Islands', code: 'FO', capital: 'Tórshavn', languages: ['Faroese', 'Danish'], domain: 'fo' },
     { name: 'Fiji', code: 'FJ', capital: 'Suva', languages: ['English', 'Fijian', 'Hindi'], domain: 'fj' },
     { name: 'Finland', code: 'FI', capital: 'Helsinki', languages: ['Finnish', 'Swedish'], domain: 'fi' },
     { name: 'France', code: 'FR', capital: 'Paris', languages: ['French'], domain: 'fr' },
@@ -82,13 +104,16 @@ const allCountries = [
     { name: 'Germany', code: 'DE', capital: 'Berlin', languages: ['German'], domain: 'de', aliases: ['Deutschland'] },
     { name: 'Ghana', code: 'GH', capital: 'Accra', languages: ['English'], domain: 'gh' },
     { name: 'Greece', code: 'GR', capital: 'Athens', languages: ['Greek'], domain: 'gr' },
+    { name: 'Greenland', code: 'GL', capital: 'Nuuk', languages: ['Greenlandic', 'Danish'], domain: 'gl' },
     { name: 'Grenada', code: 'GD', capital: "Saint George's", languages: ['English'], domain: 'gd' },
+    { name: 'Guam', code: 'GU', capital: 'Hagåtña', languages: ['English', 'Chamorro'], domain: 'gu' },
     { name: 'Guatemala', code: 'GT', capital: 'Guatemala City', languages: ['Spanish'], domain: 'gt' },
     { name: 'Guinea', code: 'GN', capital: 'Conakry', languages: ['French'], domain: 'gn' },
     { name: 'Guinea-Bissau', code: 'GW', capital: 'Bissau', languages: ['Portuguese'], domain: 'gw' },
     { name: 'Guyana', code: 'GY', capital: 'Georgetown', languages: ['English'], domain: 'gy' },
     { name: 'Haiti', code: 'HT', capital: 'Port-au-Prince', languages: ['French', 'Haitian Creole'], domain: 'ht' },
     { name: 'Honduras', code: 'HN', capital: 'Tegucigalpa', languages: ['Spanish'], domain: 'hn' },
+    { name: 'Hong Kong', code: 'HK', capital: 'Hong Kong', languages: ['Chinese', 'English'], domain: 'hk' },
     { name: 'Hungary', code: 'HU', capital: 'Budapest', languages: ['Hungarian'], domain: 'hu' },
     { name: 'Iceland', code: 'IS', capital: 'Reykjavik', languages: ['Icelandic'], domain: 'is' },
     { name: 'India', code: 'IN', capital: 'New Delhi', languages: ['Hindi', 'English'], domain: 'in' },
@@ -96,6 +121,7 @@ const allCountries = [
     { name: 'Iran', code: 'IR', capital: 'Tehran', languages: ['Persian'], domain: 'ir', aliases: ['Persia'] },
     { name: 'Iraq', code: 'IQ', capital: 'Baghdad', languages: ['Arabic', 'Kurdish'], domain: 'iq' },
     { name: 'Ireland', code: 'IE', capital: 'Dublin', languages: ['Irish', 'English'], domain: 'ie', aliases: ['Eire', 'Republic of Ireland'] },
+    { name: 'Isle of Man', code: 'IM', capital: 'Douglas', languages: ['English', 'Manx'], domain: 'im' },
     { name: 'Israel', code: 'IL', capital: 'Jerusalem', languages: ['Hebrew', 'Arabic'], domain: 'il' },
     { name: 'Ivory Coast', code: 'CI', capital: 'Yamoussoukro', languages: ['French'], domain: 'ci', aliases: ['Côte d\'Ivoire', 'Cote d\'Ivoire'] },
     { name: 'Italy', code: 'IT', capital: 'Rome', languages: ['Italian'], domain: 'it' },
@@ -146,6 +172,7 @@ const allCountries = [
     { name: 'North Korea', code: 'KP', capital: 'Pyongyang', languages: ['Korean'], domain: 'kp', aliases: ['DPRK', "Democratic People's Republic of Korea", 'North Korea'] },
     { name: 'North Macedonia', code: 'MK', capital: 'Skopje', languages: ['Macedonian'], domain: 'mk', aliases: ['Macedonia'] },
     { name: 'Norway', code: 'NO', capital: 'Oslo', languages: ['Norwegian'], domain: 'no' },
+    { name: 'Northern Mariana Islands', code: 'MP', capital: 'Saipan', languages: ['English', 'Chamorro', 'Carolinian'], domain: 'mp' },
     { name: 'Oman', code: 'OM', capital: 'Muscat', languages: ['Arabic'], domain: 'om' },
     { name: 'Pakistan', code: 'PK', capital: 'Islamabad', languages: ['Urdu', 'English'], domain: 'pk' },
     { name: 'Palau', code: 'PW', capital: 'Ngerulmud', languages: ['English', 'Palauan'], domain: 'pw' },
@@ -157,8 +184,10 @@ const allCountries = [
     { name: 'Philippines', code: 'PH', capital: 'Manila', languages: ['Filipino', 'English'], domain: 'ph' },
     { name: 'Poland', code: 'PL', capital: 'Warsaw', languages: ['Polish'], domain: 'pl' },
     { name: 'Portugal', code: 'PT', capital: 'Lisbon', languages: ['Portuguese'], domain: 'pt' },
+    { name: 'Puerto Rico', code: 'PR', capital: 'San Juan', languages: ['Spanish', 'English'], domain: 'pr' },
     { name: 'Qatar', code: 'QA', capital: 'Doha', languages: ['Arabic'], domain: 'qa' },
     { name: 'Romania', code: 'RO', capital: 'Bucharest', languages: ['Romanian'], domain: 'ro' },
+    { name: 'Réunion', code: 'RE', capital: 'Saint-Denis', languages: ['French'], domain: 're' },
     { name: 'Russia', code: 'RU', capital: 'Moscow', languages: ['Russian'], domain: 'ru', aliases: ['Russian Federation', 'Russian'] },
     { name: 'Rwanda', code: 'RW', capital: 'Kigali', languages: ['Kinyarwanda', 'French', 'English'], domain: 'rw' },
     { name: 'Saint Kitts and Nevis', code: 'KN', capital: 'Basseterre', languages: ['English'], domain: 'kn' },
@@ -204,6 +233,7 @@ const allCountries = [
     { name: 'United Arab Emirates', code: 'AE', capital: 'Abu Dhabi', languages: ['Arabic'], domain: 'ae', aliases: ['UAE'] },
     { name: 'United Kingdom', code: 'GB', capital: 'London', languages: ['English'], domain: 'uk', aliases: ['UK', 'Great Britain', 'Britain', 'England'] },
     { name: 'United States', code: 'US', capital: 'Washington, D.C.', languages: ['English'], domain: 'us', aliases: ['USA', 'US', 'America', 'United States of America'] },
+    { name: 'U.S. Virgin Islands', code: 'VI', capital: 'Charlotte Amalie', languages: ['English'], domain: 'vi' },
     { name: 'Uruguay', code: 'UY', capital: 'Montevideo', languages: ['Spanish'], domain: 'uy' },
     { name: 'Uzbekistan', code: 'UZ', capital: 'Tashkent', languages: ['Uzbek'], domain: 'uz' },
     { name: 'Vanuatu', code: 'VU', capital: 'Port Vila', languages: ['Bislama', 'English', 'French'], domain: 'vu' },
@@ -235,17 +265,11 @@ function getAvailableCountries() {
             'Lichtenstein': 'Liechtenstein'
         };
         
-        // Note: Greenland is not in our countries list (it's a territory of Denmark)
-        // So we'll skip it in the filter
-        
         filtered = allCountries.filter(country => {
             const countryName = country.name;
             const aliases = country.aliases || [];
             
             return geoguessrCountries.some(ggName => {
-                // Skip Greenland as it's not a country in our list
-                if (ggName === 'Greenland') return false;
-                
                 const mappedName = nameMap[ggName] || ggName;
                 return countryName === mappedName || 
                        countryName === ggName ||
@@ -483,6 +507,15 @@ function loadNewFlag() {
     flagImg.style.display = 'block';
     flagImg.src = `https://flagcdn.com/w320/${currentCountry.code.toLowerCase()}.png`;
     flagImg.alt = `${currentCountry.name} flag`;
+    // Handle flag loading errors (for territories that might not have flags)
+    flagImg.onerror = function() {
+        this.src = `https://flagcdn.com/w320/${currentCountry.code.toLowerCase()}.svg`;
+        this.onerror = function() {
+            // If both PNG and SVG fail, show a placeholder or hide the image
+            this.style.display = 'none';
+            console.warn(`Flag not available for ${currentCountry.name} (${currentCountry.code})`);
+        };
+    };
     
     // Reset UI
     countryInput.value = '';
@@ -690,6 +723,14 @@ nextBtn.addEventListener('click', () => {
         flagImg.style.display = 'block';
         flagImg.src = `https://flagcdn.com/w320/${currentCountry.code.toLowerCase()}.png`;
         flagImg.alt = `${currentCountry.name} flag`;
+        // Reset error handler
+        flagImg.onerror = function() {
+            this.src = `https://flagcdn.com/w320/${currentCountry.code.toLowerCase()}.svg`;
+            this.onerror = function() {
+                this.style.display = 'none';
+                console.warn(`Flag not available for ${currentCountry.name} (${currentCountry.code})`);
+            };
+        };
         countryInput.value = '';
         capitalInput.value = '';
         languageInput.value = '';
