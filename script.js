@@ -128,7 +128,7 @@ const allCountries = [
     { name: 'Jamaica', code: 'JM', capital: 'Kingston', languages: ['English'], domain: 'jm' },
     { name: 'Japan', code: 'JP', capital: 'Tokyo', languages: ['Japanese'], domain: 'jp' },
     { name: 'Jordan', code: 'JO', capital: 'Amman', languages: ['Arabic'], domain: 'jo' },
-    { name: 'Kazakhstan', code: 'KZ', capital: 'Nur-Sultan', languages: ['Kazakh', 'Russian'], domain: 'kz' },
+           { name: 'Kazakhstan', code: 'KZ', capital: 'Astana', languages: ['Kazakh', 'Russian'], domain: 'kz' },
     { name: 'Kenya', code: 'KE', capital: 'Nairobi', languages: ['English', 'Swahili'], domain: 'ke' },
     { name: 'Kiribati', code: 'KI', capital: 'Tarawa', languages: ['English', 'Gilbertese'], domain: 'ki' },
     { name: 'Kosovo', code: 'XK', capital: 'Pristina', languages: ['Albanian', 'Serbian'], domain: '' },
