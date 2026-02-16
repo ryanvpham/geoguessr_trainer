@@ -14,58 +14,104 @@
                 <h1>🌍 GeoGuessr Trainer</h1>
             </header>
             <div class="menu-buttons">
-                <button id="play-btn" class="menu-btn">Play</button>
-                <button id="settings-btn" class="menu-btn">Settings</button>
+                <button id="country-quiz-btn" class="menu-btn">Country Quiz</button>
+                <button id="capital-quiz-btn" class="menu-btn">Country Capital Quiz</button>
             </div>
         </div>
 
-        <!-- Settings Screen -->
-        <div id="settings-screen" class="screen" style="display: none;">
+        <!-- Country Quiz Settings Screen -->
+        <div id="country-quiz-settings-screen" class="screen" style="display: none;">
             <header>
-                <h1>⚙️ Settings</h1>
+                <button id="country-quiz-back-btn" class="back-arrow-btn">←</button>
+                <h1>⚙️ Country Quiz Settings</h1>
             </header>
             <div class="settings-content">
                 <div class="setting-item">
                     <label class="checkbox-label">
-                        <input type="checkbox" id="geoguessr-filter" />
+                        <input type="checkbox" id="country-quiz-geoguessr-filter" />
                         <span>GeoGuessr Countries Only</span>
                     </label>
                     <p class="setting-description">Filter to only countries that appear in GeoGuessr</p>
                 </div>
                 <div class="setting-item">
-                    <label class="checkbox-label">
-                        <input type="checkbox" id="require-capitals" />
-                        <span>Require Capital Cities</span>
-                    </label>
-                    <p class="setting-description">Enable capital city input requirement</p>
+                    <label class="setting-label">Question Format</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="country-quiz-question-format" value="flag" checked />
+                            <span>Flag</span>
+                        </label>
+                    </div>
                 </div>
                 <div class="setting-item">
-                    <label class="checkbox-label">
-                        <input type="checkbox" id="require-languages" />
-                        <span>Require National Languages</span>
-                    </label>
-                    <p class="setting-description">Enable national language input requirement</p>
+                    <label class="setting-label">Answer Format</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="country-quiz-answer-format" value="typein" checked />
+                            <span>Type In</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="country-quiz-answer-format" value="multichoice" />
+                            <span>Multiple Choice</span>
+                        </label>
+                    </div>
                 </div>
+                <button id="country-quiz-start-btn" class="menu-btn">Start Quiz</button>
+            </div>
+        </div>
+
+        <!-- Capital Quiz Settings Screen -->
+        <div id="capital-quiz-settings-screen" class="screen" style="display: none;">
+            <header>
+                <button id="capital-quiz-back-btn" class="back-arrow-btn">←</button>
+                <h1>⚙️ Capital Quiz Settings</h1>
+            </header>
+            <div class="settings-content">
                 <div class="setting-item">
                     <label class="checkbox-label">
-                        <input type="checkbox" id="require-domains" />
-                        <span>Require Internet Domain Suffix</span>
+                        <input type="checkbox" id="capital-quiz-geoguessr-filter" />
+                        <span>GeoGuessr Countries Only</span>
                     </label>
-                    <p class="setting-description">Enable internet domain suffix input requirement (e.g., .uk for United Kingdom)</p>
+                    <p class="setting-description">Filter to only countries that appear in GeoGuessr</p>
                 </div>
-                <button id="back-btn" class="menu-btn">Back to Menu</button>
+                <div class="setting-item">
+                    <label class="setting-label">Question Format</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="capital-quiz-question-format" value="flag" checked />
+                            <span>Flag</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="capital-quiz-question-format" value="countryName" />
+                            <span>Country Name</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <label class="setting-label">Answer Format</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="capital-quiz-answer-format" value="typein" checked />
+                            <span>Type In</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="capital-quiz-answer-format" value="multichoice" />
+                            <span>Multiple Choice</span>
+                        </label>
+                    </div>
+                </div>
+                <button id="capital-quiz-start-btn" class="menu-btn">Start Quiz</button>
             </div>
         </div>
 
         <!-- Game Screen -->
         <div id="game-screen" class="screen" style="display: none;">
             <header>
-                <h1>🌍 GeoGuessr Trainer</h1>
+                <button id="menu-back-btn" class="back-arrow-btn">←</button>
+                <h1 id="game-title">🌍 GeoGuessr Trainer</h1>
                 <div class="score">
                     <span>Round: <span id="round-number">1</span></span>
                     <span id="score-display">0 / 0 (0%)</span>
                 </div>
-                <button id="menu-back-btn" class="menu-back-btn">Menu</button>
             </header>
             
             <main>
@@ -74,41 +120,35 @@
                     <div id="round-summary-content"></div>
                 </div>
                 
-                <div class="flag-container">
-                    <img id="flag" src="" alt="Country Flag" />
+                <!-- Question Display Area -->
+                <div class="question-container">
+                    <div class="flag-container" id="flag-container" style="display: none;">
+                        <img id="flag" src="" alt="Country Flag" />
+                    </div>
+                    <div class="country-name-display" id="country-name-display" style="display: none;">
+                        <h2 id="displayed-country-name"></h2>
+                    </div>
                 </div>
                 
-                <div class="input-container">
+                <!-- Answer Input Area -->
+                <div class="input-container" id="typein-container">
                     <input 
                         type="text" 
-                        id="country-input" 
-                        placeholder="Enter country name..."
-                        autocomplete="off"
-                    />
-                    <input 
-                        type="text" 
-                        id="capital-input" 
-                        placeholder="Enter capital city..."
-                        autocomplete="off"
-                    />
-                    <input 
-                        type="text" 
-                        id="language-input" 
-                        placeholder="Enter national language..."
-                        autocomplete="off"
-                    />
-                    <input 
-                        type="text" 
-                        id="domain-input" 
-                        placeholder="Enter domain suffix (e.g., uk)..."
+                        id="answer-input" 
+                        placeholder="Enter answer..."
                         autocomplete="off"
                     />
                     <button id="submit-btn">Submit</button>
                 </div>
                 
+                <!-- Multiple Choice Area -->
+                <div class="multichoice-container" id="multichoice-container" style="display: none;">
+                    <div class="multichoice-options" id="multichoice-options"></div>
+                </div>
+                
                 <div id="feedback" class="feedback"></div>
                 
-                <button id="next-btn" class="next-btn" style="display: none;">Next Flag</button>
+                <button id="next-btn" class="next-btn" style="display: none;">Next Question</button>
             </main>
         </div>
     </div>

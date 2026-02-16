@@ -31,7 +31,8 @@ const geoguessrCountries = [
     'Israel', 'Jordan', 'Palestine', 'Qatar', 'Tunisia', 'Turkey', 'United Arab Emirates'
 ];
 
-// List of countries with their flag codes (ISO 3166-1 alpha-2), aliases, capitals, and languages
+// List of countries with their flag codes (ISO 3166-1 alpha-2), aliases, capitals, languages, and domains
+// NOTE: languages and domains are commented out for now but kept in data structure for future use
 const allCountries = [
     { name: 'Afghanistan', code: 'AF', capital: 'Kabul', languages: ['Pashto', 'Dari'], domain: 'af' },
     { name: 'Albania', code: 'AL', capital: 'Tirana', languages: ['Albanian'], domain: 'al' },
@@ -245,19 +246,27 @@ const allCountries = [
     { name: 'Zimbabwe', code: 'ZW', capital: 'Harare', languages: ['English', 'Shona', 'Ndebele'], domain: 'zw' },
 ];
 
-// Settings state
-let settings = {
+// Game mode: 'country' or 'capital'
+let gameMode = null;
+
+// Settings for each game mode
+let countryQuizSettings = {
     geoguessrFilter: false,
-    requireCapitals: false,
-    requireLanguages: false,
-    requireDomains: false
+    questionFormat: 'flag', // 'flag'
+    answerFormat: 'typein' // 'typein' or 'multichoice'
+};
+
+let capitalQuizSettings = {
+    geoguessrFilter: false,
+    questionFormat: 'flag', // 'flag' or 'countryName'
+    answerFormat: 'typein' // 'typein' or 'multichoice'
 };
 
 // Get filtered countries based on settings
-function getAvailableCountries() {
+function getAvailableCountries(geoguessrFilter) {
     let filtered = allCountries;
     
-    if (settings.geoguessrFilter) {
+    if (geoguessrFilter) {
         // Map GeoGuessr country names to our country objects
         // Handle special cases like "Czechia" -> "Czech Republic", "Lichtenstein" -> "Liechtenstein"
         const nameMap = {
@@ -281,6 +290,7 @@ function getAvailableCountries() {
     return filtered;
 }
 
+// Game state
 let currentCountry = null;
 let correctCount = 0;
 let totalSeen = 0;
@@ -291,25 +301,42 @@ let roundCorrectCount = 0;
 let roundTotalSeen = 0;
 let roundScores = []; // Track scores for each completed round
 let justSubmitted = false;
-let countries = getAvailableCountries();
+let countries = [];
+let multiChoiceOptions = []; // Store current multi-choice options
 
 // DOM elements
 const menuScreen = document.getElementById('menu-screen');
-const settingsScreen = document.getElementById('settings-screen');
+const countryQuizSettingsScreen = document.getElementById('country-quiz-settings-screen');
+const capitalQuizSettingsScreen = document.getElementById('capital-quiz-settings-screen');
 const gameScreen = document.getElementById('game-screen');
-const playBtn = document.getElementById('play-btn');
-const settingsBtn = document.getElementById('settings-btn');
-const backBtn = document.getElementById('back-btn');
+const countryQuizBtn = document.getElementById('country-quiz-btn');
+const capitalQuizBtn = document.getElementById('capital-quiz-btn');
+const countryQuizBackBtn = document.getElementById('country-quiz-back-btn');
+const capitalQuizBackBtn = document.getElementById('capital-quiz-back-btn');
+const countryQuizStartBtn = document.getElementById('country-quiz-start-btn');
+const capitalQuizStartBtn = document.getElementById('capital-quiz-start-btn');
 const menuBackBtn = document.getElementById('menu-back-btn');
-const geoguessrFilterCheckbox = document.getElementById('geoguessr-filter');
-const requireCapitalsCheckbox = document.getElementById('require-capitals');
-const requireLanguagesCheckbox = document.getElementById('require-languages');
-const requireDomainsCheckbox = document.getElementById('require-domains');
+const gameTitle = document.getElementById('game-title');
+
+// Country Quiz Settings DOM
+const countryQuizGeoguessrFilter = document.getElementById('country-quiz-geoguessr-filter');
+const countryQuizQuestionFormatRadios = document.querySelectorAll('input[name="country-quiz-question-format"]');
+const countryQuizAnswerFormatRadios = document.querySelectorAll('input[name="country-quiz-answer-format"]');
+
+// Capital Quiz Settings DOM
+const capitalQuizGeoguessrFilter = document.getElementById('capital-quiz-geoguessr-filter');
+const capitalQuizQuestionFormatRadios = document.querySelectorAll('input[name="capital-quiz-question-format"]');
+const capitalQuizAnswerFormatRadios = document.querySelectorAll('input[name="capital-quiz-answer-format"]');
+
+// Game Screen DOM
+const flagContainer = document.getElementById('flag-container');
 const flagImg = document.getElementById('flag');
-const countryInput = document.getElementById('country-input');
-const capitalInput = document.getElementById('capital-input');
-const languageInput = document.getElementById('language-input');
-const domainInput = document.getElementById('domain-input');
+const countryNameDisplay = document.getElementById('country-name-display');
+const displayedCountryName = document.getElementById('displayed-country-name');
+const typeinContainer = document.getElementById('typein-container');
+const answerInput = document.getElementById('answer-input');
+const multichoiceContainer = document.getElementById('multichoice-container');
+const multichoiceOptionsDiv = document.getElementById('multichoice-options');
 const submitBtn = document.getElementById('submit-btn');
 const nextBtn = document.getElementById('next-btn');
 const feedbackDiv = document.getElementById('feedback');
@@ -321,38 +348,34 @@ const roundSummaryContent = document.getElementById('round-summary-content');
 // Screen navigation
 function showScreen(screen) {
     menuScreen.style.display = screen === 'menu' ? 'block' : 'none';
-    settingsScreen.style.display = screen === 'settings' ? 'block' : 'none';
+    countryQuizSettingsScreen.style.display = screen === 'country-quiz-settings' ? 'block' : 'none';
+    capitalQuizSettingsScreen.style.display = screen === 'capital-quiz-settings' ? 'block' : 'none';
     gameScreen.style.display = screen === 'game' ? 'block' : 'none';
 }
 
-// Initialize settings from checkboxes
-function updateSettings() {
-    settings.geoguessrFilter = geoguessrFilterCheckbox.checked;
-    settings.requireCapitals = requireCapitalsCheckbox.checked;
-    settings.requireLanguages = requireLanguagesCheckbox.checked;
-    settings.requireDomains = requireDomainsCheckbox.checked;
-    
-    // Update countries list
-    countries = getAvailableCountries();
-    usedCountries = []; // Reset used countries when settings change
-    
-    // Update input visibility
-    if (settings.requireCapitals) {
-        capitalInput.style.display = 'block';
-    } else {
-        capitalInput.style.display = 'none';
+// Load country quiz settings from DOM
+function loadCountryQuizSettings() {
+    countryQuizSettings.geoguessrFilter = countryQuizGeoguessrFilter.checked;
+    const selectedQuestionFormat = document.querySelector('input[name="country-quiz-question-format"]:checked');
+    if (selectedQuestionFormat) {
+        countryQuizSettings.questionFormat = selectedQuestionFormat.value;
     }
-    
-    if (settings.requireLanguages) {
-        languageInput.style.display = 'block';
-    } else {
-        languageInput.style.display = 'none';
+    const selectedAnswerFormat = document.querySelector('input[name="country-quiz-answer-format"]:checked');
+    if (selectedAnswerFormat) {
+        countryQuizSettings.answerFormat = selectedAnswerFormat.value;
     }
-    
-    if (settings.requireDomains) {
-        domainInput.style.display = 'block';
-    } else {
-        domainInput.style.display = 'none';
+}
+
+// Load capital quiz settings from DOM
+function loadCapitalQuizSettings() {
+    capitalQuizSettings.geoguessrFilter = capitalQuizGeoguessrFilter.checked;
+    const selectedQuestionFormat = document.querySelector('input[name="capital-quiz-question-format"]:checked');
+    if (selectedQuestionFormat) {
+        capitalQuizSettings.questionFormat = selectedQuestionFormat.value;
+    }
+    const selectedAnswerFormat = document.querySelector('input[name="capital-quiz-answer-format"]:checked');
+    if (selectedAnswerFormat) {
+        capitalQuizSettings.answerFormat = selectedAnswerFormat.value;
     }
 }
 
@@ -470,8 +493,139 @@ function startNextRound() {
     return country;
 }
 
-// Load a new flag
-function loadNewFlag() {
+// Generate multi-choice options (4 options: 1 correct + 3 random)
+function generateMultiChoiceOptions(correctAnswer, isCapital = false) {
+    const options = [correctAnswer];
+    
+    // Get 3 random incorrect options
+    const availableOptions = isCapital 
+        ? countries.map(c => c.capital).filter(cap => cap !== correctAnswer)
+        : countries.map(c => c.name).filter(name => name !== correctAnswer);
+    
+    // Shuffle and take 3
+    const shuffled = availableOptions.sort(() => Math.random() - 0.5);
+    options.push(...shuffled.slice(0, 3));
+    
+    // Shuffle all options
+    const finalOptions = options.sort(() => Math.random() - 0.5);
+    
+    return finalOptions;
+}
+
+// Display multi-choice options
+function displayMultiChoiceOptions(options, correctAnswer) {
+    multichoiceOptionsDiv.innerHTML = '';
+    multiChoiceOptions = options;
+    
+    options.forEach((option, index) => {
+        const button = document.createElement('button');
+        button.className = 'multichoice-btn';
+        button.textContent = option;
+        button.addEventListener('click', () => handleMultiChoiceAnswer(option, correctAnswer, button));
+        multichoiceOptionsDiv.appendChild(button);
+    });
+}
+
+// Handle multi-choice answer selection
+function handleMultiChoiceAnswer(selectedAnswer, correctAnswer, buttonElement) {
+    // Disable all buttons
+    const allButtons = multichoiceOptionsDiv.querySelectorAll('.multichoice-btn');
+    allButtons.forEach(btn => btn.disabled = true);
+    
+    const isCorrect = normalizeString(selectedAnswer) === normalizeString(correctAnswer);
+    
+    // Mark correct/incorrect
+    if (isCorrect) {
+        buttonElement.classList.add('correct');
+    } else {
+        buttonElement.classList.add('incorrect');
+        // Also highlight the correct answer
+        allButtons.forEach(btn => {
+            if (normalizeString(btn.textContent) === normalizeString(correctAnswer)) {
+                btn.classList.add('correct');
+            }
+        });
+    }
+    
+    // Process answer
+    totalSeen++;
+    roundTotalSeen++;
+    
+    if (isCorrect) {
+        correctCount++;
+        roundCorrectCount++;
+        
+        // Remove from incorrect list if it was there
+        if (incorrectCountries.includes(currentCountry.name)) {
+            incorrectCountries = incorrectCountries.filter(name => name !== currentCountry.name);
+        }
+        
+        feedbackDiv.textContent = `Correct!`;
+        feedbackDiv.className = 'feedback correct';
+    } else {
+        // Wrong answer - add to incorrect list if not already there
+        if (!incorrectCountries.includes(currentCountry.name)) {
+            incorrectCountries.push(currentCountry.name);
+        }
+        
+        feedbackDiv.textContent = `Incorrect! The correct answer is: ${correctAnswer}`;
+        feedbackDiv.className = 'feedback incorrect';
+    }
+    
+    updateScoreDisplay();
+    nextBtn.style.display = 'block';
+    
+    // Set flag to prevent immediate next trigger
+    justSubmitted = true;
+    setTimeout(() => {
+        justSubmitted = false;
+    }, 100);
+}
+
+// Load question based on format
+function loadQuestion() {
+    const settings = gameMode === 'country' ? countryQuizSettings : capitalQuizSettings;
+    
+    // Hide all question containers
+    flagContainer.style.display = 'none';
+    countryNameDisplay.style.display = 'none';
+    
+    if (gameMode === 'country') {
+        // Country Quiz - only flag format available
+        flagContainer.style.display = 'block';
+        flagImg.style.display = 'block';
+        flagImg.src = `https://flagcdn.com/w320/${currentCountry.code.toLowerCase()}.png`;
+        flagImg.alt = `${currentCountry.name} flag`;
+        flagImg.onerror = function() {
+            this.src = `https://flagcdn.com/w320/${currentCountry.code.toLowerCase()}.svg`;
+            this.onerror = function() {
+                this.style.display = 'none';
+                console.warn(`Flag not available for ${currentCountry.name} (${currentCountry.code})`);
+            };
+        };
+    } else {
+        // Capital Quiz
+        if (settings.questionFormat === 'flag') {
+            flagContainer.style.display = 'block';
+            flagImg.style.display = 'block';
+            flagImg.src = `https://flagcdn.com/w320/${currentCountry.code.toLowerCase()}.png`;
+            flagImg.alt = `${currentCountry.name} flag`;
+            flagImg.onerror = function() {
+                this.src = `https://flagcdn.com/w320/${currentCountry.code.toLowerCase()}.svg`;
+                this.onerror = function() {
+                    this.style.display = 'none';
+                    console.warn(`Flag not available for ${currentCountry.name} (${currentCountry.code})`);
+                };
+            };
+        } else if (settings.questionFormat === 'countryName') {
+            countryNameDisplay.style.display = 'block';
+            displayedCountryName.textContent = currentCountry.name;
+        }
+    }
+}
+
+// Load a new question
+function loadNewQuestion() {
     currentCountry = getRandomCountry();
     
     if (currentCountry === null) {
@@ -487,51 +641,51 @@ function loadNewFlag() {
         
         // All rounds complete
         if (incorrectCountries.length === 0) {
-            feedbackDiv.textContent = `Perfect! You got all ${countries.length} countries correct!`;
+            feedbackDiv.textContent = `Perfect! You got all ${countries.length} ${gameMode === 'country' ? 'countries' : 'capitals'} correct!`;
         } else {
             const remainingCount = incorrectCountries.length;
-            feedbackDiv.textContent = `Round ${currentRound} complete! You have ${remainingCount} country${remainingCount !== 1 ? 'ies' : ''} to practice. Click Next to continue.`;
+            const word = gameMode === 'country' 
+                ? (remainingCount !== 1 ? 'countries' : 'country')
+                : (remainingCount !== 1 ? 'capitals' : 'capital');
+            feedbackDiv.textContent = `Round ${currentRound} complete! You have ${remainingCount} ${word} to practice. Click Next to continue.`;
         }
         feedbackDiv.className = 'feedback correct';
-        countryInput.disabled = true;
-        capitalInput.disabled = true;
-        languageInput.disabled = true;
-        domainInput.disabled = true;
-        submitBtn.disabled = true;
+        answerInput.disabled = true;
+        submitBtn.style.display = 'none';
         nextBtn.style.display = 'block';
         nextBtn.textContent = incorrectCountries.length > 0 ? 'Start Next Round' : 'Back to Menu';
-        flagImg.style.display = 'none';
+        flagContainer.style.display = 'none';
+        countryNameDisplay.style.display = 'none';
         return;
     }
     
-    flagImg.style.display = 'block';
-    flagImg.src = `https://flagcdn.com/w320/${currentCountry.code.toLowerCase()}.png`;
-    flagImg.alt = `${currentCountry.name} flag`;
-    // Handle flag loading errors (for territories that might not have flags)
-    flagImg.onerror = function() {
-        this.src = `https://flagcdn.com/w320/${currentCountry.code.toLowerCase()}.svg`;
-        this.onerror = function() {
-            // If both PNG and SVG fail, show a placeholder or hide the image
-            this.style.display = 'none';
-            console.warn(`Flag not available for ${currentCountry.name} (${currentCountry.code})`);
-        };
-    };
+    // Load question based on format
+    loadQuestion();
     
     // Reset UI
-    countryInput.value = '';
-    capitalInput.value = '';
-    languageInput.value = '';
-    domainInput.value = '';
-    countryInput.disabled = false;
-    capitalInput.disabled = false;
-    languageInput.disabled = false;
-    domainInput.disabled = false;
-    countryInput.focus();
-    submitBtn.disabled = false;
+    answerInput.value = '';
+    answerInput.disabled = false;
+    answerInput.focus();
+    submitBtn.style.display = 'block';
     feedbackDiv.textContent = '';
     feedbackDiv.className = 'feedback';
     nextBtn.style.display = 'none';
-    nextBtn.textContent = 'Next Flag';
+    nextBtn.textContent = 'Next Question';
+    
+    // Show/hide answer format containers
+    const settings = gameMode === 'country' ? countryQuizSettings : capitalQuizSettings;
+    if (settings.answerFormat === 'typein') {
+        typeinContainer.style.display = 'block';
+        multichoiceContainer.style.display = 'none';
+    } else {
+        typeinContainer.style.display = 'none';
+        multichoiceContainer.style.display = 'block';
+        
+        // Generate and display multi-choice options
+        const correctAnswer = gameMode === 'country' ? currentCountry.name : currentCountry.capital;
+        const options = generateMultiChoiceOptions(correctAnswer, gameMode === 'capital');
+        displayMultiChoiceOptions(options, correctAnswer);
+    }
 }
 
 // Normalize string for comparison (remove punctuation, extra spaces, and accents)
@@ -544,18 +698,12 @@ function normalizeString(str) {
         .trim();
 }
 
-// Check answer (case insensitive, supports aliases, accent-insensitive)
-function checkAnswer() {
-    const userCountryAnswer = normalizeString(countryInput.value.trim());
-    const userCapitalAnswer = normalizeString(capitalInput.value.trim());
-    const userLanguageAnswer = normalizeString(languageInput.value.trim());
-    const userDomainAnswer = normalizeString(domainInput.value.trim());
+// Check country answer
+function checkCountryAnswer() {
+    const userAnswer = normalizeString(answerInput.value.trim());
     const correctCountry = normalizeString(currentCountry.name);
-    const correctCapital = normalizeString(currentCountry.capital);
-    const correctLanguages = currentCountry.languages ? currentCountry.languages.map(lang => normalizeString(lang)) : [];
-    const correctDomain = currentCountry.domain ? normalizeString(currentCountry.domain) : '';
     
-    // Check if country answer matches the country name or any of its aliases
+    // Check if answer matches the country name or any of its aliases
     const allCountryAnswers = [correctCountry];
     if (currentCountry.aliases) {
         currentCountry.aliases.forEach(alias => {
@@ -563,19 +711,13 @@ function checkAnswer() {
         });
     }
     
-    const isCountryCorrect = allCountryAnswers.includes(userCountryAnswer);
-    const isCapitalCorrect = !settings.requireCapitals || userCapitalAnswer === correctCapital;
-    const isLanguageCorrect = !settings.requireLanguages || correctLanguages.includes(userLanguageAnswer);
-    // Domain is correct if: not required OR (user answer matches correct domain OR both are empty)
-    const isDomainCorrect = !settings.requireDomains || 
-        (userDomainAnswer === correctDomain || (userDomainAnswer === '' && correctDomain === ''));
+    const isCorrect = allCountryAnswers.includes(userAnswer);
     
     // Increment total seen
     totalSeen++;
     roundTotalSeen++;
     
-    // All required fields must be correct
-    if (isCountryCorrect && isCapitalCorrect && isLanguageCorrect && isDomainCorrect) {
+    if (isCorrect) {
         // Correct answer
         correctCount++;
         roundCorrectCount++;
@@ -585,23 +727,10 @@ function checkAnswer() {
             incorrectCountries = incorrectCountries.filter(name => name !== currentCountry.name);
         }
         
-        let feedbackMsg = `Correct! It's ${currentCountry.name}`;
-        if (settings.requireCapitals) {
-            feedbackMsg += `, capital: ${currentCountry.capital}`;
-        }
-        if (settings.requireLanguages && currentCountry.languages) {
-            feedbackMsg += `, language: ${currentCountry.languages[0]}`;
-        }
-        if (settings.requireDomains && currentCountry.domain) {
-            feedbackMsg += ` (domain: .${currentCountry.domain})`;
-        }
-        feedbackDiv.textContent = feedbackMsg;
+        feedbackDiv.textContent = `Correct! It's ${currentCountry.name}`;
         feedbackDiv.className = 'feedback correct';
-        countryInput.disabled = true;
-        capitalInput.disabled = true;
-        languageInput.disabled = true;
-        domainInput.disabled = true;
-        submitBtn.disabled = true;
+        answerInput.disabled = true;
+        submitBtn.style.display = 'none';
         nextBtn.style.display = 'block';
     } else {
         // Wrong answer - add to incorrect list if not already there
@@ -609,63 +738,86 @@ function checkAnswer() {
             incorrectCountries.push(currentCountry.name);
         }
         
-        // Provide specific feedback showing which inputs were wrong and correct answers
-        let feedbackMsg = 'Incorrect! ';
-        const wrongDetails = [];
-        
-        if (!isCountryCorrect) {
-            wrongDetails.push(`Country: ${currentCountry.name}`);
-        }
-        if (settings.requireCapitals && !isCapitalCorrect) {
-            wrongDetails.push(`Capital: ${currentCountry.capital}`);
-        }
-        if (settings.requireLanguages && !isLanguageCorrect && currentCountry.languages) {
-            wrongDetails.push(`Language: ${currentCountry.languages[0]}`);
-        }
-        if (settings.requireDomains && !isDomainCorrect) {
-            if (currentCountry.domain) {
-                wrongDetails.push(`Domain: .${currentCountry.domain}`);
-            } else {
-                wrongDetails.push(`Domain: (none)`);
-            }
-        }
-        
-        if (wrongDetails.length > 0) {
-            feedbackMsg += wrongDetails.join(' | ');
-        }
-        
-        // Also mention what was correct
-        const correctParts = [];
-        if (isCountryCorrect) correctParts.push('country');
-        if (settings.requireCapitals && isCapitalCorrect) correctParts.push('capital');
-        if (settings.requireLanguages && isLanguageCorrect) correctParts.push('language');
-        if (settings.requireDomains && isDomainCorrect) correctParts.push('domain');
-        
-        if (correctParts.length > 0) {
-            feedbackMsg += ` (${correctParts.join(', ')} ${correctParts.length === 1 ? 'was' : 'were'} correct)`;
-        }
-        
-        feedbackDiv.textContent = feedbackMsg;
+        feedbackDiv.textContent = `Incorrect! The correct answer is: ${currentCountry.name}`;
         feedbackDiv.className = 'feedback incorrect';
-        countryInput.disabled = true;
-        capitalInput.disabled = true;
-        languageInput.disabled = true;
-        domainInput.disabled = true;
-        submitBtn.disabled = true;
+        answerInput.disabled = true;
+        submitBtn.style.display = 'none';
         nextBtn.style.display = 'block';
     }
     
     updateScoreDisplay();
     
-    // Set flag to prevent immediate next flag trigger
+    // Set flag to prevent immediate next trigger
     justSubmitted = true;
     setTimeout(() => {
         justSubmitted = false;
     }, 100);
 }
 
-// Start game
-function startGame() {
+// Check capital answer
+function checkCapitalAnswer() {
+    const userAnswer = normalizeString(answerInput.value.trim());
+    const correctCapital = normalizeString(currentCountry.capital);
+    
+    const isCorrect = userAnswer === correctCapital;
+    
+    // Increment total seen
+    totalSeen++;
+    roundTotalSeen++;
+    
+    if (isCorrect) {
+        // Correct answer
+        correctCount++;
+        roundCorrectCount++;
+        
+        // Remove from incorrect list if it was there
+        if (incorrectCountries.includes(currentCountry.name)) {
+            incorrectCountries = incorrectCountries.filter(name => name !== currentCountry.name);
+        }
+        
+        feedbackDiv.textContent = `Correct! The capital of ${currentCountry.name} is ${currentCountry.capital}`;
+        feedbackDiv.className = 'feedback correct';
+        answerInput.disabled = true;
+        submitBtn.style.display = 'none';
+        nextBtn.style.display = 'block';
+    } else {
+        // Wrong answer - add to incorrect list if not already there
+        if (!incorrectCountries.includes(currentCountry.name)) {
+            incorrectCountries.push(currentCountry.name);
+        }
+        
+        feedbackDiv.textContent = `Incorrect! The capital of ${currentCountry.name} is: ${currentCountry.capital}`;
+        feedbackDiv.className = 'feedback incorrect';
+        answerInput.disabled = true;
+        submitBtn.style.display = 'none';
+        nextBtn.style.display = 'block';
+    }
+    
+    updateScoreDisplay();
+    
+    // Set flag to prevent immediate next trigger
+    justSubmitted = true;
+    setTimeout(() => {
+        justSubmitted = false;
+    }, 100);
+}
+
+// Check answer (routes to appropriate function)
+function checkAnswer() {
+    if (gameMode === 'country') {
+        checkCountryAnswer();
+    } else {
+        checkCapitalAnswer();
+    }
+}
+
+// Start country quiz
+function startCountryQuiz() {
+    loadCountryQuizSettings();
+    gameMode = 'country';
+    gameTitle.textContent = '🌍 Country Quiz';
+    countries = getAvailableCountries(countryQuizSettings.geoguessrFilter);
+    
     correctCount = 0;
     totalSeen = 0;
     roundCorrectCount = 0;
@@ -676,15 +828,39 @@ function startGame() {
     roundScores = [];
     roundNumber.textContent = currentRound;
     updateScoreDisplay();
-    updateSettings();
     showScreen('game');
-    loadNewFlag();
+    loadNewQuestion();
+}
+
+// Start capital quiz
+function startCapitalQuiz() {
+    loadCapitalQuizSettings();
+    gameMode = 'capital';
+    gameTitle.textContent = '🏛️ Capital Quiz';
+    countries = getAvailableCountries(capitalQuizSettings.geoguessrFilter);
+    
+    correctCount = 0;
+    totalSeen = 0;
+    roundCorrectCount = 0;
+    roundTotalSeen = 0;
+    usedCountries = [];
+    incorrectCountries = [];
+    currentRound = 1;
+    roundScores = [];
+    roundNumber.textContent = currentRound;
+    updateScoreDisplay();
+    showScreen('game');
+    loadNewQuestion();
 }
 
 // Event listeners for navigation
-playBtn.addEventListener('click', startGame);
-settingsBtn.addEventListener('click', () => showScreen('settings'));
-backBtn.addEventListener('click', () => showScreen('menu'));
+countryQuizBtn.addEventListener('click', () => showScreen('country-quiz-settings'));
+capitalQuizBtn.addEventListener('click', () => showScreen('capital-quiz-settings'));
+countryQuizBackBtn.addEventListener('click', () => showScreen('menu'));
+capitalQuizBackBtn.addEventListener('click', () => showScreen('menu'));
+countryQuizStartBtn.addEventListener('click', startCountryQuiz);
+capitalQuizStartBtn.addEventListener('click', startCapitalQuiz);
+
 menuBackBtn.addEventListener('click', () => {
     showScreen('menu');
     correctCount = 0;
@@ -696,132 +872,60 @@ menuBackBtn.addEventListener('click', () => {
     currentRound = 1;
     roundScores = [];
     roundSummary.style.display = 'none';
+    gameMode = null;
 });
-
-// Settings event listeners
-geoguessrFilterCheckbox.addEventListener('change', updateSettings);
-requireCapitalsCheckbox.addEventListener('change', updateSettings);
-requireLanguagesCheckbox.addEventListener('change', updateSettings);
-requireDomainsCheckbox.addEventListener('change', updateSettings);
 
 // Game event listeners
 submitBtn.addEventListener('click', checkAnswer);
 nextBtn.addEventListener('click', () => {
     if (nextBtn.textContent === 'Start Next Round') {
-        // Start next round (round score already saved in loadNewFlag)
+        // Start next round (round score already saved in loadNewQuestion)
         currentCountry = startNextRound();
         if (currentCountry === null) {
             // No more incorrect countries
-            feedbackDiv.textContent = `Perfect! You've mastered all countries!`;
+            feedbackDiv.textContent = `Perfect! You've mastered all ${gameMode === 'country' ? 'countries' : 'capitals'}!`;
             feedbackDiv.className = 'feedback correct';
             nextBtn.textContent = 'Back to Menu';
             // Show round summary when game is complete
             updateRoundSummary();
             return;
         }
-        // Load the first flag of the new round
-        flagImg.style.display = 'block';
-        flagImg.src = `https://flagcdn.com/w320/${currentCountry.code.toLowerCase()}.png`;
-        flagImg.alt = `${currentCountry.name} flag`;
-        // Reset error handler
-        flagImg.onerror = function() {
-            this.src = `https://flagcdn.com/w320/${currentCountry.code.toLowerCase()}.svg`;
-            this.onerror = function() {
-                this.style.display = 'none';
-                console.warn(`Flag not available for ${currentCountry.name} (${currentCountry.code})`);
-            };
-        };
-        countryInput.value = '';
-        capitalInput.value = '';
-        languageInput.value = '';
-        domainInput.value = '';
-        countryInput.disabled = false;
-        capitalInput.disabled = false;
-        languageInput.disabled = false;
-        domainInput.disabled = false;
-        countryInput.focus();
-        submitBtn.disabled = false;
+        // Load the first question of the new round
+        loadQuestion();
+        answerInput.value = '';
+        answerInput.disabled = false;
+        answerInput.focus();
+        submitBtn.style.display = 'block';
         feedbackDiv.textContent = '';
         feedbackDiv.className = 'feedback';
         nextBtn.style.display = 'none';
-        nextBtn.textContent = 'Next Flag';
+        nextBtn.textContent = 'Next Question';
         roundSummary.style.display = 'none';
+        
+        // Show/hide answer format containers
+        const settings = gameMode === 'country' ? countryQuizSettings : capitalQuizSettings;
+        if (settings.answerFormat === 'typein') {
+            typeinContainer.style.display = 'block';
+            multichoiceContainer.style.display = 'none';
+        } else {
+            typeinContainer.style.display = 'none';
+            multichoiceContainer.style.display = 'block';
+            
+            // Generate and display multi-choice options
+            const correctAnswer = gameMode === 'country' ? currentCountry.name : currentCountry.capital;
+            const options = generateMultiChoiceOptions(correctAnswer, gameMode === 'capital');
+            displayMultiChoiceOptions(options, correctAnswer);
+        }
     } else if (nextBtn.textContent === 'Back to Menu') {
         showScreen('menu');
     } else {
-        loadNewFlag();
+        loadNewQuestion();
     }
 });
 
-countryInput.addEventListener('keypress', (e) => {
+answerInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
-        if (!countryInput.disabled) {
-            e.preventDefault();
-            e.stopPropagation();
-            // Move focus to next required input or submit
-            if (settings.requireCapitals) {
-                capitalInput.focus();
-            } else if (settings.requireLanguages) {
-                languageInput.focus();
-            } else if (settings.requireDomains) {
-                domainInput.focus();
-            } else {
-                checkAnswer();
-            }
-        } else if (nextBtn.style.display !== 'none') {
-            // Next button is visible, trigger it
-            e.preventDefault();
-            e.stopPropagation();
-            nextBtn.click();
-        }
-    }
-});
-
-capitalInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-        if (!capitalInput.disabled) {
-            e.preventDefault();
-            e.stopPropagation();
-            // Move focus to language input if required, then domain, otherwise submit
-            if (settings.requireLanguages) {
-                languageInput.focus();
-            } else if (settings.requireDomains) {
-                domainInput.focus();
-            } else {
-                checkAnswer();
-            }
-        } else if (nextBtn.style.display !== 'none') {
-            // Next button is visible, trigger it
-            e.preventDefault();
-            e.stopPropagation();
-            nextBtn.click();
-        }
-    }
-});
-
-languageInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-        if (!languageInput.disabled) {
-            e.preventDefault();
-            e.stopPropagation();
-            // Move focus to domain input if required, otherwise submit
-            if (settings.requireDomains) {
-                domainInput.focus();
-            } else {
-                checkAnswer();
-            }
-        } else if (nextBtn.style.display !== 'none') {
-            // Next button is visible, trigger it
-            e.preventDefault();
-            e.stopPropagation();
-            nextBtn.click();
-        }
-    }
-});
-
-domainInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-        if (!domainInput.disabled) {
+        if (!answerInput.disabled) {
             e.preventDefault();
             e.stopPropagation();
             checkAnswer();
@@ -838,16 +942,22 @@ domainInput.addEventListener('keypress', (e) => {
 document.addEventListener('keypress', (e) => {
     if (e.key === 'Enter' && 
         nextBtn.style.display !== 'none' && 
-        countryInput.disabled &&
-        (!settings.requireCapitals || capitalInput.disabled) &&
-        (!settings.requireLanguages || languageInput.disabled) &&
-        (!settings.requireDomains || domainInput.disabled) &&
         !justSubmitted) {
-        e.preventDefault();
-        nextBtn.click();
+        // Check if we're in type-in mode and input is disabled
+        const isTypeInMode = typeinContainer.style.display !== 'none';
+        const isTypeInReady = isTypeInMode && answerInput.disabled;
+        
+        // Check if we're in multi-choice mode and buttons are disabled
+        const isMultiChoiceMode = multichoiceContainer.style.display !== 'none';
+        const isMultiChoiceReady = isMultiChoiceMode && 
+            multichoiceOptionsDiv.querySelectorAll('.multichoice-btn:disabled').length > 0;
+        
+        if (isTypeInReady || isMultiChoiceReady) {
+            e.preventDefault();
+            nextBtn.click();
+        }
     }
 });
 
 // Initialize
-updateSettings();
 showScreen('menu');
