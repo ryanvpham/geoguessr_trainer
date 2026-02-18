@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useMemo } from 'react'
+import { generateMultiChoiceOptions } from '../utils/gameLogic'
 
 function AnswerInput({ answerFormat, onSubmit, disabled, correctAnswer, countries, isCapital }) {
   const [answer, setAnswer] = useState('')
@@ -71,7 +72,6 @@ function AnswerInput({ answerFormat, onSubmit, disabled, correctAnswer, countrie
     )
   } else {
     // Multi-choice
-    const { generateMultiChoiceOptions } = require('../utils/gameLogic')
     const options = useMemo(() => {
       if (!correctAnswer || !countries) return []
       return generateMultiChoiceOptions(correctAnswer, countries, isCapital)
