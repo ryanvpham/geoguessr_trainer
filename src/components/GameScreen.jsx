@@ -285,6 +285,8 @@ function GameScreen({ gameMode, settings, onBack }) {
           </div>
         )}
         
+        <Feedback message={feedback.message} isCorrect={feedback.isCorrect} />
+        
         {currentCountry && (
           <AnswerInput
             answerFormat={settings.answerFormat}
@@ -295,8 +297,6 @@ function GameScreen({ gameMode, settings, onBack }) {
             isCapital={gameMode === 'capital'}
           />
         )}
-        
-        <Feedback message={feedback.message} isCorrect={feedback.isCorrect} />
         
         {showNext && (
           <button className="next-btn" onClick={handleNext}>

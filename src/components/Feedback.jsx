@@ -1,8 +1,6 @@
 function Feedback({ message, isCorrect }) {
-  if (!message) return null
-  
   return (
-    <div className={`feedback ${isCorrect ? 'correct' : 'incorrect'}`}>
+    <div className={`feedback ${message ? (isCorrect ? 'correct' : 'incorrect') : ''}`}>
       {message}
     </div>
   )
