@@ -4,9 +4,156 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GeoGuessr Trainer</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <div class="container">
+        <!-- Menu Screen -->
+        <div id="menu-screen" class="screen">
+            <header>
+                <h1>🌍 GeoGuessr Trainer</h1>
+            </header>
+            <div class="menu-buttons">
+                <button id="country-quiz-btn" class="menu-btn">Country Quiz</button>
+                <button id="capital-quiz-btn" class="menu-btn">Country Capital Quiz</button>
+            </div>
+        </div>
+
+        <!-- Country Quiz Settings Screen -->
+        <div id="country-quiz-settings-screen" class="screen" style="display: none;">
+            <header>
+                <button id="country-quiz-back-btn" class="back-arrow-btn">←</button>
+                <h1>⚙️ Country Quiz Settings</h1>
+            </header>
+            <div class="settings-content">
+                <div class="setting-item">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="country-quiz-geoguessr-filter" />
+                        <span>GeoGuessr Countries Only</span>
+                    </label>
+                    <p class="setting-description">Filter to only countries that appear in GeoGuessr</p>
+                </div>
+                <div class="setting-item">
+                    <label class="setting-label">Question Format</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="country-quiz-question-format" value="flag" checked />
+                            <span>Flag</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <label class="setting-label">Answer Format</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="country-quiz-answer-format" value="typein" checked />
+                            <span>Type In</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="country-quiz-answer-format" value="multichoice" />
+                            <span>Multiple Choice</span>
+                        </label>
+                    </div>
+                </div>
+                <button id="country-quiz-start-btn" class="menu-btn">Start Quiz</button>
+            </div>
+        </div>
+
+        <!-- Capital Quiz Settings Screen -->
+        <div id="capital-quiz-settings-screen" class="screen" style="display: none;">
+            <header>
+                <button id="capital-quiz-back-btn" class="back-arrow-btn">←</button>
+                <h1>⚙️ Capital Quiz Settings</h1>
+            </header>
+            <div class="settings-content">
+                <div class="setting-item">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="capital-quiz-geoguessr-filter" />
+                        <span>GeoGuessr Countries Only</span>
+                    </label>
+                    <p class="setting-description">Filter to only countries that appear in GeoGuessr</p>
+                </div>
+                <div class="setting-item">
+                    <label class="setting-label">Question Format</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="capital-quiz-question-format" value="flag" checked />
+                            <span>Flag</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="capital-quiz-question-format" value="countryName" />
+                            <span>Country Name</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <label class="setting-label">Answer Format</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="capital-quiz-answer-format" value="typein" checked />
+                            <span>Type In</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="capital-quiz-answer-format" value="multichoice" />
+                            <span>Multiple Choice</span>
+                        </label>
+                    </div>
+                </div>
+                <button id="capital-quiz-start-btn" class="menu-btn">Start Quiz</button>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="game-screen" class="screen" style="display: none;">
+            <header>
+                <button id="menu-back-btn" class="back-arrow-btn">←</button>
+                <h1 id="game-title">🌍 GeoGuessr Trainer</h1>
+                <div class="score">
+                    <span>Round: <span id="round-number">1</span></span>
+                    <span id="score-display">0 / 0 (0%)</span>
+                </div>
+            </header>
+            
+            <main>
+                <div id="round-summary" class="round-summary" style="display: none;">
+                    <h3>Round Summary</h3>
+                    <div id="round-summary-content"></div>
+                </div>
+                
+                <!-- Question Display Area -->
+                <div class="question-container">
+                    <div class="flag-container" id="flag-container" style="display: none;">
+                        <img id="flag" src="" alt="Country Flag" />
+                    </div>
+                    <div class="country-name-display" id="country-name-display" style="display: none;">
+                        <h2 id="displayed-country-name"></h2>
+                    </div>
+                </div>
+                
+                <!-- Answer Input Area -->
+                <div class="input-container" id="typein-container">
+                    <input 
+                        type="text" 
+                        id="answer-input" 
+                        placeholder="Enter answer..."
+                        autocomplete="off"
+                    />
+                    <button id="submit-btn">Submit</button>
+                </div>
+                
+                <!-- Multiple Choice Area -->
+                <div class="multichoice-container" id="multichoice-container" style="display: none;">
+                    <div class="multichoice-options" id="multichoice-options"></div>
+                </div>
+                
+                <div id="feedback" class="feedback"></div>
+                
+                <button id="next-btn" class="next-btn" style="display: none;">Next Question</button>
+            </main>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
 </body>
 </html>
+
