@@ -1,18 +1,19 @@
 {
   "name": "geoguessr-trainer",
   "version": "1.0.0",
+  "description": "Free web app to practice countries, flags, and capitals — great for GeoGuessr prep.",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:root": "BASE_PATH=/ vite build"
   },
   "dependencies": {
     "d3-geo": "^3.1.0",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-simple-maps": "^3.0.0",
     "topojson-client": "^3.1.0"
   },
   "devDependencies": {

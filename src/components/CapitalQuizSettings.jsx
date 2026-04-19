@@ -1,3 +1,5 @@
+import RegionFilter from './RegionFilter'
+
 function CapitalQuizSettings({ settings, onSettingsChange, onBack, onStart }) {
   const handleGeoguessrFilterChange = (e) => {
     onSettingsChange({ ...settings, geoguessrFilter: e.target.checked })
@@ -11,11 +13,15 @@ function CapitalQuizSettings({ settings, onSettingsChange, onBack, onStart }) {
     onSettingsChange({ ...settings, answerFormat: e.target.value })
   }
 
+  const handleRegionsChange = (regions) => {
+    onSettingsChange({ ...settings, selectedRegions: regions })
+  }
+
   return (
     <div className="screen">
       <header>
-        <button className="back-arrow-btn" onClick={onBack}>←</button>
-        <h1>⚙️ Capital Quiz Settings</h1>
+        <button className="back-arrow-btn" onClick={onBack} aria-label="Back">←</button>
+        <h1>Capital Quiz</h1>
       </header>
       <div className="settings-content">
         <div className="setting-item">
@@ -28,6 +34,13 @@ function CapitalQuizSettings({ settings, onSettingsChange, onBack, onStart }) {
             <span>GeoGuessr Countries Only</span>
           </label>
           <p className="setting-description">Filter to only countries that appear in GeoGuessr</p>
+        </div>
+        <div className="setting-item">
+          <RegionFilter
+            selectedRegions={settings.selectedRegions || []}
+            onChange={handleRegionsChange}
+            geoguessrFilter={settings.geoguessrFilter}
+          />
         </div>
         <div className="setting-item">
           <label className="setting-label">Question Format</label>
