@@ -24,9 +24,17 @@ function GameScreen({ gameMode, settings, onBack }) {
   const [isAnswered, setIsAnswered] = useState(false)
   const [justSubmitted, setJustSubmitted] = useState(false)
 
-  // Initialize countries when component mounts or settings change
+  // Re-seed the pool whenever region selection or the GeoGuessr filter changes.
+  // Joining the region array to a string keeps the dep stable across rerenders.
+  const regionKey = Array.isArray(settings.selectedRegions)
+    ? settings.selectedRegions.slice().sort().join('|')
+    : ''
+
   useEffect(() => {
-    const availableCountries = getAvailableCountries(settings.geoguessrFilter)
+    const availableCountries = getAvailableCountries(
+      settings.geoguessrFilter,
+      settings.selectedRegions
+    )
     setCountries(availableCountries)
     setCurrentCountry(null)
     setCorrectCount(0)
@@ -41,7 +49,8 @@ function GameScreen({ gameMode, settings, onBack }) {
     setShowNext(false)
     setNextButtonText('Next Question')
     setIsAnswered(false)
-  }, [settings.geoguessrFilter])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [settings.geoguessrFilter, regionKey])
 
   // Load first question when countries are ready
   useEffect(() => {
@@ -252,26 +261,42 @@ function GameScreen({ gameMode, settings, onBack }) {
     return () => document.removeEventListener('keypress', handleKeyPress)
   }, [showNext, isAnswered, justSubmitted, handleNext])
 
-  const gameTitle = gameMode === 'country' ? '🌍 Country Quiz' : '🏛️ Capital Quiz'
+  const gameTitle = gameMode === 'country' ? 'Country Quiz' : 'Capital Quiz'
   const percentage = totalSeen > 0 ? Math.round((correctCount / totalSeen) * 100) : 0
-  const correctAnswer = currentCountry 
+  const correctAnswer = currentCountry
     ? (gameMode === 'country' ? currentCountry.name : currentCountry.capital)
     : ''
 
   // Show round summary only when game is complete
   const showRoundSummary = incorrectCountries.length === 0 && roundScores.length > 0
 
+  // Round progress — for round 1 it's (seen / total); for later rounds
+  // (seen this round / incorrect from previous). Fall back to 0 if none.
+  const roundTotal =
+    currentRound === 1 ? countries.length : incorrectCountries.length + roundTotalSeen
+  const progressPct = roundTotal > 0
+    ? Math.min(100, Math.round((roundTotalSeen / roundTotal) * 100))
+    : 0
+
   return (
     <div className="screen">
-      <header>
-        <button className="back-arrow-btn" onClick={onBack}>←</button>
+      <header className="game-header">
+        <button className="back-arrow-btn" onClick={onBack} aria-label="Back to menu">←</button>
         <h1 id="game-title">{gameTitle}</h1>
-        <div className="score">
-          <span>Round: <span>{currentRound}</span></span>
-          <span id="score-display">{correctCount} / {totalSeen} ({percentage}%)</span>
+        <div className="score-badge" aria-label={`Score ${correctCount} of ${totalSeen}, ${percentage}%`}>
+          <span>Round <span className="round-num">{currentRound}</span></span>
+          <span className="dot" aria-hidden="true"></span>
+          <span id="score-display">{correctCount}/{totalSeen} · {percentage}%</span>
         </div>
       </header>
-      
+
+      <div className="round-progress" aria-hidden="true">
+        <div
+          className="round-progress-fill"
+          style={{ width: `${progressPct}%` }}
+        />
+      </div>
+
       <main>
         {showRoundSummary && <RoundSummary roundScores={roundScores} />}
         
@@ -285,6 +310,8 @@ function GameScreen({ gameMode, settings, onBack }) {
           </div>
         )}
         
+        <Feedback message={feedback.message} isCorrect={feedback.isCorrect} />
+        
         {currentCountry && (
           <AnswerInput
             answerFormat={settings.answerFormat}
@@ -295,8 +322,6 @@ function GameScreen({ gameMode, settings, onBack }) {
             isCapital={gameMode === 'capital'}
           />
         )}
-        
-        <Feedback message={feedback.message} isCorrect={feedback.isCorrect} />
         
         {showNext && (
           <button className="next-btn" onClick={handleNext}>

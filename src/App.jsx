@@ -3,22 +3,26 @@ import MenuScreen from './components/MenuScreen'
 import CountryQuizSettings from './components/CountryQuizSettings'
 import CapitalQuizSettings from './components/CapitalQuizSettings'
 import GameScreen from './components/GameScreen'
+import { REGION_IDS } from './data/regionMapping'
 
 function App() {
   const [currentScreen, setCurrentScreen] = useState('menu')
   const [gameMode, setGameMode] = useState(null)
-  
-  // Settings for each game mode
+
+  // Settings for each game mode. By default every region is selected so the
+  // quiz covers the whole world until the user narrows it down.
   const [countryQuizSettings, setCountryQuizSettings] = useState({
     geoguessrFilter: false,
     questionFormat: 'flag', // 'flag' or 'map'
-    answerFormat: 'typein' // 'typein' or 'multichoice'
+    answerFormat: 'typein', // 'typein' or 'multichoice'
+    selectedRegions: [...REGION_IDS],
   })
-  
+
   const [capitalQuizSettings, setCapitalQuizSettings] = useState({
     geoguessrFilter: false,
     questionFormat: 'flag', // 'flag' or 'countryName'
-    answerFormat: 'typein' // 'typein' or 'multichoice'
+    answerFormat: 'typein', // 'typein' or 'multichoice'
+    selectedRegions: [...REGION_IDS],
   })
 
   const handleStartCountryQuiz = () => {
