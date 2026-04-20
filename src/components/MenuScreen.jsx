@@ -26,7 +26,7 @@ function MenuScreen({ onCountryQuizClick, onCapitalQuizClick }) {
           <h2>Country Quiz</h2>
           <p>
             Identify countries from their flag or their highlighted position on the
-            world map. Type the name or pick from options.
+            world map.
           </p>
           <span className="mode-arrow">Start practicing →</span>
         </button>
