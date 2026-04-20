@@ -34,7 +34,7 @@ export const alpha2ToNumeric = {
   TW: '158', TJ: '762', TZ: '834', TH: '764', TL: '626', TG: '768', TK: '772',
   TO: '776', TT: '780', TN: '788', TR: '792', TM: '795', TC: '796', TV: '798',
   UG: '800', UA: '804', AE: '784', GB: '826', US: '840', UY: '858', UZ: '860',
-  VU: '548', VE: '862', VN: '704', VG: '092', VI: '850', WF: '876', EH: '732',
+  VU: '548', VA: '336', VE: '862', VN: '704', VG: '092', VI: '850', WF: '876', EH: '732',
   YE: '887', ZM: '894', ZW: '716', XK: '-99' // Kosovo has no official ISO numeric; world-atlas uses -99
 }
 

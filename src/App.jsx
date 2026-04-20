@@ -20,7 +20,7 @@ function App() {
 
   const [capitalQuizSettings, setCapitalQuizSettings] = useState({
     geoguessrFilter: false,
-    questionFormat: 'flag', // 'flag' or 'countryName'
+    questionFormat: 'flag', // 'flag' | 'countryName' | 'map'
     answerFormat: 'typein', // 'typein' or 'multichoice'
     selectedRegions: [...REGION_IDS],
   })

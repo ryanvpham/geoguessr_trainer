@@ -1,25 +1,31 @@
 import { useEffect, useRef, useState, useMemo, useCallback } from 'react'
-import {
-  geoMercator,
-  geoPath,
-  geoCentroid,
-  geoBounds,
-} from 'd3-geo'
+import { geoMercator, geoPath } from 'd3-geo'
 import * as topojson from 'topojson-client'
 import { alpha2ToNumeric, normalizeNumericId } from '../utils/isoNumericMapping'
 
-// World-atlas 10m (~2MB gzipped). Highest resolution available — real
-// coastlines, proper island detail, every small nation included. Cached by
-// jsdelivr so first-load cost is paid once.
-const GEO_URL = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-10m.json'
+// World-atlas 50m (~700KB gzipped). Good coastline detail for every country.
+// We deliberately DON'T use 10m: its Maldives feature has an antimeridian
+// encoding bug that makes d3-geo project it as a world-spanning rectangle,
+// which renders as a big beige box over the entire map.
+const GEO_URL = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json'
 
 // SVG viewBox size. We render at a fixed internal resolution and scale with CSS.
 const WIDTH = 960
 const HEIGHT = 520
 
-// Auto-zoom: floor on the "framed" angular span so tiny nations still have
-// a bit of context but we zoom in nicely on city-states (Singapore, Vatican).
-const MIN_SPAN_DEG = 5
+// Auto-zoom minimums, scaled to country size. Microstates like Monaco,
+// Vatican, or Malta get a tight 10° view so the country and capital are
+// actually legible; small-but-not-micro countries (Netherlands, Belgium,
+// Germany) get a roomier 20° minimum so you still see the neighbors.
+const MIN_SPAN_MICRO = 10
+const MIN_SPAN_NORMAL = 20
+// Countries with a natural bbox side smaller than this are "micro" for
+// zoom purposes (catches Monaco, Vatican, Malta, Singapore, Bahrain, etc.).
+const MICRO_THRESHOLD_DEG = 2
+
+// How much breathing room around the target country. 2.5× means a country
+// with a 10° bounding box gets a 25° viewport — you always see neighbors.
+const FRAME_PADDING = 2.5
 
 // Threshold below which a country is considered "tiny" and gets a pin marker.
 const TINY_SPAN_DEG = 3
@@ -56,7 +62,69 @@ function loadGeo() {
   return fetchPromise
 }
 
-function WorldMap({ highlightedCountryCode }) {
+// SVG path for a 5-point star, drawn around origin. We scale/translate it
+// when rendering via a <path transform>. This shape is ~20 units wide, which
+// is a comfortable size in our 960x520 viewBox.
+const STAR_PATH =
+  'M0,-10 L2.35,-3.23 L9.51,-3.09 L3.74,1.23 L5.88,8.09 L0,4 L-5.88,8.09 L-3.74,1.23 L-9.51,-3.09 L-2.35,-3.23 Z'
+
+// Pick the "primary" polygon of a country feature for auto-zoom framing.
+// If `capitalCoords` is given ([lat, lng]), prefer the polygon whose bbox
+// contains that point (the one with the capital in it). Otherwise pick the
+// largest polygon by bbox area. This keeps scattered overseas territories
+// (Aruba for NL, French Guiana for FR, Falklands for GB, Alaska for US)
+// from blowing up the auto-zoom span.
+function primaryBbox(feature, capitalCoords) {
+  const g = feature.geometry
+  if (!g) return null
+
+  // Normalize to an array of polygons. A "polygon" here is an array of rings;
+  // ring[0] is the outer ring (which is enough for bbox purposes).
+  const polygons =
+    g.type === 'MultiPolygon' ? g.coordinates :
+    g.type === 'Polygon' ? [g.coordinates] :
+    []
+
+  const bboxes = polygons.map((poly) => {
+    const ring = poly[0] || []
+    let minLon = Infinity, maxLon = -Infinity
+    let minLat = Infinity, maxLat = -Infinity
+    for (const pt of ring) {
+      const [lon, lat] = pt
+      if (lon < minLon) minLon = lon
+      if (lon > maxLon) maxLon = lon
+      if (lat < minLat) minLat = lat
+      if (lat > maxLat) maxLat = lat
+    }
+    const lonSpan = maxLon - minLon
+    const latSpan = maxLat - minLat
+    return {
+      minLon, maxLon, minLat, maxLat,
+      lonSpan, latSpan,
+      area: lonSpan * latSpan,
+      cx: (minLon + maxLon) / 2,
+      cy: (minLat + maxLat) / 2,
+    }
+  })
+
+  if (bboxes.length === 0) return null
+
+  // Capital-containing polygon wins if we have a capital.
+  if (capitalCoords && Array.isArray(capitalCoords)) {
+    const [capLat, capLng] = capitalCoords
+    const containing = bboxes.find(
+      (b) =>
+        capLng >= b.minLon && capLng <= b.maxLon &&
+        capLat >= b.minLat && capLat <= b.maxLat
+    )
+    if (containing) return containing
+  }
+
+  // Otherwise: largest polygon by bbox area.
+  return bboxes.reduce((best, b) => (b.area > best.area ? b : best), bboxes[0])
+}
+
+function WorldMap({ highlightedCountryCode, capitalCoords }) {
   const [features, setFeatures] = useState(cachedFeatures)
   const [view, setView] = useState(DEFAULT_VIEW)
   const animationRef = useRef(null)
@@ -144,7 +212,9 @@ function WorldMap({ highlightedCountryCode }) {
     if (!targetFeature) {
       if (!highlightedCountryCode) {
         animateTo({ ...view }, DEFAULT_VIEW, 600)
-      } else {
+      } else if (features) {
+        // Only warn once the TopoJSON has actually loaded. Before that,
+        // `targetFeature` is null simply because there's no data yet.
         console.warn(
           `WorldMap: country "${highlightedCountryCode}" not found in TopoJSON — holding view.`
         )
@@ -153,12 +223,19 @@ function WorldMap({ highlightedCountryCode }) {
     }
 
     try {
-      const [[minLon, minLat], [maxLon, maxLat]] = geoBounds(targetFeature)
-      const [cLon, cLat] = geoCentroid(targetFeature)
-      const lonSpan = maxLon - minLon
-      const latSpan = maxLat - minLat
-      const rawSpan = Math.max(lonSpan, latSpan) * 1.8
-      const span = clamp(rawSpan, MIN_SPAN_DEG, 160)
+      // Pick a "primary" polygon to frame instead of using the whole multi-polygon
+      // bounding box. For countries with scattered overseas territories (NL, FR,
+      // GB, NO, US, DK, …), the full bbox spans continents and auto-zoom frames
+      // the Atlantic. For the capital quiz, the primary polygon is the one that
+      // contains the capital; for the country quiz, it's the largest polygon.
+      const primary = primaryBbox(targetFeature, capitalCoords)
+
+      const cLon = capitalCoords ? capitalCoords[1] : primary.cx
+      const cLat = capitalCoords ? capitalCoords[0] : primary.cy
+      const naturalMax = Math.max(primary.lonSpan, primary.latSpan)
+      const minSpan =
+        naturalMax < MICRO_THRESHOLD_DEG ? MIN_SPAN_MICRO : MIN_SPAN_NORMAL
+      const span = clamp(naturalMax * FRAME_PADDING, minSpan, 160)
 
       animateTo(
         { ...view },
@@ -174,7 +251,7 @@ function WorldMap({ highlightedCountryCode }) {
     }
     // Intentionally don't include `view` — we only want to re-run when the target changes.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [targetFeature])
+  }, [targetFeature, capitalCoords])
 
   // Build the Mercator projection for the current view.
   const buildProjection = useCallback((v) => {
@@ -193,18 +270,32 @@ function WorldMap({ highlightedCountryCode }) {
   const targetOverlay = useMemo(() => {
     if (!targetFeature) return null
     try {
-      const [[minLon, minLat], [maxLon, maxLat]] = geoBounds(targetFeature)
-      const lonSpan = maxLon - minLon
-      const latSpan = maxLat - minLat
-      const isTiny = Math.max(lonSpan, latSpan) < TINY_SPAN_DEG
-      const [cLon, cLat] = geoCentroid(targetFeature)
-      const screen = projection([cLon, cLat])
+      // Use the primary polygon's bbox so the pin sits on the main country,
+      // not on the centroid of a scattered multi-polygon (which can land in
+      // the ocean between mainland NL and Aruba, for example).
+      const primary = primaryBbox(targetFeature, capitalCoords)
+      if (!primary) return null
+      const isTiny = Math.max(primary.lonSpan, primary.latSpan) < TINY_SPAN_DEG
+      const screen = projection([primary.cx, primary.cy])
       if (!screen || !isFinite(screen[0]) || !isFinite(screen[1])) return null
       return { x: screen[0], y: screen[1], isTiny }
     } catch {
       return null
     }
-  }, [targetFeature, projection])
+  }, [targetFeature, capitalCoords, projection])
+
+  // Project the capital's lat/lng into screen space whenever the view or
+  // capital changes. We suppress the marker when the pin marker (tiny-country
+  // indicator) would collide with it — for microstates the centroid and the
+  // capital are basically the same point, and the pin does the job.
+  const capitalOverlay = useMemo(() => {
+    if (!capitalCoords || !Array.isArray(capitalCoords)) return null
+    // capitalCoordinates stores [lat, lng], but d3 wants [lng, lat].
+    const [lat, lng] = capitalCoords
+    const screen = projection([lng, lat])
+    if (!screen || !isFinite(screen[0]) || !isFinite(screen[1])) return null
+    return { x: screen[0], y: screen[1] }
+  }, [capitalCoords, projection])
 
   // --- Pointer <-> SVG viewBox coords -------------------------------------
 
@@ -439,26 +530,30 @@ function WorldMap({ highlightedCountryCode }) {
     // If a target is focused, zoom back to it; else go to the world view.
     if (targetFeature) {
       try {
-        const [[minLon, minLat], [maxLon, maxLat]] = geoBounds(targetFeature)
-        const [cLon, cLat] = geoCentroid(targetFeature)
-        const rawSpan =
-          Math.max(maxLon - minLon, maxLat - minLat) * 1.8
-        animateTo(
-          { ...view },
-          {
-            cx: cLon,
-            cy: clamp(cLat, -MAX_LAT, MAX_LAT),
-            span: clamp(rawSpan, MIN_SPAN_DEG, 160),
-          },
-          500
-        )
-        return
+        const primary = primaryBbox(targetFeature, capitalCoords)
+        if (primary) {
+          const cLon = capitalCoords ? capitalCoords[1] : primary.cx
+          const cLat = capitalCoords ? capitalCoords[0] : primary.cy
+          const naturalMax = Math.max(primary.lonSpan, primary.latSpan)
+          const minSpan =
+            naturalMax < MICRO_THRESHOLD_DEG ? MIN_SPAN_MICRO : MIN_SPAN_NORMAL
+          animateTo(
+            { ...view },
+            {
+              cx: cLon,
+              cy: clamp(cLat, -MAX_LAT, MAX_LAT),
+              span: clamp(naturalMax * FRAME_PADDING, minSpan, 160),
+            },
+            500
+          )
+          return
+        }
       } catch {
         /* fall through */
       }
     }
     animateTo({ ...view }, DEFAULT_VIEW, 500)
-  }, [animateTo, cancelAnimation, targetFeature, view])
+  }, [animateTo, cancelAnimation, targetFeature, capitalCoords, view])
 
   if (!features) {
     return (
@@ -489,32 +584,41 @@ function WorldMap({ highlightedCountryCode }) {
       >
         <defs>
           <radialGradient id="ocean-gradient" cx="50%" cy="50%" r="75%">
-            <stop offset="0%" stopColor="#e8f1fb" />
-            <stop offset="100%" stopColor="#cfe1f4" />
+            <stop offset="0%" stopColor="#bfd9ee" />
+            <stop offset="100%" stopColor="#8fb9dc" />
           </radialGradient>
         </defs>
 
         <rect width={WIDTH} height={HEIGHT} fill="url(#ocean-gradient)" />
 
         <g className="countries-layer">
-          {features.map((feat) => {
+          {features.map((feat, i) => {
             const isHighlighted =
               targetFeature &&
               normalizeNumericId(feat.id) === normalizeNumericId(targetFeature.id)
+            const d = pathGen(feat)
+            if (!d) return null
+            // `feat.id` is not unique in the 10m dataset: Australia and
+            // Ashmore & Cartier Islands both have id "036", and 16 small
+            // territories have no id at all. Use the array index to
+            // guarantee a unique React key.
             return (
               <path
-                key={feat.id}
-                d={pathGen(feat) || ''}
-                fill={isHighlighted ? '#f59e0b' : '#f5f2e9'}
-                stroke={isHighlighted ? '#b45309' : '#b8b0a0'}
-                strokeWidth={isHighlighted ? 1.2 : 0.4}
+                key={i}
+                d={d}
+                fill={isHighlighted ? '#f59e0b' : '#f5efdf'}
+                stroke={isHighlighted ? '#b45309' : '#8f8878'}
+                strokeWidth={isHighlighted ? 1.4 : 0.6}
+                vectorEffect="non-scaling-stroke"
                 style={{ transition: 'fill 0.25s ease, stroke 0.25s ease' }}
               />
             )
           })}
         </g>
 
-        {targetOverlay && (
+        {/* Show the country-centroid pin only when we aren't also drawing a
+            capital star — otherwise the two markers compete for attention. */}
+        {targetOverlay && !capitalOverlay && (
           <g className="target-marker" pointerEvents="none">
             <circle
               cx={targetOverlay.x}
@@ -547,6 +651,25 @@ function WorldMap({ highlightedCountryCode }) {
               fill="#f59e0b"
               stroke="#ffffff"
               strokeWidth={1.5}
+            />
+          </g>
+        )}
+
+        {capitalOverlay && (
+          <g
+            className="capital-marker"
+            transform={`translate(${capitalOverlay.x} ${capitalOverlay.y})`}
+            pointerEvents="none"
+          >
+            {/* White halo so the star stays visible on the amber-highlighted country */}
+            <circle r={12} fill="#ffffff" opacity={0.85} />
+            {/* Gold star with dark outline */}
+            <path
+              d={STAR_PATH}
+              fill="#fbbf24"
+              stroke="#422006"
+              strokeWidth={1.2}
+              strokeLinejoin="round"
             />
           </g>
         )}
