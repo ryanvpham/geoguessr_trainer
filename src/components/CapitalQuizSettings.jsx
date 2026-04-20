@@ -65,6 +65,16 @@ function CapitalQuizSettings({ settings, onSettingsChange, onBack, onStart }) {
               />
               <span>Country Name</span>
             </label>
+            <label className="radio-label">
+              <input
+                type="radio"
+                name="capital-quiz-question-format"
+                value="map"
+                checked={settings.questionFormat === 'map'}
+                onChange={handleQuestionFormatChange}
+              />
+              <span>Map</span>
+            </label>
           </div>
         </div>
         <div className="setting-item">

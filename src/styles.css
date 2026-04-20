@@ -561,9 +561,9 @@ header h1 {
 [data-theme='dark'] .world-map-svg rect {
   fill: #0d1724 !important;
 }
-[data-theme='dark'] .world-map-svg path[fill='#f5f2e9'] {
+[data-theme='dark'] .world-map-svg path[fill='#f5efdf'] {
   fill: #243449 !important;
-  stroke: #354a66 !important;
+  stroke: #5a7196 !important;
 }
 
 .map-loading {
