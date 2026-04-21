@@ -287,7 +287,7 @@ header h1 {
 .settings-content {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 14px;
   margin-top: 8px;
 }
 
@@ -298,48 +298,128 @@ header h1 {
   padding: 18px 20px;
 }
 
+/* Row layout: label+description on the left, control on the right */
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  cursor: default;
+}
+
+.setting-toggle {
+  cursor: pointer;
+}
+
+.setting-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
 .setting-label {
   display: block;
   font-size: 0.95rem;
   font-weight: 600;
   color: var(--ink);
-  margin-bottom: 12px;
   letter-spacing: 0.005em;
 }
 
 .setting-description {
   font-size: 0.85rem;
   color: var(--ink-muted);
-  margin-top: 6px;
-  margin-left: 30px;
   font-weight: 400;
+  margin: 0;
 }
 
-.checkbox-label {
+/* Grouped card: one header + multiple sub-rows (e.g. Quiz Format) */
+.setting-group {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.setting-group-head {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.setting-subrow {
   display: flex;
   align-items: center;
-  gap: 12px;
-  cursor: pointer;
-  font-size: 0.98rem;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.setting-subrow .setting-label {
+  font-size: 0.88rem;
   font-weight: 500;
-  color: var(--ink);
+  color: var(--ink-soft);
 }
 
-.checkbox-label input[type='checkbox'] {
-  width: 18px;
-  height: 18px;
-  cursor: pointer;
-  accent-color: var(--accent);
+/* iOS-style toggle switch */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 26px;
+  flex-shrink: 0;
 }
 
-/* Radio group becomes a segmented pill control */
+.switch input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.switch-slider {
+  position: absolute;
+  inset: 0;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.switch-slider::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.15s ease;
+}
+
+.switch input:checked + .switch-slider {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.switch input:checked + .switch-slider::before {
+  transform: translateX(18px);
+}
+
+.switch input:focus-visible + .switch-slider {
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+/* Radio group: segmented pill control */
 .radio-group {
   display: inline-flex;
   background: var(--surface-alt);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
-  padding: 4px;
+  padding: 3px;
   gap: 2px;
+  flex-shrink: 0;
 }
 
 .radio-label {
@@ -347,13 +427,14 @@ header h1 {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   font-weight: 500;
   color: var(--ink-soft);
-  padding: 7px 14px;
+  padding: 6px 14px;
   border-radius: calc(var(--radius-sm) - 3px);
   transition: background 0.15s, color 0.15s;
   user-select: none;
+  white-space: nowrap;
 }
 
 .radio-label:hover {
@@ -369,6 +450,17 @@ header h1 {
   color: var(--ink);
   box-shadow: var(--shadow-sm);
   font-weight: 600;
+}
+
+@media (max-width: 540px) {
+  .setting-subrow {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .setting-subrow .radio-group {
+    align-self: flex-start;
+  }
 }
 
 /* ---------- Primary buttons ---------- */
@@ -943,7 +1035,7 @@ a:focus-visible {
 
 .region-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: 8px;
 }
 
