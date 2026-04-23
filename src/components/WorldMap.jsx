@@ -27,9 +27,6 @@ const MICRO_THRESHOLD_DEG = 2
 // with a 10° bounding box gets a 25° viewport — you always see neighbors.
 const FRAME_PADDING = 2.5
 
-// Threshold below which a country is considered "tiny" and gets a pin marker.
-const TINY_SPAN_DEG = 3
-
 // User-zoom clamp (manual pinch / wheel / buttons).
 const MIN_USER_SPAN = 1.5 // closest zoom-in (street-level roughly)
 const MAX_USER_SPAN = 360 // full world view
@@ -124,8 +121,19 @@ function primaryBbox(feature, capitalCoords) {
   return bboxes.reduce((best, b) => (b.area > best.area ? b : best), bboxes[0])
 }
 
-function WorldMap({ highlightedCountryCode, capitalCoords }) {
-  const [features, setFeatures] = useState(cachedFeatures)
+// WorldMap now doubles as a generic zoomable choropleth: pass `features` and
+// `targetFeature` to render any feature set (e.g. a country's states) with
+// the same drag/pinch/wheel and auto-zoom behavior. When those props are
+// omitted it falls back to loading the world-atlas TopoJSON and looking the
+// target up by ISO alpha-2 via `highlightedCountryCode`.
+function WorldMap({
+  highlightedCountryCode,
+  capitalCoords,
+  features: externalFeatures,
+  targetFeature: externalTargetFeature,
+}) {
+  const [loadedFeatures, setLoadedFeatures] = useState(cachedFeatures)
+  const features = externalFeatures ?? loadedFeatures
   const [view, setView] = useState(DEFAULT_VIEW)
   const animationRef = useRef(null)
   const svgRef = useRef(null)
@@ -136,16 +144,19 @@ function WorldMap({ highlightedCountryCode, capitalCoords }) {
   const pointersRef = useRef(new Map())
   const pinchRef = useRef(null)
 
-  // Load the TopoJSON once.
+  // Load the TopoJSON once — only when the caller didn't already provide
+  // features (e.g. the Country/Capital quizzes). Skip when StatesMap feeds
+  // in its own per-country GeoJSON.
   useEffect(() => {
+    if (externalFeatures) return
     let cancelled = false
     loadGeo().then((f) => {
-      if (!cancelled) setFeatures(f)
+      if (!cancelled) setLoadedFeatures(f)
     })
     return () => {
       cancelled = true
     }
-  }, [])
+  }, [externalFeatures])
 
   // Natural Earth uses id "-99" for several disputed territories (Kosovo,
   // Somaliland, Northern Cyprus, etc.) — so matching by numeric id alone
@@ -155,6 +166,9 @@ function WorldMap({ highlightedCountryCode, capitalCoords }) {
   }
 
   const targetFeature = useMemo(() => {
+    // External caller (e.g. StatesMap) resolved the target itself; use it.
+    // `undefined` means "not provided"; `null` is a valid "no target" value.
+    if (externalTargetFeature !== undefined) return externalTargetFeature
     if (!features || !highlightedCountryCode) return null
 
     const specialNames = SPECIAL_NAME_MATCH[highlightedCountryCode]
@@ -173,7 +187,7 @@ function WorldMap({ highlightedCountryCode, capitalCoords }) {
         (f) => normalizeNumericId(f.id) === normalizeNumericId(numId)
       ) || null
     )
-  }, [features, highlightedCountryCode])
+  }, [features, highlightedCountryCode, externalTargetFeature])
 
   const cancelAnimation = useCallback(() => {
     if (animationRef.current) {
@@ -210,6 +224,10 @@ function WorldMap({ highlightedCountryCode, capitalCoords }) {
     cancelAnimation()
 
     if (!targetFeature) {
+      // In caller-driven mode (StatesMap) we hold the current view until the
+      // caller resolves a target — snapping back to the world would be jarring
+      // mid-question. Default mode still resets to world when cleared.
+      if (externalFeatures) return
       if (!highlightedCountryCode) {
         animateTo({ ...view }, DEFAULT_VIEW, 600)
       } else if (features) {
@@ -266,23 +284,6 @@ function WorldMap({ highlightedCountryCode, capitalCoords }) {
 
   const projection = useMemo(() => buildProjection(view), [view, buildProjection])
   const pathGen = useMemo(() => geoPath(projection), [projection])
-
-  const targetOverlay = useMemo(() => {
-    if (!targetFeature) return null
-    try {
-      // Use the primary polygon's bbox so the pin sits on the main country,
-      // not on the centroid of a scattered multi-polygon (which can land in
-      // the ocean between mainland NL and Aruba, for example).
-      const primary = primaryBbox(targetFeature, capitalCoords)
-      if (!primary) return null
-      const isTiny = Math.max(primary.lonSpan, primary.latSpan) < TINY_SPAN_DEG
-      const screen = projection([primary.cx, primary.cy])
-      if (!screen || !isFinite(screen[0]) || !isFinite(screen[1])) return null
-      return { x: screen[0], y: screen[1], isTiny }
-    } catch {
-      return null
-    }
-  }, [targetFeature, capitalCoords, projection])
 
   // Project the capital's lat/lng into screen space whenever the view or
   // capital changes. We suppress the marker when the pin marker (tiny-country
@@ -593,9 +594,15 @@ function WorldMap({ highlightedCountryCode, capitalCoords }) {
 
         <g className="countries-layer">
           {features.map((feat, i) => {
+            // Prefer object identity (works regardless of whether features have
+            // an `id` field — e.g. the Mexico GeoJSON has none) and fall back
+            // to id-matching for the world-atlas case where an externally
+            // resolved target still has the same numeric id as the feature.
             const isHighlighted =
               targetFeature &&
-              normalizeNumericId(feat.id) === normalizeNumericId(targetFeature.id)
+              (feat === targetFeature ||
+                (targetFeature.id != null &&
+                  normalizeNumericId(feat.id) === normalizeNumericId(targetFeature.id)))
             const d = pathGen(feat)
             if (!d) return null
             // `feat.id` is not unique in the 10m dataset: Australia and
@@ -615,45 +622,6 @@ function WorldMap({ highlightedCountryCode, capitalCoords }) {
             )
           })}
         </g>
-
-        {/* Show the country-centroid pin only when we aren't also drawing a
-            capital star — otherwise the two markers compete for attention. */}
-        {targetOverlay && !capitalOverlay && (
-          <g className="target-marker" pointerEvents="none">
-            <circle
-              cx={targetOverlay.x}
-              cy={targetOverlay.y}
-              r={targetOverlay.isTiny ? 14 : 10}
-              fill="none"
-              stroke="#f59e0b"
-              strokeWidth={2}
-              opacity={0.55}
-            >
-              <animate
-                attributeName="r"
-                from={targetOverlay.isTiny ? 8 : 6}
-                to={targetOverlay.isTiny ? 22 : 18}
-                dur="1.4s"
-                repeatCount="indefinite"
-              />
-              <animate
-                attributeName="opacity"
-                from="0.75"
-                to="0"
-                dur="1.4s"
-                repeatCount="indefinite"
-              />
-            </circle>
-            <circle
-              cx={targetOverlay.x}
-              cy={targetOverlay.y}
-              r={targetOverlay.isTiny ? 5 : 3.5}
-              fill="#f59e0b"
-              stroke="#ffffff"
-              strokeWidth={1.5}
-            />
-          </g>
-        )}
 
         {capitalOverlay && (
           <g
