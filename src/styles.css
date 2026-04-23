@@ -1106,3 +1106,44 @@ a:focus-visible {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Country selector — single-select dropdown used by the States Quiz settings.
+   --------------------------------------------------------------------------- */
+
+.country-selector-head {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 10px;
+}
+
+.country-select {
+  width: 100%;
+  padding: 10px 14px;
+  font: inherit;
+  font-size: 0.95rem;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm, 10px);
+  cursor: pointer;
+  appearance: none;
+  /* Chevron background — subtle indicator that this is a dropdown */
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23888'><path d='M5.5 7.5l4.5 4.5 4.5-4.5' stroke='%23888' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 18px;
+  padding-right: 38px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.country-select:hover {
+  border-color: var(--accent);
+}
+
+.country-select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}

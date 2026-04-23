@@ -1,4 +1,5 @@
 import { allCountries } from '../data/countries'
+import { allStates } from '../data/states'
 import { geoguessrCountries } from '../data/geoguessrCountries'
 import { countryToRegion, REGION_IDS } from '../data/regionMapping'
 
@@ -48,6 +49,14 @@ export function getAvailableCountries(geoguessrFilter, selectedRegions) {
   }
 
   return filtered
+}
+
+// States Quiz pool — all subdivisions whose parent country matches the
+// single-selected country code ('US' | 'MX' | 'CA'). Falls back to every
+// state if no country is provided so the game loop never sees an empty pool.
+export function getAvailableStates(selectedCountryCode) {
+  if (!selectedCountryCode) return allStates
+  return allStates.filter((s) => s.countryCode === selectedCountryCode)
 }
 
 // Generate multi-choice options (4 options: 1 correct + 3 random)
