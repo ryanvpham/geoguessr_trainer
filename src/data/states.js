@@ -112,7 +112,7 @@ export const allStates = [
   { name: 'Saskatchewan',               code: 'CA-SK', countryCode: 'CA', capital: 'Regina',         capitalCoords: [50.4452, -104.6189] },
   { name: 'Northwest Territories',      code: 'CA-NT', countryCode: 'CA', capital: 'Yellowknife',    capitalCoords: [62.4540, -114.3718] },
   { name: 'Nunavut',                    code: 'CA-NU', countryCode: 'CA', capital: 'Iqaluit',        capitalCoords: [63.7467, -68.5170] },
-  { name: 'Yukon',                      code: 'CA-YT', countryCode: 'CA', capital: 'Whitehorse',     capitalCoords: [60.7212, -135.0568] },
+  { name: 'Yukon',                      code: 'CA-YT', countryCode: 'CA', capital: 'Whitehorse',     capitalCoords: [60.7212, -135.0568], aliases: ['Yukon Territory'] },
 ]
 
 // The three supported parent countries for the States Quiz, in the order

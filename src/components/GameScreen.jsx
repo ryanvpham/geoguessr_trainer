@@ -84,24 +84,12 @@ function GameScreen({ gameMode, settings, onBack }) {
     
     // Filter out countries already used in this round
     let availableCountries = availableForRound.filter(c => !usedCountries.includes(c.name))
-    
-    if (availableCountries.length === 0) {
-      // Round complete - check if we should start next round
-      if (currentRound === 1 && incorrectCountries.length > 0) {
-        // Start round 2 with incorrect countries
-        startNextRound()
-        return null
-      } else if (currentRound > 1) {
-        // Check if there are still incorrect countries to practice
-        const stillIncorrect = countries.filter(c => incorrectCountries.includes(c.name))
-        if (stillIncorrect.length > 0) {
-          startNextRound()
-          return null
-        }
-      }
-      // All rounds complete
-      return null
-    }
+
+    // Round exhausted — let loadNewQuestion save the score and present the
+    // correct next action (Start Next Round / Back to Menu). Advancing the
+    // round here caused a double-advance when handleNext also called
+    // startNextRound on click.
+    if (availableCountries.length === 0) return null
     
     const randomIndex = Math.floor(Math.random() * availableCountries.length)
     const country = availableCountries[randomIndex]
@@ -109,42 +97,34 @@ function GameScreen({ gameMode, settings, onBack }) {
     return country
   }, [countries, currentRound, incorrectCountries, usedCountries])
 
-  // Start next round
+  // Start next round. Scoring is handled by loadNewQuestion when the previous
+  // round ends — this function only advances round state and picks the first
+  // question of the new round from the remaining incorrect items.
   const startNextRound = useCallback(() => {
-    // Save current round score before starting next round
-    if (roundTotalSeen > 0) {
-      setRoundScores(prev => [...prev, {
-        round: currentRound,
-        correct: roundCorrectCount,
-        total: roundTotalSeen
-      }])
-    }
-    
     setCurrentRound(prev => prev + 1)
-    setUsedCountries([]) // Reset used countries for new round
     setRoundCorrectCount(0)
     setRoundTotalSeen(0)
-    
-    // Filter incorrect countries to only those that are still incorrect
+
     const stillIncorrect = countries.filter(c => incorrectCountries.includes(c.name))
-    
     if (stillIncorrect.length === 0) {
-      return null // No more incorrect countries to practice
+      setUsedCountries([])
+      return null
     }
-    
-    // Get a random country from remaining incorrect ones
+
     const randomIndex = Math.floor(Math.random() * stillIncorrect.length)
     const country = stillIncorrect[randomIndex]
     setUsedCountries([country.name])
     return country
-  }, [countries, currentRound, incorrectCountries, roundCorrectCount, roundTotalSeen])
+  }, [countries, incorrectCountries])
 
   // Load a new question
   const loadNewQuestion = useCallback(() => {
     const country = getRandomCountry()
     
     if (country === null) {
-      // Round complete - save the round score
+      // Single source of truth for round-score bookkeeping — fires on every
+      // round boundary (final round or mid-game transition) and applies
+      // uniformly to country, capital, and states modes.
       if (roundTotalSeen > 0) {
         setRoundScores(prev => [...prev, {
           round: currentRound,
@@ -208,26 +188,56 @@ function GameScreen({ gameMode, settings, onBack }) {
         : `Incorrect! The capital of ${currentCountry.name} is: ${currentCountry.capital}`
     }
     
+    // Compute post-answer state up front so we can detect "game over" without
+    // waiting for the async setState cycle (and without needing a second click).
+    const newIncorrectCountries = isCorrect
+      ? incorrectCountries.filter(name => name !== currentCountry.name)
+      : (incorrectCountries.includes(currentCountry.name)
+          ? incorrectCountries
+          : [...incorrectCountries, currentCountry.name])
+    const newUsedCountries = [...usedCountries, currentCountry.name]
+    const availableForRound = currentRound === 1
+      ? countries
+      : countries.filter(c => newIncorrectCountries.includes(c.name))
+    const remainingInRound = availableForRound.filter(c => !newUsedCountries.includes(c.name))
+    const gameOver = remainingInRound.length === 0 && newIncorrectCountries.length === 0
+
     // Update counts
     setTotalSeen(prev => prev + 1)
     setRoundTotalSeen(prev => prev + 1)
-    
+
     if (isCorrect) {
       setCorrectCount(prev => prev + 1)
       setRoundCorrectCount(prev => prev + 1)
-      
-      // Remove from incorrect list if it was there
-      setIncorrectCountries(prev => prev.filter(name => name !== currentCountry.name))
-    } else {
-      // Wrong answer - add to incorrect list if not already there
-      setIncorrectCountries(prev => {
-        if (!prev.includes(currentCountry.name)) {
-          return [...prev, currentCountry.name]
-        }
-        return prev
-      })
     }
-    
+    setIncorrectCountries(newIncorrectCountries)
+
+    if (gameOver) {
+      // Skip the intermediate "Next Question" screen — write the final round's
+      // score and jump straight to the summary + Back to Menu.
+      const finalRoundCorrect = roundCorrectCount + (isCorrect ? 1 : 0)
+      const finalRoundTotal = roundTotalSeen + 1
+      setRoundScores(prev => [...prev, {
+        round: currentRound,
+        correct: finalRoundCorrect,
+        total: finalRoundTotal,
+      }])
+      const labels = ITEM_LABELS[gameMode] || ITEM_LABELS.country
+      setFeedback({
+        message: `Perfect! You got all ${countries.length} ${labels.plural} correct!`,
+        isCorrect: true,
+      })
+      setShowNext(true)
+      setNextButtonText('Back to Menu')
+      setCurrentCountry(null)
+      setIsAnswered(true)
+      // Suppress the Enter keypress that submitted this answer — otherwise it
+      // bubbles to the document listener and immediately "clicks" Back to Menu.
+      setJustSubmitted(true)
+      setTimeout(() => setJustSubmitted(false), 100)
+      return
+    }
+
     setFeedback({ message: feedbackMessage, isCorrect })
     setShowNext(true)
     setIsAnswered(true)
@@ -237,7 +247,7 @@ function GameScreen({ gameMode, settings, onBack }) {
     setTimeout(() => {
       setJustSubmitted(false)
     }, 100)
-  }, [gameMode, currentCountry, isAnswered])
+  }, [gameMode, currentCountry, isAnswered, incorrectCountries, usedCountries, countries, currentRound, roundCorrectCount, roundTotalSeen])
 
   // Handle next button click
   const handleNext = useCallback(() => {
