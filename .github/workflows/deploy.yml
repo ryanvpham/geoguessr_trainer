@@ -31,10 +31,10 @@ jobs:
         run: npm ci
 
       - name: Build
-        # BASE_PATH defaults to "/<repo>/" in vite.config.js — override here if
-        # you use a custom domain or your repo name differs.
+        # Custom domain (geo-quizzes.com) serves from the apex, so assets
+        # must be at root paths.
         env:
-          BASE_PATH: /${{ github.event.repository.name }}/
+          BASE_PATH: /
         run: npm run build
 
       - name: Add SPA fallback (copy index.html to 404.html)
