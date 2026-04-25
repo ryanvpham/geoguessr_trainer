@@ -37,10 +37,10 @@ function MenuScreen({ onCountryQuizClick, onCapitalQuizClick, onStatesQuizClick 
           onClick={onCapitalQuizClick}
         >
           <span className="mode-icon" aria-hidden="true">🏛️</span>
-          <h2>Capital Quiz</h2>
+          <h2>Country Capital Quiz</h2>
           <p>
-            Given a flag or country name, name its capital. Perfect for brushing up
-            on the trickier ones.
+            Given a flag, country name, or highlighted country on the map, name
+            its capital.
           </p>
           <span className="mode-arrow">Start practicing →</span>
         </button>
@@ -53,22 +53,14 @@ function MenuScreen({ onCountryQuizClick, onCapitalQuizClick, onStatesQuizClick 
           <span className="mode-icon" aria-hidden="true">🗺️</span>
           <h2>States Quiz</h2>
           <p>
-            Pick a country — United States, Mexico, or Canada — and name the state
-            or province marked on the map.
+            Pick a country and name the state or province marked on the map.
           </p>
           <span className="mode-arrow">Start practicing →</span>
         </button>
       </div>
 
       <footer className="app-footer">
-        Built for GeoGuessr players. ·{' '}
-        <a
-          href="https://github.com/ryanvpham/geoguessr_trainer"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Source on GitHub
-        </a>
+        Built for GeoGuessr beginners.
       </footer>
     </div>
   )

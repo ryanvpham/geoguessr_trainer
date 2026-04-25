@@ -14,7 +14,7 @@ function App() {
   // quiz covers the whole world until the user narrows it down.
   const [countryQuizSettings, setCountryQuizSettings] = useState({
     geoguessrFilter: false,
-    questionFormat: 'flag', // 'flag' or 'map'
+    questionFormat: 'flag', // 'flag' | 'map' | 'capital'
     answerFormat: 'typein', // 'typein' or 'multichoice'
     selectedRegions: [...REGION_IDS],
   })

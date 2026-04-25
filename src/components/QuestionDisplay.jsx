@@ -10,6 +10,8 @@ function QuestionDisplay({ questionFormat, country, gameMode }) {
       return <FlagDisplay country={country} />
     } else if (questionFormat === 'map') {
       return <WorldMap highlightedCountryCode={country.code} />
+    } else if (questionFormat === 'capital') {
+      return <CountryNameDisplay name={country.capital} />
     }
   } else if (gameMode === 'states') {
     // `country` is actually a state object (see GameScreen — the variable name

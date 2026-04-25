@@ -291,7 +291,7 @@ function GameScreen({ gameMode, settings, onBack }) {
   const gameTitle =
     gameMode === 'country' ? 'Country Quiz'
     : gameMode === 'states' ? 'States Quiz'
-    : 'Capital Quiz'
+    : 'Country Capital Quiz'
   const percentage = totalSeen > 0 ? Math.round((correctCount / totalSeen) * 100) : 0
   // For country + states modes the answer is the item's name; for the capital
   // quiz it's the capital field. Drives AnswerInput's multi-choice options.

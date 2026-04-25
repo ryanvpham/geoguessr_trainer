@@ -21,7 +21,7 @@ function CapitalQuizSettings({ settings, onSettingsChange, onBack, onStart }) {
     <div className="screen">
       <header>
         <button className="back-arrow-btn" onClick={onBack} aria-label="Back">←</button>
-        <h1>Capital Quiz</h1>
+        <h1>Country Capital Quiz</h1>
       </header>
       <div className="settings-content">
         <div className="setting-item">
