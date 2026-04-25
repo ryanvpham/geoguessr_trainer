@@ -85,7 +85,7 @@ function RegionFilter({ selectedRegions, onChange, geoguessrFilter }) {
         defaults to all regions.
       </p>
       <div className="region-grid">
-        {REGIONS.map((region) => {
+        {[...REGIONS].sort((a, b) => a.label.localeCompare(b.label)).map((region) => {
           const isChecked = selectedRegions.includes(region.id)
           const count = counts[region.id] ?? 0
           return (

@@ -19,7 +19,7 @@ function CountrySelector({ selectedCountry, onChange }) {
         value={selectedCountry}
         onChange={(e) => onChange(e.target.value)}
       >
-        {STATES_COUNTRIES.map((c) => (
+        {[...STATES_COUNTRIES].sort((a, b) => a.label.localeCompare(b.label)).map((c) => (
           <option key={c.code} value={c.code}>
             {c.label} ({counts[c.code] ?? 0})
           </option>

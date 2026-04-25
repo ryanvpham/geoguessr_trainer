@@ -14,6 +14,19 @@ npm run preview      # preview the built dist/ locally
 
 There is no test runner and no linter configured. Don't invent commands for them.
 
+## Git & PRs
+
+This is a personal project. **All git activity here must use the personal GitHub identity, not the work one.**
+
+- Identity: `ryanvpham <ryanvpham94@gmail.com>`. The local `git config user.email` may be the work identity — don't change it. Instead, set both author and committer per-commit:
+  ```
+  GIT_COMMITTER_NAME="ryanvpham" GIT_COMMITTER_EMAIL="ryanvpham94@gmail.com" \
+    git commit --author="ryanvpham <ryanvpham94@gmail.com>" -m "..."
+  ```
+  Setting only `--author` leaves the committer as the work identity, which still surfaces on GitHub.
+- Remote `origin` is `github.com/ryanvpham/geoguessr_trainer` (personal). Push directly there.
+- Open PRs against `main` in that repo. After `git push -u origin <branch>`, surface the PR creation URL from the push output for the user to click.
+
 ## Deployment
 
 `.github/workflows/deploy.yml` builds and publishes to GitHub Pages on every push to `main`. The workflow sets `BASE_PATH=/<repo-name>/` automatically. Pages *Source* must be set to **GitHub Actions** in repo settings.

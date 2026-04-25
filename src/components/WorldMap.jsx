@@ -588,10 +588,14 @@ function WorldMap({
             <stop offset="0%" stopColor="#bfd9ee" />
             <stop offset="100%" stopColor="#8fb9dc" />
           </radialGradient>
+          <clipPath id="map-clip">
+            <rect width={WIDTH} height={HEIGHT} />
+          </clipPath>
         </defs>
 
         <rect width={WIDTH} height={HEIGHT} fill="url(#ocean-gradient)" />
 
+        <g clipPath="url(#map-clip)">
         <g className="countries-layer">
           {features.map((feat, i) => {
             // Prefer object identity (works regardless of whether features have
@@ -641,6 +645,7 @@ function WorldMap({
             />
           </g>
         )}
+        </g>
       </svg>
 
       <div className="map-controls" aria-label="Map zoom controls">
