@@ -1,6 +1,11 @@
 // Top-level administrative subdivisions for the States Quiz.
-// Covers the 50 U.S. states, 32 Mexican states (including Mexico City / CDMX),
-// and Canada's 10 provinces + 3 territories — 95 entries total.
+// Covers:
+//   - 50 U.S. states
+//   - 32 Mexican states (incl. Mexico City / CDMX)
+//   - Canada's 10 provinces + 3 territories
+//   - Argentina's 23 provinces + Buenos Aires City (CABA)
+//   - Brazil's 26 states + Federal District
+//   - Australia's 6 states + 2 territories
 //
 // Shape mirrors allCountries so the existing game loop and multi-choice
 // generator can consume it unchanged.
@@ -113,14 +118,87 @@ export const allStates = [
   { name: 'Northwest Territories',      code: 'CA-NT', countryCode: 'CA', capital: 'Yellowknife',    capitalCoords: [62.4540, -114.3718] },
   { name: 'Nunavut',                    code: 'CA-NU', countryCode: 'CA', capital: 'Iqaluit',        capitalCoords: [63.7467, -68.5170] },
   { name: 'Yukon',                      code: 'CA-YT', countryCode: 'CA', capital: 'Whitehorse',     capitalCoords: [60.7212, -135.0568], aliases: ['Yukon Territory'] },
+
+  // --- Argentina (23 provinces + Buenos Aires City) ---
+  // GeoJSON property.name uses Spanish forms with accents — matched
+  // case/accent-insensitively, so canonical names mirror the GeoJSON.
+  { name: 'Buenos Aires',                 code: 'AR-B', countryCode: 'AR', capital: 'La Plata',                       capitalCoords: [-34.9215, -57.9545] },
+  { name: 'Buenos Aires City',            code: 'AR-C', countryCode: 'AR', capital: 'Buenos Aires',                   capitalCoords: [-34.6037, -58.3816], aliases: ['Ciudad de Buenos Aires', 'Ciudad Autónoma de Buenos Aires', 'CABA', 'City of Buenos Aires'] },
+  { name: 'Catamarca',                    code: 'AR-K', countryCode: 'AR', capital: 'San Fernando del Valle de Catamarca', capitalCoords: [-28.4696, -65.7795] },
+  { name: 'Chaco',                        code: 'AR-H', countryCode: 'AR', capital: 'Resistencia',                    capitalCoords: [-27.4514, -58.9869] },
+  { name: 'Chubut',                       code: 'AR-U', countryCode: 'AR', capital: 'Rawson',                         capitalCoords: [-43.3002, -65.1023] },
+  { name: 'Córdoba',                      code: 'AR-X', countryCode: 'AR', capital: 'Córdoba',                        capitalCoords: [-31.4201, -64.1888], aliases: ['Cordoba'] },
+  { name: 'Corrientes',                   code: 'AR-W', countryCode: 'AR', capital: 'Corrientes',                     capitalCoords: [-27.4806, -58.8341] },
+  { name: 'Entre Ríos',                   code: 'AR-E', countryCode: 'AR', capital: 'Paraná',                         capitalCoords: [-31.7333, -60.5333], aliases: ['Entre Rios'] },
+  { name: 'Formosa',                      code: 'AR-P', countryCode: 'AR', capital: 'Formosa',                        capitalCoords: [-26.1849, -58.1731] },
+  { name: 'Jujuy',                        code: 'AR-Y', countryCode: 'AR', capital: 'San Salvador de Jujuy',          capitalCoords: [-24.1858, -65.2995] },
+  { name: 'La Pampa',                     code: 'AR-L', countryCode: 'AR', capital: 'Santa Rosa',                     capitalCoords: [-36.6201, -64.2906] },
+  { name: 'La Rioja',                     code: 'AR-F', countryCode: 'AR', capital: 'La Rioja',                       capitalCoords: [-29.4131, -66.8558] },
+  { name: 'Mendoza',                      code: 'AR-M', countryCode: 'AR', capital: 'Mendoza',                        capitalCoords: [-32.8908, -68.8272] },
+  { name: 'Misiones',                     code: 'AR-N', countryCode: 'AR', capital: 'Posadas',                        capitalCoords: [-27.3621, -55.9008] },
+  { name: 'Neuquén',                      code: 'AR-Q', countryCode: 'AR', capital: 'Neuquén',                        capitalCoords: [-38.9516, -68.0591], aliases: ['Neuquen'] },
+  { name: 'Río Negro',                    code: 'AR-R', countryCode: 'AR', capital: 'Viedma',                         capitalCoords: [-40.8135, -62.9967], aliases: ['Rio Negro'] },
+  { name: 'Salta',                        code: 'AR-A', countryCode: 'AR', capital: 'Salta',                          capitalCoords: [-24.7821, -65.4232] },
+  { name: 'San Juan',                     code: 'AR-J', countryCode: 'AR', capital: 'San Juan',                       capitalCoords: [-31.5375, -68.5364] },
+  { name: 'San Luis',                     code: 'AR-D', countryCode: 'AR', capital: 'San Luis',                       capitalCoords: [-33.2950, -66.3356] },
+  { name: 'Santa Cruz',                   code: 'AR-Z', countryCode: 'AR', capital: 'Río Gallegos',                   capitalCoords: [-51.6226, -69.2181] },
+  { name: 'Santa Fe',                     code: 'AR-S', countryCode: 'AR', capital: 'Santa Fe',                       capitalCoords: [-31.6333, -60.7000] },
+  { name: 'Santiago del Estero',          code: 'AR-G', countryCode: 'AR', capital: 'Santiago del Estero',            capitalCoords: [-27.7833, -64.2667] },
+  { name: 'Tierra del Fuego',             code: 'AR-V', countryCode: 'AR', capital: 'Ushuaia',                        capitalCoords: [-54.8019, -68.3030] },
+  { name: 'Tucumán',                      code: 'AR-T', countryCode: 'AR', capital: 'San Miguel de Tucumán',          capitalCoords: [-26.8083, -65.2176], aliases: ['Tucuman'] },
+
+  // --- Brazil (26 states + Federal District) ---
+  { name: 'Acre',                  code: 'BR-AC', countryCode: 'BR', capital: 'Rio Branco',     capitalCoords: [-9.9747, -67.8243] },
+  { name: 'Alagoas',               code: 'BR-AL', countryCode: 'BR', capital: 'Maceió',         capitalCoords: [-9.6498, -35.7089] },
+  { name: 'Amapá',                 code: 'BR-AP', countryCode: 'BR', capital: 'Macapá',         capitalCoords: [0.0349, -51.0664],   aliases: ['Amapa'] },
+  { name: 'Amazonas',              code: 'BR-AM', countryCode: 'BR', capital: 'Manaus',         capitalCoords: [-3.1190, -60.0217] },
+  { name: 'Bahia',                 code: 'BR-BA', countryCode: 'BR', capital: 'Salvador',       capitalCoords: [-12.9714, -38.5014] },
+  { name: 'Ceará',                 code: 'BR-CE', countryCode: 'BR', capital: 'Fortaleza',      capitalCoords: [-3.7172, -38.5433],  aliases: ['Ceara'] },
+  { name: 'Distrito Federal',      code: 'BR-DF', countryCode: 'BR', capital: 'Brasília',       capitalCoords: [-15.7975, -47.8919], aliases: ['Federal District'] },
+  { name: 'Espírito Santo',        code: 'BR-ES', countryCode: 'BR', capital: 'Vitória',        capitalCoords: [-20.3155, -40.3128], aliases: ['Espirito Santo'] },
+  { name: 'Goiás',                 code: 'BR-GO', countryCode: 'BR', capital: 'Goiânia',        capitalCoords: [-16.6864, -49.2643], aliases: ['Goias'] },
+  { name: 'Maranhão',              code: 'BR-MA', countryCode: 'BR', capital: 'São Luís',       capitalCoords: [-2.5298, -44.2826],  aliases: ['Maranhao'] },
+  { name: 'Mato Grosso',           code: 'BR-MT', countryCode: 'BR', capital: 'Cuiabá',         capitalCoords: [-15.5989, -56.0949] },
+  { name: 'Mato Grosso do Sul',    code: 'BR-MS', countryCode: 'BR', capital: 'Campo Grande',   capitalCoords: [-20.4697, -54.6201] },
+  { name: 'Minas Gerais',          code: 'BR-MG', countryCode: 'BR', capital: 'Belo Horizonte', capitalCoords: [-19.9167, -43.9345] },
+  { name: 'Pará',                  code: 'BR-PA', countryCode: 'BR', capital: 'Belém',          capitalCoords: [-1.4554, -48.4898],  aliases: ['Para'] },
+  { name: 'Paraíba',               code: 'BR-PB', countryCode: 'BR', capital: 'João Pessoa',    capitalCoords: [-7.1195, -34.8450],  aliases: ['Paraiba'] },
+  { name: 'Paraná',                code: 'BR-PR', countryCode: 'BR', capital: 'Curitiba',       capitalCoords: [-25.4284, -49.2733], aliases: ['Parana'] },
+  { name: 'Pernambuco',            code: 'BR-PE', countryCode: 'BR', capital: 'Recife',         capitalCoords: [-8.0476, -34.8770] },
+  { name: 'Piauí',                 code: 'BR-PI', countryCode: 'BR', capital: 'Teresina',       capitalCoords: [-5.0892, -42.8016],  aliases: ['Piaui'] },
+  { name: 'Rio de Janeiro',        code: 'BR-RJ', countryCode: 'BR', capital: 'Rio de Janeiro', capitalCoords: [-22.9068, -43.1729] },
+  { name: 'Rio Grande do Norte',   code: 'BR-RN', countryCode: 'BR', capital: 'Natal',          capitalCoords: [-5.7945, -35.2110] },
+  { name: 'Rio Grande do Sul',     code: 'BR-RS', countryCode: 'BR', capital: 'Porto Alegre',   capitalCoords: [-30.0346, -51.2177] },
+  { name: 'Rondônia',              code: 'BR-RO', countryCode: 'BR', capital: 'Porto Velho',    capitalCoords: [-8.7619, -63.9039],  aliases: ['Rondonia'] },
+  { name: 'Roraima',               code: 'BR-RR', countryCode: 'BR', capital: 'Boa Vista',      capitalCoords: [2.8235, -60.6758] },
+  { name: 'Santa Catarina',        code: 'BR-SC', countryCode: 'BR', capital: 'Florianópolis',  capitalCoords: [-27.5954, -48.5480] },
+  { name: 'São Paulo',             code: 'BR-SP', countryCode: 'BR', capital: 'São Paulo',      capitalCoords: [-23.5505, -46.6333], aliases: ['Sao Paulo'] },
+  { name: 'Sergipe',               code: 'BR-SE', countryCode: 'BR', capital: 'Aracaju',        capitalCoords: [-10.9472, -37.0731] },
+  { name: 'Tocantins',             code: 'BR-TO', countryCode: 'BR', capital: 'Palmas',         capitalCoords: [-10.1846, -48.3336] },
+
+  // --- Australia (6 states + 2 territories) ---
+  // The source GeoJSON also includes an "Other Territories" feature
+  // (Christmas Island, Norfolk Island, etc.) — intentionally not quizzed.
+  { name: 'New South Wales',              code: 'AU-NSW', countryCode: 'AU', capital: 'Sydney',     capitalCoords: [-33.8688, 151.2093], aliases: ['NSW'] },
+  { name: 'Victoria',                     code: 'AU-VIC', countryCode: 'AU', capital: 'Melbourne',  capitalCoords: [-37.8136, 144.9631] },
+  { name: 'Queensland',                   code: 'AU-QLD', countryCode: 'AU', capital: 'Brisbane',   capitalCoords: [-27.4698, 153.0251], aliases: ['QLD'] },
+  { name: 'Western Australia',            code: 'AU-WA',  countryCode: 'AU', capital: 'Perth',      capitalCoords: [-31.9505, 115.8605], aliases: ['WA'] },
+  { name: 'South Australia',              code: 'AU-SA',  countryCode: 'AU', capital: 'Adelaide',   capitalCoords: [-34.9285, 138.6007], aliases: ['SA'] },
+  { name: 'Tasmania',                     code: 'AU-TAS', countryCode: 'AU', capital: 'Hobart',     capitalCoords: [-42.8821, 147.3272], aliases: ['TAS'] },
+  { name: 'Australian Capital Territory', code: 'AU-ACT', countryCode: 'AU', capital: 'Canberra',   capitalCoords: [-35.2809, 149.1300], aliases: ['ACT'] },
+  { name: 'Northern Territory',           code: 'AU-NT',  countryCode: 'AU', capital: 'Darwin',     capitalCoords: [-12.4634, 130.8456], aliases: ['NT'] },
 ]
 
-// The three supported parent countries for the States Quiz, in the order
-// they should appear in the dropdown. Labels are what the UI shows.
+// Parent countries supported by the States Quiz. The order here doesn't
+// matter for UI — CountrySelector sorts alphabetically — but matches the
+// quiz pool's grouping above.
 export const STATES_COUNTRIES = [
   { code: 'US', label: 'United States' },
   { code: 'MX', label: 'Mexico' },
   { code: 'CA', label: 'Canada' },
+  { code: 'AR', label: 'Argentina' },
+  { code: 'BR', label: 'Brazil' },
+  { code: 'AU', label: 'Australia' },
 ]
 
 export const STATES_COUNTRY_CODES = STATES_COUNTRIES.map((c) => c.code)

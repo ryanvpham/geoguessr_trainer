@@ -27,9 +27,14 @@ This is a personal project. **All git activity here must use the personal GitHub
 - Remote `origin` is `github.com/ryanvpham/geoguessr_trainer` (personal). Push directly there.
 - Open PRs against `main` in that repo. After `git push -u origin <branch>`, surface the PR creation URL from the push output for the user to click.
 
+### Workflow conventions
+
+- **Always sync with origin/main before creating a branch.** Run `git fetch origin && git checkout -b <branch> origin/main` so the new branch starts at the latest merged state — not whatever local main happened to be. Skipping this leads to PRs that conflict with already-merged work or accidentally revert it.
+- **At commit/PR time, update this file with anything worth remembering.** If you discovered a non-obvious data source, hit a tooling gotcha, fixed an invariant, or learned something a future session would need to know cold, add it to the relevant section here. Keep entries terse — a sentence with the *why*, not a changelog. Stale facts (paths, code locations, supported sets) should be corrected as part of the same PR.
+
 ## Deployment
 
-`.github/workflows/deploy.yml` builds and publishes to GitHub Pages on every push to `main`. The workflow sets `BASE_PATH=/<repo-name>/` automatically. Pages *Source* must be set to **GitHub Actions** in repo settings.
+`.github/workflows/deploy.yml` builds and publishes to GitHub Pages on every push to `main`. **The workflow currently pins `BASE_PATH=/`** because the site lives at the custom domain `geo-quizzes.com` (see `public/CNAME`). If you ever revert to `username.github.io/geoguessr_trainer/`, change `BASE_PATH` back to `/${{ github.event.repository.name }}/`. Pages *Source* must be set to **GitHub Actions** in repo settings.
 
 ## Architecture
 
@@ -46,7 +51,7 @@ Key invariants in `GameScreen`:
 
 `src/utils/gameLogic.js`:
 - `getAvailableCountries(geoguessrFilter, selectedRegions)` — intersects the GeoGuessr allowlist with region filters. Empty `selectedRegions` means "all regions" (never return an empty pool — the game loop assumes non-empty).
-- `getAvailableStates(countryCode)` — filters `allStates` to `'US' | 'MX' | 'CA'`.
+- `getAvailableStates(countryCode)` — filters `allStates` by parent country. Supported parents are listed in `STATES_COUNTRIES` (`src/data/states.js`); a matching `GEO_URLS` entry must exist in `StatesMap.jsx` for the country to render.
 
 ### Map rendering
 
@@ -55,6 +60,8 @@ Key invariants in `GameScreen`:
 - States Quiz (`StatesMap.jsx`) matches by `feature.properties.name` against `state.name` + `state.aliases` (normalized for accents/case). **If a state fails to zoom, the most likely cause is a name mismatch between `src/data/states.js` and the GeoJSON source** — add the GeoJSON's exact name to `aliases`. Example: Canada's GeoJSON calls it `"Yukon Territory"`, not `"Yukon"`.
 
 `StatesMap` also sanitizes problematic polygons in the PublicaMundi US GeoJSON (Alaska's out-of-range Aleutian polygon; Virginia's zero-area polygon) to prevent Mercator from painting extreme coordinates across the whole map.
+
+**GeoJSON sources**: most countries pull from `click_that_hood` via jsDelivr. **Argentina** isn't in that catalog, so it's self-hosted at `public/data/argentina-provinces.geojson` (extracted from Natural Earth 10m admin-1 — the global file is 60MB, way over jsDelivr's 20MB limit, so per-country self-hosting is the only viable path). Use ``${import.meta.env.BASE_URL}data/...`` for self-hosted GeoJSON paths so they resolve correctly under both `/` and `/<repo>/` base paths.
 
 ### Answer validation
 
@@ -68,4 +75,5 @@ Key invariants in `GameScreen`:
 
 - Countries: `src/data/countries.js` — ISO-3166 alpha-2 codes.
 - States/provinces: `src/data/states.js` — ISO-3166-2 codes (`US-CA`, `CA-YT`, etc.), with `countryCode` for parent country.
-- When adding a state/province, verify `name` matches the GeoJSON source used in `StatesMap.GEO_URLS`; if not, add the GeoJSON's spelling to `aliases`.
+- When adding a state/province, verify `name` matches the GeoJSON source used in `StatesMap.GEO_URLS`; if not, add the GeoJSON's spelling to `aliases`. The fastest sanity check is a tiny Python script that loads the GeoJSON, normalizes both sides (lowercase + strip accents), and asserts every `state.name`-or-alias resolves to a feature.
+- When adding a new parent country to the States Quiz, three coordinated edits are required: append to `allStates` and `STATES_COUNTRIES` in `src/data/states.js`, and add a `GEO_URLS` entry in `src/components/StatesMap.jsx`. Missing any one leaves the country either unselectable, un-poolable, or unrenderable.

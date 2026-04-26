@@ -8,10 +8,19 @@ import { normalizeString } from '../utils/answerValidation'
 //         unlike the click_that_hood US file which drops non-contiguous states)
 //   - MX: 32 states (click_that_hood)
 //   - CA: 13 provinces & territories (click_that_hood)
+//   - BR: 26 states + Federal District (click_that_hood)
+//   - AU: 8 states/territories + 1 ignored "Other Territories" (click_that_hood)
+//   - AR: 23 provinces + Buenos Aires City — extracted from Natural Earth 10m
+//         admin-1 and self-hosted (click_that_hood doesn't ship Argentina).
+//         BASE_URL keeps the path correct under both repo-path and custom-domain
+//         deploys.
 const GEO_URLS = {
   US: 'https://cdn.jsdelivr.net/gh/PublicaMundi/MappingAPI@master/data/geojson/us-states.json',
   MX: 'https://cdn.jsdelivr.net/gh/codeforgermany/click_that_hood@main/public/data/mexico.geojson',
   CA: 'https://cdn.jsdelivr.net/gh/codeforgermany/click_that_hood@main/public/data/canada.geojson',
+  BR: 'https://cdn.jsdelivr.net/gh/codeforgermany/click_that_hood@main/public/data/brazil-states.geojson',
+  AU: 'https://cdn.jsdelivr.net/gh/codeforgermany/click_that_hood@main/public/data/australia.geojson',
+  AR: `${import.meta.env.BASE_URL}data/argentina-provinces.geojson`,
 }
 
 // Module-level cache — GeoJSON shouldn't refetch between quiz rounds.
