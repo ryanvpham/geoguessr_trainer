@@ -52,8 +52,9 @@ export function getAvailableCountries(geoguessrFilter, selectedRegions) {
 }
 
 // States Quiz pool — all subdivisions whose parent country matches the
-// single-selected country code ('US' | 'MX' | 'CA'). Falls back to every
-// state if no country is provided so the game loop never sees an empty pool.
+// single-selected country code (see STATES_COUNTRIES in src/data/states.js
+// for the supported set). Falls back to every state if no country is provided
+// so the game loop never sees an empty pool.
 export function getAvailableStates(selectedCountryCode) {
   if (!selectedCountryCode) return allStates
   return allStates.filter((s) => s.countryCode === selectedCountryCode)
