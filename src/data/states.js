@@ -6,6 +6,10 @@
 //   - Argentina's 23 provinces + Buenos Aires City (CABA)
 //   - Brazil's 26 states + Federal District
 //   - Australia's 6 states + 2 territories
+//   - Philippines: the 17 administrative regions (not the 81 provinces) —
+//     regions are the natural quiz unit, similar to Brazil/Argentina sizes
+//     and how Filipinos identify location. Codes use the unofficial
+//     "PH-RNN" pattern since regions don't have ISO 3166-2 codes.
 //
 // Shape mirrors allCountries so the existing game loop and multi-choice
 // generator can consume it unchanged.
@@ -187,6 +191,28 @@ export const allStates = [
   { name: 'Tasmania',                     code: 'AU-TAS', countryCode: 'AU', capital: 'Hobart',     capitalCoords: [-42.8821, 147.3272], aliases: ['TAS'] },
   { name: 'Australian Capital Territory', code: 'AU-ACT', countryCode: 'AU', capital: 'Canberra',   capitalCoords: [-35.2809, 149.1300], aliases: ['ACT'] },
   { name: 'Northern Territory',           code: 'AU-NT',  countryCode: 'AU', capital: 'Darwin',     capitalCoords: [-12.4634, 130.8456], aliases: ['NT'] },
+
+  // --- Philippines (17 administrative regions) ---
+  // "Regional center" rather than "capital" since regions aren't constitutionally
+  // capital-having entities, but the matcher key is still `capital` for parity.
+  // Region codes are unofficial PH-Rnn (no ISO 3166-2 standard for regions).
+  { name: 'Ilocos Region',                    code: 'PH-R01', countryCode: 'PH', capital: 'San Fernando',  capitalCoords: [16.6160, 120.3196], aliases: ['Region I', 'Ilocos'] },
+  { name: 'Cagayan Valley',                   code: 'PH-R02', countryCode: 'PH', capital: 'Tuguegarao',    capitalCoords: [17.6132, 121.7270], aliases: ['Region II'] },
+  { name: 'Central Luzon',                    code: 'PH-R03', countryCode: 'PH', capital: 'San Fernando',  capitalCoords: [15.0306, 120.6840], aliases: ['Region III'] },
+  { name: 'Calabarzon',                       code: 'PH-R4A', countryCode: 'PH', capital: 'Calamba',       capitalCoords: [14.2117, 121.1653], aliases: ['CALABARZON', 'Region IV-A', 'Region IVA'] },
+  { name: 'Mimaropa',                         code: 'PH-R4B', countryCode: 'PH', capital: 'Calapan',       capitalCoords: [13.4118, 121.1803], aliases: ['MIMAROPA', 'Region IV-B', 'Region IVB', 'Southwestern Tagalog Region'] },
+  { name: 'Bicol',                            code: 'PH-R05', countryCode: 'PH', capital: 'Legazpi',       capitalCoords: [13.1391, 123.7438], aliases: ['Region V', 'Bicol Region'] },
+  { name: 'Western Visayas',                  code: 'PH-R06', countryCode: 'PH', capital: 'Iloilo City',   capitalCoords: [10.7202, 122.5621], aliases: ['Region VI'] },
+  { name: 'Central Visayas',                  code: 'PH-R07', countryCode: 'PH', capital: 'Cebu City',     capitalCoords: [10.3157, 123.8854], aliases: ['Region VII'] },
+  { name: 'Eastern Visayas',                  code: 'PH-R08', countryCode: 'PH', capital: 'Tacloban',      capitalCoords: [11.2421, 125.0046], aliases: ['Region VIII'] },
+  { name: 'Zamboanga Peninsula',              code: 'PH-R09', countryCode: 'PH', capital: 'Pagadian',      capitalCoords: [7.8257, 123.4366],  aliases: ['Region IX'] },
+  { name: 'Northern Mindanao',                code: 'PH-R10', countryCode: 'PH', capital: 'Cagayan de Oro', capitalCoords: [8.4542, 124.6319], aliases: ['Region X'] },
+  { name: 'Davao Region',                     code: 'PH-R11', countryCode: 'PH', capital: 'Davao City',    capitalCoords: [7.1907, 125.4553],  aliases: ['Region XI', 'Davao'] },
+  { name: 'Soccsksargen',                     code: 'PH-R12', countryCode: 'PH', capital: 'Koronadal',     capitalCoords: [6.5031, 124.8472],  aliases: ['SOCCSKSARGEN', 'Region XII'] },
+  { name: 'Caraga',                           code: 'PH-R13', countryCode: 'PH', capital: 'Butuan',        capitalCoords: [8.9492, 125.5436],  aliases: ['Region XIII', 'Caraga Region'] },
+  { name: 'Bangsamoro',                       code: 'PH-BAR', countryCode: 'PH', capital: 'Cotabato City', capitalCoords: [7.2236, 124.2452],  aliases: ['BARMM', 'ARMM', 'Bangsamoro Autonomous Region in Muslim Mindanao', 'Autonomous Region in Muslim Mindanao'] },
+  { name: 'Cordillera Administrative Region', code: 'PH-CAR', countryCode: 'PH', capital: 'Baguio',        capitalCoords: [16.4023, 120.5960], aliases: ['CAR', 'Cordillera Region', 'Cordillera'] },
+  { name: 'Metro Manila',                     code: 'PH-NCR', countryCode: 'PH', capital: 'Manila',        capitalCoords: [14.5995, 120.9842], aliases: ['NCR', 'National Capital Region'] },
 ]
 
 // Parent countries supported by the States Quiz. The order here doesn't
@@ -199,6 +225,7 @@ export const STATES_COUNTRIES = [
   { code: 'AR', label: 'Argentina' },
   { code: 'BR', label: 'Brazil' },
   { code: 'AU', label: 'Australia' },
+  { code: 'PH', label: 'Philippines' },
 ]
 
 export const STATES_COUNTRY_CODES = STATES_COUNTRIES.map((c) => c.code)

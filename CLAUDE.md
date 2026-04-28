@@ -61,7 +61,11 @@ Key invariants in `GameScreen`:
 
 `StatesMap` also sanitizes problematic polygons in the PublicaMundi US GeoJSON (Alaska's out-of-range Aleutian polygon; Virginia's zero-area polygon) to prevent Mercator from painting extreme coordinates across the whole map.
 
-**GeoJSON sources**: most countries pull from `click_that_hood` via jsDelivr. **Argentina** isn't in that catalog, so it's self-hosted at `public/data/argentina-provinces.geojson` (extracted from Natural Earth 10m admin-1 — the global file is 60MB, way over jsDelivr's 20MB limit, so per-country self-hosting is the only viable path). Use ``${import.meta.env.BASE_URL}data/...`` for self-hosted GeoJSON paths so they resolve correctly under both `/` and `/<repo>/` base paths.
+**GeoJSON sources**: most countries pull from `click_that_hood` via jsDelivr. Some countries are self-hosted under `public/data/`:
+- **Argentina** (`argentina-provinces.geojson`) — extracted from Natural Earth 10m admin-1 because click_that_hood doesn't ship Argentina. The global Natural Earth file is 60 MB, way over jsDelivr's 20 MB limit, so per-country self-hosting is the only viable path.
+- **Philippines** (`philippines-regions.geojson`) — Natural Earth gives 118 *provinces*; the quiz uses the 17 *regions* (matches how Filipinos identify location and how GeoGuessr-relevant guesses work). The 17-feature file is built by grouping provinces by their `region` property and dissolving polygons with `shapely.ops.unary_union`. Run `make_valid` first — Natural Earth has a few self-intersecting polygons in PH that crash a naive union.
+
+Use ``${import.meta.env.BASE_URL}data/...`` for self-hosted GeoJSON paths so they resolve correctly under both `/` and `/<repo>/` base paths.
 
 ### Answer validation
 

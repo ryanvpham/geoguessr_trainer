@@ -14,6 +14,9 @@ import { normalizeString } from '../utils/answerValidation'
 //         admin-1 and self-hosted (click_that_hood doesn't ship Argentina).
 //         BASE_URL keeps the path correct under both repo-path and custom-domain
 //         deploys.
+//   - PH: 17 administrative regions, dissolved from the Natural Earth admin-1
+//         provinces (which give 118 features grouped into 17 regions).
+//         Self-hosted for the same CDN-size reason as Argentina.
 const GEO_URLS = {
   US: 'https://cdn.jsdelivr.net/gh/PublicaMundi/MappingAPI@master/data/geojson/us-states.json',
   MX: 'https://cdn.jsdelivr.net/gh/codeforgermany/click_that_hood@main/public/data/mexico.geojson',
@@ -21,6 +24,7 @@ const GEO_URLS = {
   BR: 'https://cdn.jsdelivr.net/gh/codeforgermany/click_that_hood@main/public/data/brazil-states.geojson',
   AU: 'https://cdn.jsdelivr.net/gh/codeforgermany/click_that_hood@main/public/data/australia.geojson',
   AR: `${import.meta.env.BASE_URL}data/argentina-provinces.geojson`,
+  PH: `${import.meta.env.BASE_URL}data/philippines-regions.geojson`,
 }
 
 // Module-level cache — GeoJSON shouldn't refetch between quiz rounds.
