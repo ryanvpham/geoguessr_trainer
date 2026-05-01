@@ -6,7 +6,10 @@ import { normalizeString } from '../utils/answerValidation'
 // `properties.name` is the state/province name, e.g. "California".
 //   - US: 50 states + DC + Puerto Rico (PublicaMundi; Hawaii/Alaska included,
 //         unlike the click_that_hood US file which drops non-contiguous states)
-//   - MX: 32 states (click_that_hood)
+//   - MX: 32 states — click_that_hood ships a 9.4 MB / 250k-point file that
+//         lags d3-geo's per-frame Mercator reprojection during auto-zoom, so
+//         we self-host a Shapely-simplified version (tol=0.005°, ~390 KB /
+//         16k points) which is visually indistinguishable at quiz zoom.
 //   - CA: 13 provinces & territories (click_that_hood)
 //   - BR: 26 states + Federal District (click_that_hood)
 //   - AU: 8 states/territories + 1 ignored "Other Territories" (click_that_hood)
@@ -19,7 +22,7 @@ import { normalizeString } from '../utils/answerValidation'
 //         Self-hosted for the same CDN-size reason as Argentina.
 const GEO_URLS = {
   US: 'https://cdn.jsdelivr.net/gh/PublicaMundi/MappingAPI@master/data/geojson/us-states.json',
-  MX: 'https://cdn.jsdelivr.net/gh/codeforgermany/click_that_hood@main/public/data/mexico.geojson',
+  MX: `${import.meta.env.BASE_URL}data/mexico-states.geojson`,
   CA: 'https://cdn.jsdelivr.net/gh/codeforgermany/click_that_hood@main/public/data/canada.geojson',
   BR: 'https://cdn.jsdelivr.net/gh/codeforgermany/click_that_hood@main/public/data/brazil-states.geojson',
   AU: 'https://cdn.jsdelivr.net/gh/codeforgermany/click_that_hood@main/public/data/australia.geojson',
@@ -100,7 +103,10 @@ function findStateFeature(features, state) {
 
 // Thin wrapper around WorldMap that supplies its own feature set (the
 // selected country's subdivisions) and resolves the target by state name.
-function StatesMap({ state }) {
+// Pass `showCapitalMarker` to draw a star at the state's `capitalCoords`
+// (used by the State Capitals Quiz map format; States Quiz omits it so
+// the state is shown by itself).
+function StatesMap({ state, showCapitalMarker = false }) {
   const [features, setFeatures] = useState(featureCache[state.countryCode] || null)
 
   useEffect(() => {
@@ -120,14 +126,11 @@ function StatesMap({ state }) {
     [features, state]
   )
 
-  // Pass features + resolved target through — WorldMap handles projection,
-  // drag, pinch, wheel, and auto-zoom. Intentionally omit `capitalCoords`
-  // so the state is shown highlighted by itself (matching the Country Quiz
-  // map, which never draws a capital marker).
   return (
     <WorldMap
       features={features || undefined}
       targetFeature={targetFeature}
+      capitalCoords={showCapitalMarker ? state.capitalCoords : undefined}
     />
   )
 }

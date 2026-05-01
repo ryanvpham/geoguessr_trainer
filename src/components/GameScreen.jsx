@@ -7,12 +7,13 @@ import AnswerInput from './AnswerInput'
 import Feedback from './Feedback'
 import RoundSummary from './RoundSummary'
 
-// Per-mode display strings used in round-complete and end-of-game messages.
-// Keeps the feedback code below free of nested ternaries.
-const ITEM_LABELS = {
-  country: { singular: 'country', plural: 'countries' },
-  capital: { singular: 'capital', plural: 'capitals' },
-  states:  { singular: 'state',   plural: 'states'    },
+// Per-mode display strings: header title plus the singular/plural item word
+// used in round-complete and end-of-game feedback messages.
+const MODE_INFO = {
+  country:      { title: 'Country Quiz',         singular: 'country', plural: 'countries' },
+  capital:      { title: 'Country Capital Quiz', singular: 'capital', plural: 'capitals'  },
+  states:       { title: 'States Quiz',          singular: 'state',   plural: 'states'    },
+  stateCapital: { title: 'State Capitals Quiz',  singular: 'capital', plural: 'capitals'  },
 }
 
 function GameScreen({ gameMode, settings, onBack }) {
@@ -33,16 +34,17 @@ function GameScreen({ gameMode, settings, onBack }) {
   const [justSubmitted, setJustSubmitted] = useState(false)
 
   // Re-seed the pool whenever any input that shapes the pool changes.
-  //   - country/capital modes: region selection + GeoGuessr filter
-  //   - states mode:           selected country code (US/MX/CA)
+  //   - country/capital modes:     region selection + GeoGuessr filter
+  //   - states/stateCapital modes: selected country code (US/MX/CA/...)
   // Joining the region array to a string keeps the dep stable across rerenders.
   const regionKey = Array.isArray(settings.selectedRegions)
     ? settings.selectedRegions.slice().sort().join('|')
     : ''
   const selectedCountry = settings.selectedCountry || ''
+  const usesStatesPool = gameMode === 'states' || gameMode === 'stateCapital'
 
   useEffect(() => {
-    const availableCountries = gameMode === 'states'
+    const availableCountries = usesStatesPool
       ? getAvailableStates(settings.selectedCountry)
       : getAvailableCountries(settings.geoguessrFilter, settings.selectedRegions)
     setCountries(availableCountries)
@@ -134,7 +136,7 @@ function GameScreen({ gameMode, settings, onBack }) {
       }
       
       // All rounds complete
-      const labels = ITEM_LABELS[gameMode] || ITEM_LABELS.country
+      const labels = MODE_INFO[gameMode] || MODE_INFO.country
       if (incorrectCountries.length === 0) {
         setFeedback({
           message: `Perfect! You got all ${countries.length} ${labels.plural} correct!`,
@@ -182,6 +184,8 @@ function GameScreen({ gameMode, settings, onBack }) {
         ? `Correct! It's ${currentCountry.name}`
         : `Incorrect! The correct answer is: ${currentCountry.name}`
     } else {
+      // capital and stateCapital modes — both ask for `currentCountry.capital`
+      // (a state object exposes `.capital` the same way a country does).
       isCorrect = checkCapitalAnswer(userAnswer, currentCountry)
       feedbackMessage = isCorrect
         ? `Correct! The capital of ${currentCountry.name} is ${currentCountry.capital}`
@@ -222,7 +226,7 @@ function GameScreen({ gameMode, settings, onBack }) {
         correct: finalRoundCorrect,
         total: finalRoundTotal,
       }])
-      const labels = ITEM_LABELS[gameMode] || ITEM_LABELS.country
+      const labels = MODE_INFO[gameMode] || MODE_INFO.country
       setFeedback({
         message: `Perfect! You got all ${countries.length} ${labels.plural} correct!`,
         isCorrect: true,
@@ -254,7 +258,7 @@ function GameScreen({ gameMode, settings, onBack }) {
     if (nextButtonText === 'Start Next Round') {
       const country = startNextRound()
       if (country === null) {
-        const labels = ITEM_LABELS[gameMode] || ITEM_LABELS.country
+        const labels = MODE_INFO[gameMode] || MODE_INFO.country
         setFeedback({
           message: `Perfect! You've mastered all ${labels.plural}!`,
           isCorrect: true
@@ -288,15 +292,14 @@ function GameScreen({ gameMode, settings, onBack }) {
     return () => document.removeEventListener('keypress', handleKeyPress)
   }, [showNext, isAnswered, justSubmitted, handleNext])
 
-  const gameTitle =
-    gameMode === 'country' ? 'Country Quiz'
-    : gameMode === 'states' ? 'States Quiz'
-    : 'Country Capital Quiz'
+  const gameTitle = (MODE_INFO[gameMode] || MODE_INFO.country).title
   const percentage = totalSeen > 0 ? Math.round((correctCount / totalSeen) * 100) : 0
   // For country + states modes the answer is the item's name; for the capital
-  // quiz it's the capital field. Drives AnswerInput's multi-choice options.
+  // and state-capital quizzes it's the capital field. Drives AnswerInput's
+  // multi-choice options.
+  const isCapitalAnswer = gameMode === 'capital' || gameMode === 'stateCapital'
   const correctAnswer = currentCountry
-    ? (gameMode === 'capital' ? currentCountry.capital : currentCountry.name)
+    ? (isCapitalAnswer ? currentCountry.capital : currentCountry.name)
     : ''
 
   // Show round summary only when game is complete
@@ -351,7 +354,7 @@ function GameScreen({ gameMode, settings, onBack }) {
             disabled={isAnswered}
             correctAnswer={correctAnswer}
             countries={countries}
-            isCapital={gameMode === 'capital'}
+            isCapital={isCapitalAnswer}
           />
         )}
         
