@@ -20,6 +20,12 @@ function QuestionDisplay({ questionFormat, country, gameMode }) {
     if (questionFormat === 'map') {
       return <StatesMap state={country} />
     }
+  } else if (gameMode === 'stateCapital') {
+    if (questionFormat === 'state') {
+      return <CountryNameDisplay name={country.name} />
+    } else if (questionFormat === 'map') {
+      return <StatesMap state={country} showCapitalMarker />
+    }
   } else {
     // Capital Quiz
     if (questionFormat === 'flag') {

@@ -81,7 +81,7 @@ export const allStates = [
   { name: 'Campeche',             code: 'MX-CAM', countryCode: 'MX', capital: 'Campeche',         capitalCoords: [19.8301, -90.5349] },
   { name: 'Chiapas',              code: 'MX-CHP', countryCode: 'MX', capital: 'Tuxtla Gutiérrez', capitalCoords: [16.7569, -93.1292] },
   { name: 'Chihuahua',            code: 'MX-CHH', countryCode: 'MX', capital: 'Chihuahua',        capitalCoords: [28.6353, -106.0889] },
-  { name: 'Coahuila',             code: 'MX-COA', countryCode: 'MX', capital: 'Saltillo',         capitalCoords: [25.4232, -100.9953] },
+  { name: 'Coahuila',             code: 'MX-COA', countryCode: 'MX', capital: 'Saltillo',         capitalCoords: [25.4232, -100.9953], aliases: ['Coahuila de Zaragoza'] },
   { name: 'Colima',               code: 'MX-COL', countryCode: 'MX', capital: 'Colima',           capitalCoords: [19.2433, -103.7248] },
   { name: 'Durango',              code: 'MX-DUR', countryCode: 'MX', capital: 'Durango',          capitalCoords: [24.0277, -104.6532] },
   { name: 'Guanajuato',           code: 'MX-GUA', countryCode: 'MX', capital: 'Guanajuato',       capitalCoords: [21.0190, -101.2574] },
@@ -89,7 +89,7 @@ export const allStates = [
   { name: 'Hidalgo',              code: 'MX-HID', countryCode: 'MX', capital: 'Pachuca',          capitalCoords: [20.1011, -98.7591] },
   { name: 'Jalisco',              code: 'MX-JAL', countryCode: 'MX', capital: 'Guadalajara',      capitalCoords: [20.6597, -103.3496] },
   { name: 'Mexico City',          code: 'MX-CMX', countryCode: 'MX', capital: 'Mexico City',      capitalCoords: [19.4326, -99.1332], aliases: ['CDMX', 'Ciudad de México', 'Distrito Federal'] },
-  { name: 'Michoacán',            code: 'MX-MIC', countryCode: 'MX', capital: 'Morelia',          capitalCoords: [19.7008, -101.1844] },
+  { name: 'Michoacán',            code: 'MX-MIC', countryCode: 'MX', capital: 'Morelia',          capitalCoords: [19.7008, -101.1844], aliases: ['Michoacán de Ocampo', 'Michoacan', 'Michoacan de Ocampo'] },
   { name: 'Morelos',              code: 'MX-MOR', countryCode: 'MX', capital: 'Cuernavaca',       capitalCoords: [18.9242, -99.2216] },
   { name: 'Nayarit',              code: 'MX-NAY', countryCode: 'MX', capital: 'Tepic',            capitalCoords: [21.5039, -104.8948] },
   { name: 'Nuevo León',           code: 'MX-NLE', countryCode: 'MX', capital: 'Monterrey',        capitalCoords: [25.6866, -100.3161] },
@@ -103,7 +103,7 @@ export const allStates = [
   { name: 'Tabasco',              code: 'MX-TAB', countryCode: 'MX', capital: 'Villahermosa',     capitalCoords: [17.9892, -92.9475] },
   { name: 'Tamaulipas',           code: 'MX-TAM', countryCode: 'MX', capital: 'Ciudad Victoria', capitalCoords: [23.7417, -99.1459] },
   { name: 'Tlaxcala',             code: 'MX-TLA', countryCode: 'MX', capital: 'Tlaxcala',         capitalCoords: [19.3181, -98.2375] },
-  { name: 'Veracruz',             code: 'MX-VER', countryCode: 'MX', capital: 'Xalapa',           capitalCoords: [19.5438, -96.9102] },
+  { name: 'Veracruz',             code: 'MX-VER', countryCode: 'MX', capital: 'Xalapa',           capitalCoords: [19.5438, -96.9102], aliases: ['Veracruz de Ignacio de la Llave'] },
   { name: 'Yucatán',              code: 'MX-YUC', countryCode: 'MX', capital: 'Mérida',           capitalCoords: [20.9674, -89.5926] },
   { name: 'Zacatecas',            code: 'MX-ZAC', countryCode: 'MX', capital: 'Zacatecas',        capitalCoords: [22.7709, -102.5832] },
   { name: 'State of Mexico',      code: 'MX-MEX', countryCode: 'MX', capital: 'Toluca',           capitalCoords: [19.2826, -99.6557], aliases: ['México', 'Estado de México'] },
@@ -229,6 +229,14 @@ export const STATES_COUNTRIES = [
 ]
 
 export const STATES_COUNTRY_CODES = STATES_COUNTRIES.map((c) => c.code)
+
+// State Capitals Quiz currently supports a smaller set than the States Quiz
+// because not every parent country in `STATES_COUNTRIES` has confidently
+// well-known subdivision capitals to quiz on. Start with US + Canada and
+// extend from `STATES_COUNTRIES` as more are vetted.
+export const STATE_CAPITAL_COUNTRIES = STATES_COUNTRIES.filter((c) =>
+  ['US', 'CA'].includes(c.code)
+)
 
 // Convenience for the settings screen — "United States (50)" etc.
 export function countStatesByCountry() {

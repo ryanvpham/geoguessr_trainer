@@ -38,9 +38,17 @@ This is a personal project. **All git activity here must use the personal GitHub
 
 ## Architecture
 
-### Three quiz modes, one game loop
+### Quiz modes, one game loop
 
-`src/components/GameScreen.jsx` is the shared game loop for **all** three modes (`country`, `capital`, `states`). `App.jsx` picks settings + mode; `GameScreen` renders questions, handles answers, tracks rounds, and shows the summary. When touching round/scoring logic, the change applies to every mode — don't fork per-mode copies.
+`src/components/GameScreen.jsx` is the shared game loop for **all** modes:
+- `country` — name a country (flag/map/capital prompt).
+- `capital` — name a country's capital (flag/name/map prompt).
+- `states` — name a state or province highlighted on the country map.
+- `stateCapital` — name a state's capital from either the state name or a map with the capital starred. The country dropdown is intentionally a subset of the States Quiz's (see `STATE_CAPITAL_COUNTRIES`) — only countries whose subdivision capitals are well-known enough to quiz on.
+
+`App.jsx` picks settings + mode; `GameScreen` renders questions, handles answers, tracks rounds, and shows the summary. Per-mode display strings (header title + singular/plural item word) live in the `MODE_INFO` lookup at the top of `GameScreen.jsx` — adding a mode means adding an entry there. When touching round/scoring logic, the change applies to every mode — don't fork per-mode copies.
+
+`stateCapital` reuses the States Quiz pool (`getAvailableStates`) but the answer is the state's `capital` field, so its branch in `GameScreen.handleAnswer` falls through to the same `else` block as `capital` mode — they share the validator and feedback strings.
 
 Key invariants in `GameScreen`:
 - **`loadNewQuestion` is the single source of truth for saving round scores.** It appends to `roundScores` whenever `getRandomCountry()` returns `null` (round exhausted). `startNextRound` only advances round state — it must not push to `roundScores`, or you'll get duplicate/skipped rounds.
@@ -62,6 +70,7 @@ Key invariants in `GameScreen`:
 `StatesMap` also sanitizes problematic polygons in the PublicaMundi US GeoJSON (Alaska's out-of-range Aleutian polygon; Virginia's zero-area polygon) to prevent Mercator from painting extreme coordinates across the whole map.
 
 **GeoJSON sources**: most countries pull from `click_that_hood` via jsDelivr. Some countries are self-hosted under `public/data/`:
+- **Mexico** (`mexico-states.geojson`) — click_that_hood ships Mexico but at 9.4 MB / 250k points it's ~14× heavier than Canada's file, and d3-geo reprojects every point each frame during the auto-zoom animation, which is visibly laggy. We host a Shapely-simplified version (`shape(...).simplify(0.005, preserve_topology=True)`, ~390 KB / 16.6k points) — visually indistinguishable at quiz zoom, comparable to Canada's perf. **Preserve `properties.name` exactly** when simplifying — the GeoJSON uses formal state names (e.g. `Coahuila de Zaragoza`, `Michoacán de Ocampo`, `Veracruz de Ignacio de la Llave`), and `findStateFeature` matches by name + aliases.
 - **Argentina** (`argentina-provinces.geojson`) — extracted from Natural Earth 10m admin-1 because click_that_hood doesn't ship Argentina. The global Natural Earth file is 60 MB, way over jsDelivr's 20 MB limit, so per-country self-hosting is the only viable path.
 - **Philippines** (`philippines-regions.geojson`) — Natural Earth gives 118 *provinces*; the quiz uses the 17 *regions* (matches how Filipinos identify location and how GeoGuessr-relevant guesses work). The 17-feature file is built by grouping provinces by their `region` property and dissolving polygons with `shapely.ops.unary_union`. Run `make_valid` first — Natural Earth has a few self-intersecting polygons in PH that crash a naive union.
 

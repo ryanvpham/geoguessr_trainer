@@ -3,6 +3,7 @@ import MenuScreen from './components/MenuScreen'
 import CountryQuizSettings from './components/CountryQuizSettings'
 import CapitalQuizSettings from './components/CapitalQuizSettings'
 import StatesQuizSettings from './components/StatesQuizSettings'
+import StateCapitalQuizSettings from './components/StateCapitalQuizSettings'
 import GameScreen from './components/GameScreen'
 import { REGION_IDS } from './data/regionMapping'
 
@@ -35,6 +36,13 @@ function App() {
     selectedCountry: 'US',
   })
 
+  // Scoped to STATE_CAPITAL_COUNTRIES (US + CA today).
+  const [stateCapitalQuizSettings, setStateCapitalQuizSettings] = useState({
+    questionFormat: 'map', // 'state' (name as text) | 'map' (highlighted on country map)
+    answerFormat: 'typein', // 'typein' or 'multichoice'
+    selectedCountry: 'US',
+  })
+
   const handleStartCountryQuiz = () => {
     setGameMode('country')
     setCurrentScreen('game')
@@ -50,10 +58,16 @@ function App() {
     setCurrentScreen('game')
   }
 
+  const handleStartStateCapitalQuiz = () => {
+    setGameMode('stateCapital')
+    setCurrentScreen('game')
+  }
+
   const settingsForMode = {
-    country: countryQuizSettings,
-    capital: capitalQuizSettings,
-    states:  statesQuizSettings,
+    country:      countryQuizSettings,
+    capital:      capitalQuizSettings,
+    states:       statesQuizSettings,
+    stateCapital: stateCapitalQuizSettings,
   }
 
   return (
@@ -63,6 +77,7 @@ function App() {
           onCountryQuizClick={() => setCurrentScreen('country-quiz-settings')}
           onCapitalQuizClick={() => setCurrentScreen('capital-quiz-settings')}
           onStatesQuizClick={() => setCurrentScreen('states-quiz-settings')}
+          onStateCapitalQuizClick={() => setCurrentScreen('state-capital-quiz-settings')}
         />
       )}
 
@@ -90,6 +105,15 @@ function App() {
           onSettingsChange={setStatesQuizSettings}
           onBack={() => setCurrentScreen('menu')}
           onStart={handleStartStatesQuiz}
+        />
+      )}
+
+      {currentScreen === 'state-capital-quiz-settings' && (
+        <StateCapitalQuizSettings
+          settings={stateCapitalQuizSettings}
+          onSettingsChange={setStateCapitalQuizSettings}
+          onBack={() => setCurrentScreen('menu')}
+          onStart={handleStartStateCapitalQuiz}
         />
       )}
 

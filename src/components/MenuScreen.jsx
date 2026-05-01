@@ -1,6 +1,6 @@
 import ThemeToggle from './ThemeToggle'
 
-function MenuScreen({ onCountryQuizClick, onCapitalQuizClick, onStatesQuizClick }) {
+function MenuScreen({ onCountryQuizClick, onCapitalQuizClick, onStatesQuizClick, onStateCapitalQuizClick }) {
   return (
     <div className="screen">
       <div className="menu-top-bar">
@@ -54,6 +54,20 @@ function MenuScreen({ onCountryQuizClick, onCapitalQuizClick, onStatesQuizClick 
           <h2>States Quiz</h2>
           <p>
             Pick a country and name the state or province marked on the map.
+          </p>
+          <span className="mode-arrow">Start practicing →</span>
+        </button>
+
+        <button
+          type="button"
+          className="mode-card"
+          onClick={onStateCapitalQuizClick}
+        >
+          <span className="mode-icon" aria-hidden="true">🏙️</span>
+          <h2>State Capitals Quiz</h2>
+          <p>
+            Given a state's name or its highlighted location on the map, name
+            its capital.
           </p>
           <span className="mode-arrow">Start practicing →</span>
         </button>
