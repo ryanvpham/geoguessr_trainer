@@ -230,11 +230,6 @@ export const STATES_COUNTRIES = [
 
 export const STATES_COUNTRY_CODES = STATES_COUNTRIES.map((c) => c.code)
 
-// State Capitals Quiz supports the same parent countries as the States Quiz —
-// every record in `allStates` carries `capital` + `capitalCoords`. Kept as a
-// separate export so the set can be narrowed again without touching consumers.
-export const STATE_CAPITAL_COUNTRIES = STATES_COUNTRIES
-
 // Convenience for the settings screen — "United States (50)" etc.
 export function countStatesByCountry() {
   const counts = Object.fromEntries(STATES_COUNTRY_CODES.map((c) => [c, 0]))

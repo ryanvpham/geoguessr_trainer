@@ -36,7 +36,7 @@ function App() {
     selectedCountry: 'US',
   })
 
-  // Scoped to STATE_CAPITAL_COUNTRIES (same set as the States Quiz).
+  // Country set is STATES_COUNTRIES, same as the States Quiz.
   const [stateCapitalQuizSettings, setStateCapitalQuizSettings] = useState({
     questionFormat: 'map', // 'state' (name as text) | 'map' (highlighted on country map)
     answerFormat: 'typein', // 'typein' or 'multichoice'

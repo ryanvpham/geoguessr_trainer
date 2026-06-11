@@ -1,5 +1,4 @@
 import CountrySelector from './CountrySelector'
-import { STATE_CAPITAL_COUNTRIES } from '../data/states'
 
 function StateCapitalQuizSettings({ settings, onSettingsChange, onBack, onStart }) {
   const handleCountryChange = (countryCode) => {
@@ -25,7 +24,6 @@ function StateCapitalQuizSettings({ settings, onSettingsChange, onBack, onStart 
           <CountrySelector
             selectedCountry={settings.selectedCountry}
             onChange={handleCountryChange}
-            countries={STATE_CAPITAL_COUNTRIES}
             description="Pick which country's state or province capitals to practice."
           />
         </div>
