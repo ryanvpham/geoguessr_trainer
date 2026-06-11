@@ -230,14 +230,6 @@ export const STATES_COUNTRIES = [
 
 export const STATES_COUNTRY_CODES = STATES_COUNTRIES.map((c) => c.code)
 
-// State Capitals Quiz currently supports a smaller set than the States Quiz
-// because not every parent country in `STATES_COUNTRIES` has confidently
-// well-known subdivision capitals to quiz on. Start with US + Canada and
-// extend from `STATES_COUNTRIES` as more are vetted.
-export const STATE_CAPITAL_COUNTRIES = STATES_COUNTRIES.filter((c) =>
-  ['US', 'CA'].includes(c.code)
-)
-
 // Convenience for the settings screen — "United States (50)" etc.
 export function countStatesByCountry() {
   const counts = Object.fromEntries(STATES_COUNTRY_CODES.map((c) => [c, 0]))
