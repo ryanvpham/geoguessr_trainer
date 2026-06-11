@@ -13,6 +13,11 @@ const base = process.env.BASE_PATH || '/geoguessr_trainer/'
 export default defineConfig({
   plugins: [react()],
   base,
+  server: {
+    // Respect a harness/CI-assigned port (e.g. Claude Code preview) so the
+    // dev server doesn't collide with another instance on the default 5173.
+    port: process.env.PORT ? Number(process.env.PORT) : 5173,
+  },
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
