@@ -42,6 +42,25 @@ const easeInOut = (t) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2)
 
 const clamp = (x, lo, hi) => Math.max(lo, Math.min(hi, x))
 
+// Build the Mercator projection for a view {cx, cy, span}. Pure — depends
+// only on module constants — so it's shared by the per-view projection and
+// the base projection below.
+function buildProjection(v) {
+  const proj = geoMercator()
+  const spanRad = (v.span * Math.PI) / 180
+  proj.scale((Math.min(WIDTH, HEIGHT) * 0.9) / spanRad)
+  proj.translate([WIDTH / 2, HEIGHT / 2])
+  proj.center([v.cx, clamp(v.cy, -MAX_LAT, MAX_LAT)])
+  return proj
+}
+
+// Fixed reference projection the feature paths are rendered against ONCE.
+// The current view is then applied as an SVG transform on the countries
+// group (see countriesTransform), so pan/zoom/animate never re-projects the
+// feature set. Mercator is conformal, so any view is just a uniform
+// scale + translate of any other — pixel-identical to projecting per-frame.
+const BASE_PROJECTION = buildProjection(DEFAULT_VIEW)
+
 // Cache the parsed GeoJSON across component unmounts — it never changes.
 let cachedFeatures = null
 let fetchPromise = null
@@ -271,19 +290,62 @@ function WorldMap({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [targetFeature, capitalCoords])
 
-  // Build the Mercator projection for the current view.
-  const buildProjection = useCallback((v) => {
-    const proj = geoMercator()
-    const spanRad = (v.span * Math.PI) / 180
-    const baseScale = (Math.min(WIDTH, HEIGHT) * 0.9) / spanRad
-    proj.scale(baseScale)
-    proj.translate([WIDTH / 2, HEIGHT / 2])
-    proj.center([v.cx, clamp(v.cy, -MAX_LAT, MAX_LAT)])
-    return proj
-  }, [])
+  const projection = useMemo(() => buildProjection(view), [view])
 
-  const projection = useMemo(() => buildProjection(view), [view, buildProjection])
-  const pathGen = useMemo(() => geoPath(projection), [projection])
+  // Project every feature ONCE per feature set (world load, or a States Quiz
+  // country switch) instead of on every view change.
+  const basePathStrings = useMemo(() => {
+    if (!features) return []
+    const path = geoPath(BASE_PROJECTION)
+    return features.map((feat) => path(feat))
+  }, [features])
+
+  // Transform mapping the base-projection geometry to the current view.
+  // Derived from the two projection objects so it can't drift from
+  // buildProjection's scale/center math: two Mercator views differ by a
+  // uniform scale (the ratio of projection scales) plus the translate that
+  // puts the view center back at the viewport center.
+  const countriesTransform = useMemo(() => {
+    const k = projection.scale() / BASE_PROJECTION.scale()
+    const [bx, by] = BASE_PROJECTION(projection.center())
+    return `translate(${WIDTH / 2 - bx * k} ${HEIGHT / 2 - by * k}) scale(${k})`
+  }, [projection])
+
+  // Path strings for the highlighted feature(s), drawn as an overlay so
+  // highlight changes never touch the memoized base layer. Prefer object
+  // identity (works regardless of whether features have an `id` field —
+  // e.g. the Mexico GeoJSON has none) and fall back to id-matching for the
+  // world-atlas case where an externally resolved target still has the same
+  // numeric id as the feature.
+  const highlightedPathDs = useMemo(() => {
+    if (!targetFeature || !features || !basePathStrings.length) return []
+    const ds = []
+    features.forEach((feat, i) => {
+      const matches =
+        feat === targetFeature ||
+        (targetFeature.id != null &&
+          normalizeNumericId(feat.id) === normalizeNumericId(targetFeature.id))
+      if (matches && basePathStrings[i]) ds.push(basePathStrings[i])
+    })
+    return ds
+  }, [targetFeature, features, basePathStrings])
+
+  // Stable JSX for the base layer — referentially equal across view changes,
+  // so React skips re-diffing the ~250 <path> nodes during pan/zoom.
+  const baseCountryPaths = useMemo(() => {
+    return basePathStrings.map((d, i) =>
+      d ? (
+        <path
+          key={i}
+          d={d}
+          fill="#f5efdf"
+          stroke="#8f8878"
+          strokeWidth={0.6}
+          vectorEffect="non-scaling-stroke"
+        />
+      ) : null
+    )
+  }, [basePathStrings])
 
   // Project the capital's lat/lng into screen space whenever the view or
   // capital changes. We suppress the marker when the pin marker (tiny-country
@@ -346,7 +408,7 @@ function WorldMap({
         }
       })
     },
-    [buildProjection]
+    []
   )
 
   // --- Wheel zoom ---------------------------------------------------------
@@ -386,7 +448,7 @@ function WorldMap({
         }
       })
     },
-    [buildProjection, cancelAnimation, clientToSvg]
+    [cancelAnimation, clientToSvg]
   )
 
   // Attach wheel listener non-passively so preventDefault works.
@@ -503,7 +565,7 @@ function WorldMap({
         })
       }
     },
-    [buildProjection, clientToSvg]
+    [clientToSvg]
   )
 
   const onPointerUp = useCallback((e) => {
@@ -596,35 +658,18 @@ function WorldMap({
         <rect width={WIDTH} height={HEIGHT} fill="url(#ocean-gradient)" />
 
         <g clipPath="url(#map-clip)">
-        <g className="countries-layer">
-          {features.map((feat, i) => {
-            // Prefer object identity (works regardless of whether features have
-            // an `id` field — e.g. the Mexico GeoJSON has none) and fall back
-            // to id-matching for the world-atlas case where an externally
-            // resolved target still has the same numeric id as the feature.
-            const isHighlighted =
-              targetFeature &&
-              (feat === targetFeature ||
-                (targetFeature.id != null &&
-                  normalizeNumericId(feat.id) === normalizeNumericId(targetFeature.id)))
-            const d = pathGen(feat)
-            if (!d) return null
-            // `feat.id` is not unique in the 10m dataset: Australia and
-            // Ashmore & Cartier Islands both have id "036", and 16 small
-            // territories have no id at all. Use the array index to
-            // guarantee a unique React key.
-            return (
-              <path
-                key={i}
-                d={d}
-                fill={isHighlighted ? '#f59e0b' : '#f5efdf'}
-                stroke={isHighlighted ? '#b45309' : '#8f8878'}
-                strokeWidth={isHighlighted ? 1.4 : 0.6}
-                vectorEffect="non-scaling-stroke"
-                style={{ transition: 'fill 0.25s ease, stroke 0.25s ease' }}
-              />
-            )
-          })}
+        <g className="countries-layer" transform={countriesTransform}>
+          {baseCountryPaths}
+          {highlightedPathDs.map((d, i) => (
+            <path
+              key={i}
+              d={d}
+              fill="#f59e0b"
+              stroke="#b45309"
+              strokeWidth={1.4}
+              vectorEffect="non-scaling-stroke"
+            />
+          ))}
         </g>
 
         {capitalOverlay && (

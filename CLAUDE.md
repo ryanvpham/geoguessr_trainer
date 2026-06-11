@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ```bash
 npm install          # first-time setup
-npm run dev          # local dev server (Vite, usually http://localhost:5173)
+npm run dev          # local dev server (Vite, usually http://localhost:5173; set PORT to override — the user often has their own instance holding 5173)
 npm run build        # production build; base path = /geoguessr_trainer/
 npm run build:root   # production build; base path = / (for custom domains)
 npm run preview      # preview the built dist/ locally
@@ -30,6 +30,7 @@ This is a personal project. **All git activity here must use the personal GitHub
 ### Workflow conventions
 
 - **Always sync with origin/main before creating a branch.** Run `git fetch origin && git checkout -b <branch> origin/main` so the new branch starts at the latest merged state — not whatever local main happened to be. Skipping this leads to PRs that conflict with already-merged work or accidentally revert it.
+- **Fetch at session start, not just at branch time.** Sessions often begin with an old feature branch checked out (this file may not even exist in that tree). Before any new work, `git fetch --all --prune` and check how far the checkout lags `origin/main` — a fix written against a stale tree has to be re-ported later (this happened with the June 2026 map-lag fix, originally built on a branch 9 commits behind).
 - **At commit/PR time, update this file with anything worth remembering.** If you discovered a non-obvious data source, hit a tooling gotcha, fixed an invariant, or learned something a future session would need to know cold, add it to the relevant section here. Keep entries terse — a sentence with the *why*, not a changelog. Stale facts (paths, code locations, supported sets) should be corrected as part of the same PR.
 
 ## Deployment
@@ -63,14 +64,20 @@ Key invariants in `GameScreen`:
 
 ### Map rendering
 
-`WorldMap.jsx` is a generic d3-geo SVG renderer with pan/zoom/pinch and smooth auto-zoom to a target feature. It does **not** do fuzzy name matching:
+`WorldMap.jsx` is a generic d3-geo SVG renderer with pan/zoom/pinch and smooth auto-zoom to a target feature.
+
+**Rendering is project-once + transform — don't reintroduce per-frame reprojection.** Feature paths are projected a single time per feature set against the fixed module-level `BASE_PROJECTION`; pan/zoom/animation only updates an SVG `transform` on the countries `<g>`. Mercator is conformal, so this is pixel-identical to re-projecting, and it's the difference between ~9 fps and ~120 fps during auto-zoom (a `geoPath(projection)` call over all features inside the render path is the regression to watch for in review). Two invariants keep it correct:
+- `buildProjection` is a pure module-scope function and the **only** place the scale/center math lives. The view transform is derived from the base and current projection objects' `.scale()`/`.center()` — never hand-code the span ratio or duplicate the formula.
+- The highlighted feature is drawn as a separate overlay `<path>` (`highlightedPathDs`), so target changes never touch the memoized base-layer JSX (`baseCountryPaths`). Recoloring base paths in place would re-render all ~250 nodes.
+
+It does **not** do fuzzy name matching:
 - Country Quiz matches by **ISO-3166 numeric code** (`isoNumericMapping.js`), not by name. The world-atlas TopoJSON uses numeric IDs.
 - States Quiz (`StatesMap.jsx`) matches by `feature.properties.name` against `state.name` + `state.aliases` (normalized for accents/case). **If a state fails to zoom, the most likely cause is a name mismatch between `src/data/states.js` and the GeoJSON source** — add the GeoJSON's exact name to `aliases`. Example: Canada's GeoJSON calls it `"Yukon Territory"`, not `"Yukon"`.
 
 `StatesMap` also sanitizes problematic polygons in the PublicaMundi US GeoJSON (Alaska's out-of-range Aleutian polygon; Virginia's zero-area polygon) to prevent Mercator from painting extreme coordinates across the whole map.
 
 **GeoJSON sources**: most countries pull from `click_that_hood` via jsDelivr. Some countries are self-hosted under `public/data/`:
-- **Mexico** (`mexico-states.geojson`) — click_that_hood ships Mexico but at 9.4 MB / 250k points it's ~14× heavier than Canada's file, and d3-geo reprojects every point each frame during the auto-zoom animation, which is visibly laggy. We host a Shapely-simplified version (`shape(...).simplify(0.005, preserve_topology=True)`, ~390 KB / 16.6k points) — visually indistinguishable at quiz zoom, comparable to Canada's perf. **Preserve `properties.name` exactly** when simplifying — the GeoJSON uses formal state names (e.g. `Coahuila de Zaragoza`, `Michoacán de Ocampo`, `Veracruz de Ignacio de la Llave`), and `findStateFeature` matches by name + aliases.
+- **Mexico** (`mexico-states.geojson`) — click_that_hood ships Mexico but at 9.4 MB / 250k points it's ~14× heavier than Canada's file. We host a Shapely-simplified version (`shape(...).simplify(0.005, preserve_topology=True)`, ~390 KB / 16.6k points) — visually indistinguishable at quiz zoom. (The original motivation — d3-geo reprojecting every point per frame during auto-zoom — was eliminated by the project-once + transform rendering above, but the smaller file is still worth keeping for download size and the one-time projection cost.) **Preserve `properties.name` exactly** when simplifying — the GeoJSON uses formal state names (e.g. `Coahuila de Zaragoza`, `Michoacán de Ocampo`, `Veracruz de Ignacio de la Llave`), and `findStateFeature` matches by name + aliases.
 - **Argentina** (`argentina-provinces.geojson`) — extracted from Natural Earth 10m admin-1 because click_that_hood doesn't ship Argentina. The global Natural Earth file is 60 MB, way over jsDelivr's 20 MB limit, so per-country self-hosting is the only viable path.
 - **Philippines** (`philippines-regions.geojson`) — Natural Earth gives 118 *provinces*; the quiz uses the 17 *regions* (matches how Filipinos identify location and how GeoGuessr-relevant guesses work). The 17-feature file is built by grouping provinces by their `region` property and dissolving polygons with `shapely.ops.unary_union`. Run `make_valid` first — Natural Earth has a few self-intersecting polygons in PH that crash a naive union.
 

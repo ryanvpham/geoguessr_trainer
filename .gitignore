@@ -42,3 +42,8 @@ coverage/
 # Misc
 *.pem
 
+# Claude Code — track only the shared project settings (hooks);
+# personal settings, launch config, and worktrees stay local
+.claude/*
+!.claude/settings.json
+
