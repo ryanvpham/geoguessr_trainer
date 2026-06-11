@@ -45,7 +45,7 @@ This is a personal project. **All git activity here must use the personal GitHub
 - `country` — name a country (flag/map/capital prompt).
 - `capital` — name a country's capital (flag/name/map prompt).
 - `states` — name a state or province highlighted on the country map.
-- `stateCapital` — name a state's capital from either the state name or a map with the capital starred. The country dropdown is intentionally a subset of the States Quiz's (see `STATE_CAPITAL_COUNTRIES`) — only countries whose subdivision capitals are well-known enough to quiz on.
+- `stateCapital` — name a state's capital from either the state name or a map with the capital starred. The country dropdown (`STATE_CAPITAL_COUNTRIES`) is the same set as the States Quiz's — every record in `allStates` carries `capital` + `capitalCoords`, so a new States Quiz country is automatically quizzable here too.
 
 `App.jsx` picks settings + mode; `GameScreen` renders questions, handles answers, tracks rounds, and shows the summary. Per-mode display strings (header title + singular/plural item word) live in the `MODE_INFO` lookup at the top of `GameScreen.jsx` — adding a mode means adding an entry there. When touching round/scoring logic, the change applies to every mode — don't fork per-mode copies.
 
