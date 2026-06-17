@@ -13,6 +13,13 @@ const base = process.env.BASE_PATH || '/geoguessr_trainer/'
 export default defineConfig({
   plugins: [react()],
   base,
+  // vite-react-ssg: prerender one HTML file per route.
+  //   dirStyle 'nested' → /country-quiz/index.html (clean GitHub Pages URLs)
+  //   entry must point at our .jsx main (default is src/main.ts)
+  ssgOptions: {
+    dirStyle: 'nested',
+    entry: 'src/main.jsx',
+  },
   server: {
     // Respect a harness/CI-assigned port (e.g. Claude Code preview) so the
     // dev server doesn't collide with another instance on the default 5173.

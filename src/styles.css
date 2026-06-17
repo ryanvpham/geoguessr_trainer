@@ -225,6 +225,7 @@ header h1 {
 
 .mode-card {
   text-align: left;
+  text-decoration: none;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
@@ -281,6 +282,29 @@ header h1 {
   font-weight: 600;
   font-size: 0.9rem;
   letter-spacing: 0.02em;
+}
+
+/* Keyword-rich intro copy below the mode grid (SEO + orientation). */
+.menu-about {
+  text-align: center;
+  margin: 36px auto 0;
+  max-width: 560px;
+}
+
+.menu-about p {
+  color: var(--ink-muted);
+  font-size: 0.98rem;
+  line-height: 1.6;
+}
+
+.menu-about a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.menu-about a:hover {
+  text-decoration: underline;
 }
 
 /* ---------- Settings screens ---------- */

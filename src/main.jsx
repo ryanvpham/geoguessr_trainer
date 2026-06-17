@@ -1,11 +1,10 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App'
+import { ViteReactSSG } from 'vite-react-ssg'
+import { routes } from './routes'
 import './styles.css'
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-)
+// basename is derived from Vite's base so links resolve under both deploys:
+//   BASE_PATH=/ (apex geo-quizzes.com) → '' → '/'
+//   default /geoguessr_trainer/         → '/geoguessr_trainer'
+const basename = import.meta.env.BASE_URL.replace(/\/$/, '') || '/'
 
+export const createRoot = ViteReactSSG({ routes, basename })

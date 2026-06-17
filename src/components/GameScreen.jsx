@@ -12,8 +12,8 @@ import RoundSummary from './RoundSummary'
 const MODE_INFO = {
   country:      { title: 'Country Quiz',         singular: 'country', plural: 'countries' },
   capital:      { title: 'Country Capital Quiz', singular: 'capital', plural: 'capitals'  },
-  states:       { title: 'States Quiz',          singular: 'state',   plural: 'states'    },
-  stateCapital: { title: 'State Capitals Quiz',  singular: 'capital', plural: 'capitals'  },
+  states:       { title: 'States & Provinces Quiz',         singular: 'state',   plural: 'states'    },
+  stateCapital: { title: 'State & Province Capitals Quiz',  singular: 'capital', plural: 'capitals'  },
 }
 
 function GameScreen({ gameMode, settings, onBack }) {

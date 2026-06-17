@@ -4,17 +4,19 @@
   "description": "Free web app to practice countries, flags, and capitals — great for GeoGuessr prep.",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "dev": "vite-react-ssg dev",
+    "build": "vite-react-ssg build",
     "preview": "vite preview",
-    "build:root": "BASE_PATH=/ vite build"
+    "build:root": "BASE_PATH=/ vite-react-ssg build"
   },
   "dependencies": {
     "d3-geo": "^3.1.0",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-router-dom": "^6.30.4",
     "topojson-client": "^3.1.0",
+    "vite-react-ssg": "^0.9.0",
     "world-atlas": "^2.0.2"
   },
   "devDependencies": {

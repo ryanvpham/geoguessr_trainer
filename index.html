@@ -5,19 +5,67 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#667eea" />
 
-    <title>GeoGuessr Trainer — Learn countries, flags & capitals</title>
-    <meta
-      name="description"
-      content="A free, fast quiz to practice identifying countries by flag or map location, and learning world capitals. Great for GeoGuessr training."
-    />
+    <!--
+      Per-route title, description, canonical and Open Graph/Twitter tags are
+      injected by src/seo/Seo.jsx (via vite-react-ssg). Only site-wide metadata
+      that doesn't vary per page lives here, so titles aren't duplicated.
+    -->
+    <meta property="og:site_name" content="GeoGuessr Trainer" />
 
-    <!-- Open Graph / social -->
-    <meta property="og:title" content="GeoGuessr Trainer" />
-    <meta
-      property="og:description"
-      content="Practice countries, flags, and capitals — free, no signup."
-    />
-    <meta property="og:type" content="website" />
+    <!-- Structured data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "GeoGuessr Trainer",
+        "url": "https://geo-quizzes.com/",
+        "description": "Free quizzes to practice country flags, world capitals, and states & provinces on the map — built for GeoGuessr training.",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "Web browser",
+        "browserRequirements": "Requires JavaScript",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Is GeoGuessr Trainer free?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Every quiz is free, with no signup, no ads, and no tracking."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What can I practice?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Identifying countries by their flag or map location, naming world capitals, and naming states, provinces and their capitals."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Which countries' states and provinces are included?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The states & provinces quiz covers the US, Canada, Mexico, Brazil, Argentina, Australia, India, Indonesia, Malaysia, the Philippines, Nigeria and South Africa."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does it help with GeoGuessr?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes — it drills the flags, capitals and regional geography that help you place locations faster in GeoGuessr."
+            }
+          }
+        ]
+      }
+    </script>
 
     <!-- Emoji-based SVG favicon — no asset file needed -->
     <link

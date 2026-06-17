@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1200" viewBox="0 0 1200 1200">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#667eea"/>
+      <stop offset="1" stop-color="#764ba2"/>
+    </linearGradient>
+    <radialGradient id="globe" cx="0.38" cy="0.34" r="0.75">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.07"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Full square fill so a centered crop to 1200x630 (rows 285-915) stays on-gradient -->
+  <rect width="1200" height="1200" fill="url(#bg)"/>
+
+  <!-- decorative globe, centered in the crop band (r=140 keeps it clear of the headline) -->
+  <g transform="translate(1050 600)" stroke="#ffffff" stroke-opacity="0.45" fill="none" stroke-width="2.5">
+    <circle r="140" fill="url(#globe)"/>
+    <ellipse rx="140" ry="49"/>
+    <ellipse rx="140" ry="95"/>
+    <ellipse rx="49" ry="140"/>
+    <ellipse rx="95" ry="140"/>
+    <line x1="-140" y1="0" x2="140" y2="0"/>
+    <line x1="0" y1="-140" x2="0" y2="140"/>
+  </g>
+
+  <!-- text block (within the central 630-tall crop band) -->
+  <g font-family="Helvetica, Arial, sans-serif" fill="#ffffff">
+    <text x="90" y="400" font-size="28" font-weight="700" letter-spacing="6" fill-opacity="0.85">GEOGUESSR TRAINER</text>
+    <text x="86" y="508" font-size="72" font-weight="700">Learn the world,</text>
+    <text x="86" y="596" font-size="72" font-weight="700">one country at a time.</text>
+    <text x="90" y="668" font-size="32" font-weight="400" fill-opacity="0.92">Free country, flag &amp; capital quizzes</text>
+    <text x="90" y="820" font-size="28" font-weight="700" fill-opacity="0.8">geo-quizzes.com</text>
+  </g>
+</svg>
