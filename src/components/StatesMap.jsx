@@ -20,6 +20,16 @@ import { normalizeString } from '../utils/answerValidation'
 //   - PH: 17 administrative regions, dissolved from the Natural Earth admin-1
 //         provinces (which give 118 features grouped into 17 regions).
 //         Self-hosted for the same CDN-size reason as Argentina.
+//   - IN: 36 states/UTs — self-hosted from geoBoundaries ADM1 (current
+//         boundaries; click_that_hood's India was missing Arunachal Pradesh,
+//         had dated J&K/Dadra-Daman boundaries, and a crude Lakshadweep blob).
+//   - MY: 13 states + KL + Putrajaya (click_that_hood; no Labuan in the file)
+//   - ID: 38 provinces (current, incl. the 2022 Papua-region split) — self-
+//         hosted. geoBoundaries only has the pre-split 34, so this is sourced
+//         from a 38-province dataset; Indonesian `PROVINSI` labels remapped to
+//         `name`, rings re-oriented CW, simplified to tol=0.005°.
+//   - NG: 37 (36 states + FCT) — self-hosted from geoBoundaries ADM1.
+//   - ZA: 9 provinces — self-hosted from geoBoundaries ADM1.
 const GEO_URLS = {
   US: 'https://cdn.jsdelivr.net/gh/PublicaMundi/MappingAPI@master/data/geojson/us-states.json',
   MX: `${import.meta.env.BASE_URL}data/mexico-states.geojson`,
@@ -28,6 +38,11 @@ const GEO_URLS = {
   AU: 'https://cdn.jsdelivr.net/gh/codeforgermany/click_that_hood@main/public/data/australia.geojson',
   AR: `${import.meta.env.BASE_URL}data/argentina-provinces.geojson`,
   PH: `${import.meta.env.BASE_URL}data/philippines-regions.geojson`,
+  IN: `${import.meta.env.BASE_URL}data/india-states.geojson`,
+  MY: 'https://cdn.jsdelivr.net/gh/codeforgermany/click_that_hood@main/public/data/malaysia.geojson',
+  ID: `${import.meta.env.BASE_URL}data/indonesia-provinces.geojson`,
+  NG: `${import.meta.env.BASE_URL}data/nigeria-states.geojson`,
+  ZA: `${import.meta.env.BASE_URL}data/south-africa-provinces.geojson`,
 }
 
 // Module-level cache — GeoJSON shouldn't refetch between quiz rounds.
