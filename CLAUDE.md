@@ -6,13 +6,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ```bash
 npm install          # first-time setup
-npm run dev          # local dev server (Vite, usually http://localhost:5173; set PORT to override — the user often has their own instance holding 5173)
+npm run dev          # local dev server (vite-react-ssg dev; usually http://localhost:5173; set PORT to override — the user often has their own instance holding 5173)
 npm run build        # production build; base path = /geoguessr_trainer/
 npm run build:root   # production build; base path = / (for custom domains)
 npm run preview      # preview the built dist/ locally
 ```
 
-There is no test runner and no linter configured. Don't invent commands for them.
+`dev`/`build` run **`vite-react-ssg`** (not plain `vite`) — the build prerenders one static HTML file per route. See *Routing & SEO* below. There is no test runner and no linter configured. Don't invent commands for them.
 
 ## Git & PRs
 
@@ -47,7 +47,7 @@ This is a personal project. **All git activity here must use the personal GitHub
 - `states` — name a state or province highlighted on the country map.
 - `stateCapital` — name a state's capital from either the state name or a map with the capital starred. The country dropdown is the same set as the States Quiz's (`CountrySelector`'s default) — every record in `allStates` carries `capital` + `capitalCoords`, so a new States Quiz country is automatically quizzable here too. To narrow it again, pass a filtered `countries` list to `CountrySelector` in `StateCapitalQuizSettings.jsx`.
 
-`App.jsx` picks settings + mode; `GameScreen` renders questions, handles answers, tracks rounds, and shows the summary. Per-mode display strings (header title + singular/plural item word) live in the `MODE_INFO` lookup at the top of `GameScreen.jsx` — adding a mode means adding an entry there. When touching round/scoring logic, the change applies to every mode — don't fork per-mode copies.
+Navigation is **URL-based** (see *Routing & SEO* below), not a state machine. The modes are a registry in `src/quizModes.js` (gameMode + settings component + default settings + `ROUTE_META` entry per row); one generic `src/screens/QuizPage.jsx` renders any mode — it owns that mode's settings + a `started` flag and swaps to `GameScreen` once *Start Quiz* is clicked (`GameScreen`'s `onBack` returns to `/`). `App.jsx` is now just the routed layout shell (`<Outlet>` inside `<div className="container">`). `GameScreen` renders questions, handles answers, tracks rounds, and shows the summary. Per-mode display strings (header title + singular/plural item word) live in the `MODE_INFO` lookup at the top of `GameScreen.jsx`. **Adding a mode = a `quizModes.js` row + a `ROUTE_META` entry + a `MODE_INFO` entry** (plus a `MenuScreen` card); the route and page wiring derive from the registry automatically. When touching round/scoring logic, the change applies to every mode — don't fork per-mode copies.
 
 `stateCapital` reuses the States Quiz pool (`getAvailableStates`) but the answer is the state's `capital` field, so its branch in `GameScreen.handleAnswer` falls through to the same `else` block as `capital` mode — they share the validator and feedback strings.
 
@@ -55,6 +55,19 @@ Key invariants in `GameScreen`:
 - **`loadNewQuestion` is the single source of truth for saving round scores.** It appends to `roundScores` whenever `getRandomCountry()` returns `null` (round exhausted). `startNextRound` only advances round state — it must not push to `roundScores`, or you'll get duplicate/skipped rounds.
 - The **final correct answer auto-advances** to the summary (no extra click). This is detected inline in `handleAnswer` by computing the post-answer pool; when it's empty and no incorrect items remain, the summary is rendered directly. The function must also set `justSubmitted=true` on this path, otherwise the bubbled Enter keypress triggers the document-level listener and immediately clicks *Back to Menu*.
 - Round 1 asks every item in the pool; subsequent rounds only re-quiz items still in `incorrectCountries`.
+
+### Routing & SEO (prerendering)
+
+The app is a routed SPA prerendered to static HTML by **`vite-react-ssg`** (needs `>=0.9.0` for Vite 7 — the 0.8.x line caps at Vite 6). `src/routes.jsx` is the route table; `src/main.jsx` exports `createRoot = ViteReactSSG({ routes, basename })`. Each quiz mode is its own indexable URL — `/`, `/country-quiz/`, `/capital-quiz/`, `/states-quiz/`, `/state-capital-quiz/` — and `npm run build` emits a real `dist/<route>/index.html` per route (one of the actual ranking goals), then the client hydrates into the normal SPA. The four `MenuScreen` mode cards are real `<Link>` anchors so crawlers follow them.
+
+Non-obvious invariants (breaking any of these silently degrades SEO):
+- **`vite.config.js` needs `ssgOptions: { dirStyle: 'nested', entry: 'src/main.jsx' }`.** `entry` is required because the default is `src/main.ts` (we're `.jsx`). `dirStyle: 'nested'` gives clean `/route/index.html` URLs.
+- **Per-route `<head>` is owned by `src/seo/Seo.jsx`** (a thin wrapper over `vite-react-ssg`'s `Head` = react-helmet-async), rendered by `QuizPage`/`MenuPage`; titles/descriptions/canonical paths live in `src/seo/meta.js` (`ROUTE_META`), and the route slugs derive from `ROUTE_META.*.path` so paths aren't hand-duplicated. **Do NOT add a static `<title>`/`<meta name=description>`/per-route OG to `index.html`** — vite-react-ssg *inserts* helmet tags after `<head>` rather than replacing existing ones, so a static title yields a duplicate `<title>`. `index.html` keeps only site-wide, non-conflicting tags (charset, viewport, fonts, theme-init script, `og:site_name`, JSON-LD).
+- **Canonical / `og:url` / `og:image` / `sitemap.xml` are hardcoded to the apex `https://geo-quizzes.com`** — never derived from `import.meta.env.BASE_URL`. The router `basename` *is* derived from `BASE_URL` (`.replace(/\/$/,'') || '/'`) so links resolve under both the apex (`/`) and repo-path (`/geoguessr_trainer/`) builds.
+- **Trailing-slash consistency:** routes are defined without a trailing slash, but `dirStyle: 'nested'` makes Pages serve `/route/`, so canonical, `sitemap.xml`, and the `<Link>`s all use the **trailing-slash** form to match. Keep them in agreement or ranking signals split.
+- `GameScreen` (d3-geo, geojson `fetch`) renders only after `started` flips true, so it never runs during Node SSG — keep it off the prerendered path.
+- `public/og-default.png` (1200×630) is regenerated from `scripts/og-default.svg` (`qlmanage -t -s 1200` → square PNG → `sips -c 630 1200` center-crop, since the SVG is authored 1200×1200 with content in the central band).
+- The deploy workflow is unchanged: `BASE_PATH=/ npm run build` now invokes `vite-react-ssg build`, and `cp dist/index.html dist/404.html` stays as the SPA fallback for any non-prerendered path.
 
 ### Pool generation
 

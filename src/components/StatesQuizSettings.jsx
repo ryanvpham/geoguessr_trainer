@@ -13,7 +13,7 @@ function StatesQuizSettings({ settings, onSettingsChange, onBack, onStart }) {
     <div className="screen">
       <header>
         <button className="back-arrow-btn" onClick={onBack} aria-label="Back">←</button>
-        <h1>States Quiz</h1>
+        <h1>States &amp; Provinces Quiz</h1>
       </header>
       <div className="settings-content">
         <div className="setting-item">
