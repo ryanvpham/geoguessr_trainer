@@ -10,6 +10,12 @@
 //     regions are the natural quiz unit, similar to Brazil/Argentina sizes
 //     and how Filipinos identify location. Codes use the unofficial
 //     "PH-RNN" pattern since regions don't have ISO 3166-2 codes.
+//   - India's 28 states + 7 union territories (per the click_that_hood
+//     GeoJSON, which still has the pre-2019/2020 boundaries — see block notes)
+//   - Malaysia's 13 states + KL & Putrajaya federal territories (no Labuan)
+//   - Indonesia's 34 provinces (pre-2022 Papua split)
+//   - Nigeria's 36 states + Federal Capital Territory
+//   - South Africa's 9 provinces
 //
 // Shape mirrors allCountries so the existing game loop and multi-choice
 // generator can consume it unchanged.
@@ -213,6 +219,163 @@ export const allStates = [
   { name: 'Bangsamoro',                       code: 'PH-BAR', countryCode: 'PH', capital: 'Cotabato City', capitalCoords: [7.2236, 124.2452],  aliases: ['BARMM', 'ARMM', 'Bangsamoro Autonomous Region in Muslim Mindanao', 'Autonomous Region in Muslim Mindanao'] },
   { name: 'Cordillera Administrative Region', code: 'PH-CAR', countryCode: 'PH', capital: 'Baguio',        capitalCoords: [16.4023, 120.5960], aliases: ['CAR', 'Cordillera Region', 'Cordillera'] },
   { name: 'Metro Manila',                     code: 'PH-NCR', countryCode: 'PH', capital: 'Manila',        capitalCoords: [14.5995, 120.9842], aliases: ['NCR', 'National Capital Region'] },
+
+  // --- India (28 states + 7 union territories) ---
+  // GeoJSON (click_that_hood) predates recent reorganizations: it keeps the
+  // pre-2019 unified 'Jammu and Kashmir' (no separate Ladakh), the pre-2020
+  // separate 'Dadra and Nagar Haveli' / 'Daman and Diu' UTs, and labels
+  // Puducherry as 'Pondicherry' — handled via aliases / canonical-name choices.
+  { name: 'Andaman and Nicobar Islands', code: 'IN-AN', countryCode: 'IN', capital: 'Port Blair',         capitalCoords: [11.6234, 92.7265] },
+  { name: 'Andhra Pradesh',              code: 'IN-AP', countryCode: 'IN', capital: 'Amaravati',          capitalCoords: [16.515, 80.518] },
+  { name: 'Assam',                       code: 'IN-AS', countryCode: 'IN', capital: 'Dispur',             capitalCoords: [26.1433, 91.7898] },
+  { name: 'Bihar',                       code: 'IN-BR', countryCode: 'IN', capital: 'Patna',              capitalCoords: [25.5941, 85.1376] },
+  { name: 'Chandigarh',                  code: 'IN-CH', countryCode: 'IN', capital: 'Chandigarh',         capitalCoords: [30.7333, 76.7794] },
+  { name: 'Chhattisgarh',                code: 'IN-CT', countryCode: 'IN', capital: 'Raipur',             capitalCoords: [21.2514, 81.6296] },
+  { name: 'Dadra and Nagar Haveli',      code: 'IN-DN', countryCode: 'IN', capital: 'Silvassa',           capitalCoords: [20.2666, 73.0166] },
+  { name: 'Daman and Diu',               code: 'IN-DD', countryCode: 'IN', capital: 'Daman',              capitalCoords: [20.3974, 72.8328] },
+  { name: 'Delhi',                       code: 'IN-DL', countryCode: 'IN', capital: 'New Delhi',          capitalCoords: [28.6139, 77.209], aliases: ['NCT of Delhi', 'National Capital Territory of Delhi'] },
+  { name: 'Goa',                         code: 'IN-GA', countryCode: 'IN', capital: 'Panaji',             capitalCoords: [15.4909, 73.8278] },
+  { name: 'Gujarat',                     code: 'IN-GJ', countryCode: 'IN', capital: 'Gandhinagar',        capitalCoords: [23.2156, 72.6369] },
+  { name: 'Haryana',                     code: 'IN-HR', countryCode: 'IN', capital: 'Chandigarh',         capitalCoords: [30.7333, 76.7794] },
+  { name: 'Himachal Pradesh',            code: 'IN-HP', countryCode: 'IN', capital: 'Shimla',             capitalCoords: [31.1048, 77.1734] },
+  { name: 'Jammu and Kashmir',           code: 'IN-JK', countryCode: 'IN', capital: 'Srinagar',           capitalCoords: [34.0837, 74.7973], aliases: ['J&K'] },
+  { name: 'Jharkhand',                   code: 'IN-JH', countryCode: 'IN', capital: 'Ranchi',             capitalCoords: [23.3441, 85.3096] },
+  { name: 'Karnataka',                   code: 'IN-KA', countryCode: 'IN', capital: 'Bengaluru',          capitalCoords: [12.9716, 77.5946], aliases: ['Bangalore'] },
+  { name: 'Kerala',                      code: 'IN-KL', countryCode: 'IN', capital: 'Thiruvananthapuram', capitalCoords: [8.5241, 76.9366], aliases: ['Trivandrum'] },
+  { name: 'Lakshadweep',                 code: 'IN-LD', countryCode: 'IN', capital: 'Kavaratti',          capitalCoords: [10.5669, 72.642] },
+  { name: 'Madhya Pradesh',              code: 'IN-MP', countryCode: 'IN', capital: 'Bhopal',             capitalCoords: [23.2599, 77.4126] },
+  { name: 'Maharashtra',                 code: 'IN-MH', countryCode: 'IN', capital: 'Mumbai',             capitalCoords: [19.076, 72.8777], aliases: ['Bombay'] },
+  { name: 'Manipur',                     code: 'IN-MN', countryCode: 'IN', capital: 'Imphal',             capitalCoords: [24.817, 93.9368] },
+  { name: 'Meghalaya',                   code: 'IN-ML', countryCode: 'IN', capital: 'Shillong',           capitalCoords: [25.5788, 91.8933] },
+  { name: 'Mizoram',                     code: 'IN-MZ', countryCode: 'IN', capital: 'Aizawl',             capitalCoords: [23.7271, 92.7176] },
+  { name: 'Nagaland',                    code: 'IN-NL', countryCode: 'IN', capital: 'Kohima',             capitalCoords: [25.6751, 94.1086] },
+  { name: 'Odisha',                      code: 'IN-OR', countryCode: 'IN', capital: 'Bhubaneswar',        capitalCoords: [20.2961, 85.8245], aliases: ['Orissa'] },
+  { name: 'Puducherry',                  code: 'IN-PY', countryCode: 'IN', capital: 'Puducherry',         capitalCoords: [11.9416, 79.8083], aliases: ['Pondicherry'] },
+  { name: 'Punjab',                      code: 'IN-PB', countryCode: 'IN', capital: 'Chandigarh',         capitalCoords: [30.7333, 76.7794] },
+  { name: 'Rajasthan',                   code: 'IN-RJ', countryCode: 'IN', capital: 'Jaipur',             capitalCoords: [26.9124, 75.7873] },
+  { name: 'Sikkim',                      code: 'IN-SK', countryCode: 'IN', capital: 'Gangtok',            capitalCoords: [27.3389, 88.6065] },
+  { name: 'Tamil Nadu',                  code: 'IN-TN', countryCode: 'IN', capital: 'Chennai',            capitalCoords: [13.0827, 80.2707], aliases: ['Madras'] },
+  { name: 'Telangana',                   code: 'IN-TG', countryCode: 'IN', capital: 'Hyderabad',          capitalCoords: [17.385, 78.4867] },
+  { name: 'Tripura',                     code: 'IN-TR', countryCode: 'IN', capital: 'Agartala',           capitalCoords: [23.8315, 91.2868] },
+  { name: 'Uttar Pradesh',               code: 'IN-UP', countryCode: 'IN', capital: 'Lucknow',            capitalCoords: [26.8467, 80.9462] },
+  { name: 'Uttarakhand',                 code: 'IN-UT', countryCode: 'IN', capital: 'Dehradun',           capitalCoords: [30.3165, 78.0322], aliases: ['Uttaranchal'] },
+  { name: 'West Bengal',                 code: 'IN-WB', countryCode: 'IN', capital: 'Kolkata',            capitalCoords: [22.5726, 88.3639], aliases: ['Calcutta'] },
+
+  // --- Malaysia (13 states + Kuala Lumpur & Putrajaya federal territories) ---
+  // click_that_hood's Malaysia file omits the third federal territory, Labuan,
+  // so it isn't quizzable here (mirrors how Australia's "Other Territories" is
+  // left out). KL and Putrajaya carry the long "Federal Territory of …" GeoJSON
+  // names as aliases.
+  { name: 'Johor',           code: 'MY-01', countryCode: 'MY', capital: 'Johor Bahru',      capitalCoords: [1.4927, 103.7414] },
+  { name: 'Kedah',           code: 'MY-02', countryCode: 'MY', capital: 'Alor Setar',       capitalCoords: [6.1184, 100.3685] },
+  { name: 'Kelantan',        code: 'MY-03', countryCode: 'MY', capital: 'Kota Bharu',       capitalCoords: [6.1254, 102.2381] },
+  { name: 'Melaka',          code: 'MY-04', countryCode: 'MY', capital: 'Malacca City',     capitalCoords: [2.1896, 102.2501], aliases: ['Malacca'] },
+  { name: 'Negeri Sembilan', code: 'MY-05', countryCode: 'MY', capital: 'Seremban',         capitalCoords: [2.7297, 101.9381] },
+  { name: 'Pahang',          code: 'MY-06', countryCode: 'MY', capital: 'Kuantan',          capitalCoords: [3.8077, 103.326] },
+  { name: 'Penang',          code: 'MY-07', countryCode: 'MY', capital: 'George Town',      capitalCoords: [5.4141, 100.3288], aliases: ['Pulau Pinang'] },
+  { name: 'Perak',           code: 'MY-08', countryCode: 'MY', capital: 'Ipoh',             capitalCoords: [4.5975, 101.0901] },
+  { name: 'Perlis',          code: 'MY-09', countryCode: 'MY', capital: 'Kangar',           capitalCoords: [6.4414, 100.1986] },
+  { name: 'Selangor',        code: 'MY-10', countryCode: 'MY', capital: 'Shah Alam',        capitalCoords: [3.0733, 101.5185] },
+  { name: 'Terengganu',      code: 'MY-11', countryCode: 'MY', capital: 'Kuala Terengganu', capitalCoords: [5.3302, 103.1408] },
+  { name: 'Sabah',           code: 'MY-12', countryCode: 'MY', capital: 'Kota Kinabalu',    capitalCoords: [5.9804, 116.0735] },
+  { name: 'Sarawak',         code: 'MY-13', countryCode: 'MY', capital: 'Kuching',          capitalCoords: [1.5533, 110.3592] },
+  { name: 'Kuala Lumpur',    code: 'MY-14', countryCode: 'MY', capital: 'Kuala Lumpur',     capitalCoords: [3.139, 101.6869], aliases: ['Federal Territory of Kuala Lumpur'] },
+  { name: 'Putrajaya',       code: 'MY-16', countryCode: 'MY', capital: 'Putrajaya',        capitalCoords: [2.9264, 101.6964], aliases: ['Federal Territory of Putrajaya'] },
+
+  // --- Indonesia (34 provinces) ---
+  // Self-hosted GeoJSON (geoBoundaries ADM1, see StatesMap GEO_URLS). Uses the
+  // English province names; Indonesian forms (e.g. "Jawa Tengah") are aliases.
+  // This 34-province set predates the 2022 split of Papua into new provinces.
+  { name: 'Aceh',                    code: 'ID-AC', countryCode: 'ID', capital: 'Banda Aceh',     capitalCoords: [5.5483, 95.3238] },
+  { name: 'Bali',                    code: 'ID-BA', countryCode: 'ID', capital: 'Denpasar',       capitalCoords: [-8.6705, 115.2126] },
+  { name: 'Bangka-Belitung Islands', code: 'ID-BB', countryCode: 'ID', capital: 'Pangkal Pinang', capitalCoords: [-2.1316, 106.1169], aliases: ['Kepulauan Bangka Belitung'] },
+  { name: 'Banten',                  code: 'ID-BT', countryCode: 'ID', capital: 'Serang',         capitalCoords: [-6.1149, 106.1502] },
+  { name: 'Bengkulu',                code: 'ID-BE', countryCode: 'ID', capital: 'Bengkulu',       capitalCoords: [-3.8004, 102.2655] },
+  { name: 'Central Java',            code: 'ID-JT', countryCode: 'ID', capital: 'Semarang',       capitalCoords: [-6.9667, 110.4167], aliases: ['Jawa Tengah'] },
+  { name: 'Central Kalimantan',      code: 'ID-KT', countryCode: 'ID', capital: 'Palangka Raya',  capitalCoords: [-2.2096, 113.9108], aliases: ['Kalimantan Tengah'] },
+  { name: 'Central Sulawesi',        code: 'ID-ST', countryCode: 'ID', capital: 'Palu',           capitalCoords: [-0.8917, 119.8707], aliases: ['Sulawesi Tengah'] },
+  { name: 'East Java',               code: 'ID-JI', countryCode: 'ID', capital: 'Surabaya',       capitalCoords: [-7.2575, 112.7521], aliases: ['Jawa Timur'] },
+  { name: 'East Kalimantan',         code: 'ID-KI', countryCode: 'ID', capital: 'Samarinda',      capitalCoords: [-0.5022, 117.1536], aliases: ['Kalimantan Timur'] },
+  { name: 'East Nusa Tenggara',      code: 'ID-NT', countryCode: 'ID', capital: 'Kupang',         capitalCoords: [-10.1772, 123.607], aliases: ['Nusa Tenggara Timur'] },
+  { name: 'Gorontalo',               code: 'ID-GO', countryCode: 'ID', capital: 'Gorontalo',      capitalCoords: [0.5435, 123.0568] },
+  { name: 'Jakarta',                 code: 'ID-JK', countryCode: 'ID', capital: 'Jakarta',        capitalCoords: [-6.2088, 106.8456], aliases: ['Jakarta Special Capital Region', 'DKI Jakarta'] },
+  { name: 'Jambi',                   code: 'ID-JA', countryCode: 'ID', capital: 'Jambi',          capitalCoords: [-1.6101, 103.6131] },
+  { name: 'Lampung',                 code: 'ID-LA', countryCode: 'ID', capital: 'Bandar Lampung', capitalCoords: [-5.3971, 105.2668] },
+  { name: 'Maluku',                  code: 'ID-MA', countryCode: 'ID', capital: 'Ambon',          capitalCoords: [-3.6954, 128.1814] },
+  { name: 'North Kalimantan',        code: 'ID-KU', countryCode: 'ID', capital: 'Tanjung Selor',  capitalCoords: [2.8375, 117.3616], aliases: ['Kalimantan Utara'] },
+  { name: 'North Maluku',            code: 'ID-MU', countryCode: 'ID', capital: 'Sofifi',         capitalCoords: [0.7333, 127.5667], aliases: ['Maluku Utara'] },
+  { name: 'North Sulawesi',          code: 'ID-SA', countryCode: 'ID', capital: 'Manado',         capitalCoords: [1.4748, 124.8421], aliases: ['Sulawesi Utara'] },
+  { name: 'North Sumatra',           code: 'ID-SU', countryCode: 'ID', capital: 'Medan',          capitalCoords: [3.5952, 98.6722], aliases: ['Sumatera Utara'] },
+  { name: 'Papua',                   code: 'ID-PA', countryCode: 'ID', capital: 'Jayapura',       capitalCoords: [-2.5337, 140.7181] },
+  { name: 'Riau',                    code: 'ID-RI', countryCode: 'ID', capital: 'Pekanbaru',      capitalCoords: [0.5071, 101.4478] },
+  { name: 'Riau Islands',            code: 'ID-KR', countryCode: 'ID', capital: 'Tanjung Pinang', capitalCoords: [0.9186, 104.4555], aliases: ['Kepulauan Riau'] },
+  { name: 'South Kalimantan',        code: 'ID-KS', countryCode: 'ID', capital: 'Banjarmasin',    capitalCoords: [-3.3194, 114.5908], aliases: ['Kalimantan Selatan'] },
+  { name: 'South Sulawesi',          code: 'ID-SN', countryCode: 'ID', capital: 'Makassar',       capitalCoords: [-5.1477, 119.4327], aliases: ['Sulawesi Selatan'] },
+  { name: 'South Sumatra',           code: 'ID-SS', countryCode: 'ID', capital: 'Palembang',      capitalCoords: [-2.9761, 104.7754], aliases: ['Sumatera Selatan'] },
+  { name: 'Southeast Sulawesi',      code: 'ID-SG', countryCode: 'ID', capital: 'Kendari',        capitalCoords: [-3.9985, 122.5127], aliases: ['Sulawesi Tenggara'] },
+  { name: 'Yogyakarta',              code: 'ID-YO', countryCode: 'ID', capital: 'Yogyakarta',     capitalCoords: [-7.7956, 110.3695], aliases: ['Special Region of Yogyakarta', 'DI Yogyakarta'] },
+  { name: 'West Java',               code: 'ID-JB', countryCode: 'ID', capital: 'Bandung',        capitalCoords: [-6.9175, 107.6191], aliases: ['Jawa Barat'] },
+  { name: 'West Kalimantan',         code: 'ID-KB', countryCode: 'ID', capital: 'Pontianak',      capitalCoords: [-0.0263, 109.3425], aliases: ['Kalimantan Barat'] },
+  { name: 'West Nusa Tenggara',      code: 'ID-NB', countryCode: 'ID', capital: 'Mataram',        capitalCoords: [-8.5833, 116.1167], aliases: ['Nusa Tenggara Barat'] },
+  { name: 'West Papua',              code: 'ID-PB', countryCode: 'ID', capital: 'Manokwari',      capitalCoords: [-0.8615, 134.062] },
+  { name: 'West Sulawesi',           code: 'ID-SR', countryCode: 'ID', capital: 'Mamuju',         capitalCoords: [-2.6748, 118.8885], aliases: ['Sulawesi Barat'] },
+  { name: 'West Sumatra',            code: 'ID-SB', countryCode: 'ID', capital: 'Padang',         capitalCoords: [-0.9471, 100.4172], aliases: ['Sumatera Barat'] },
+
+  // --- Nigeria (36 states + Federal Capital Territory) ---
+  // Self-hosted GeoJSON (geoBoundaries ADM1). The GeoJSON labels the FCT
+  // "Abuja Federal Capital Territory"; canonical here is "Federal Capital
+  // Territory" with "Abuja" / "FCT" aliases.
+  { name: 'Abia',                      code: 'NG-AB', countryCode: 'NG', capital: 'Umuahia',       capitalCoords: [5.5249, 7.4942] },
+  { name: 'Adamawa',                   code: 'NG-AD', countryCode: 'NG', capital: 'Yola',          capitalCoords: [9.2035, 12.4954] },
+  { name: 'Akwa Ibom',                 code: 'NG-AK', countryCode: 'NG', capital: 'Uyo',           capitalCoords: [5.0377, 7.9128] },
+  { name: 'Anambra',                   code: 'NG-AN', countryCode: 'NG', capital: 'Awka',          capitalCoords: [6.2107, 7.0747] },
+  { name: 'Bauchi',                    code: 'NG-BA', countryCode: 'NG', capital: 'Bauchi',        capitalCoords: [10.3103, 9.8439] },
+  { name: 'Bayelsa',                   code: 'NG-BY', countryCode: 'NG', capital: 'Yenagoa',       capitalCoords: [4.9267, 6.2676] },
+  { name: 'Benue',                     code: 'NG-BE', countryCode: 'NG', capital: 'Makurdi',       capitalCoords: [7.7322, 8.5391] },
+  { name: 'Borno',                     code: 'NG-BO', countryCode: 'NG', capital: 'Maiduguri',     capitalCoords: [11.8311, 13.151] },
+  { name: 'Cross River',               code: 'NG-CR', countryCode: 'NG', capital: 'Calabar',       capitalCoords: [4.9757, 8.3417] },
+  { name: 'Delta',                     code: 'NG-DE', countryCode: 'NG', capital: 'Asaba',         capitalCoords: [6.1986, 6.7272] },
+  { name: 'Ebonyi',                    code: 'NG-EB', countryCode: 'NG', capital: 'Abakaliki',     capitalCoords: [6.3249, 8.1137] },
+  { name: 'Edo',                       code: 'NG-ED', countryCode: 'NG', capital: 'Benin City',    capitalCoords: [6.335, 5.6037] },
+  { name: 'Ekiti',                     code: 'NG-EK', countryCode: 'NG', capital: 'Ado-Ekiti',     capitalCoords: [7.6211, 5.2214] },
+  { name: 'Enugu',                     code: 'NG-EN', countryCode: 'NG', capital: 'Enugu',         capitalCoords: [6.5244, 7.5186] },
+  { name: 'Federal Capital Territory', code: 'NG-FC', countryCode: 'NG', capital: 'Abuja',         capitalCoords: [9.0765, 7.3986], aliases: ['Abuja Federal Capital Territory', 'Abuja', 'FCT'] },
+  { name: 'Gombe',                     code: 'NG-GO', countryCode: 'NG', capital: 'Gombe',         capitalCoords: [10.2897, 11.1689] },
+  { name: 'Imo',                       code: 'NG-IM', countryCode: 'NG', capital: 'Owerri',        capitalCoords: [5.4836, 7.0332] },
+  { name: 'Jigawa',                    code: 'NG-JI', countryCode: 'NG', capital: 'Dutse',         capitalCoords: [11.7566, 9.3386] },
+  { name: 'Kaduna',                    code: 'NG-KD', countryCode: 'NG', capital: 'Kaduna',        capitalCoords: [10.5222, 7.4383] },
+  { name: 'Kano',                      code: 'NG-KN', countryCode: 'NG', capital: 'Kano',          capitalCoords: [12.0022, 8.592] },
+  { name: 'Katsina',                   code: 'NG-KT', countryCode: 'NG', capital: 'Katsina',       capitalCoords: [12.9908, 7.6018] },
+  { name: 'Kebbi',                     code: 'NG-KE', countryCode: 'NG', capital: 'Birnin Kebbi',  capitalCoords: [12.4539, 4.1975] },
+  { name: 'Kogi',                      code: 'NG-KO', countryCode: 'NG', capital: 'Lokoja',        capitalCoords: [7.7969, 6.7405] },
+  { name: 'Kwara',                     code: 'NG-KW', countryCode: 'NG', capital: 'Ilorin',        capitalCoords: [8.4799, 4.5418] },
+  { name: 'Lagos',                     code: 'NG-LA', countryCode: 'NG', capital: 'Ikeja',         capitalCoords: [6.6018, 3.3515] },
+  { name: 'Nasarawa',                  code: 'NG-NA', countryCode: 'NG', capital: 'Lafia',         capitalCoords: [8.4939, 8.5158], aliases: ['Nassarawa'] },
+  { name: 'Niger',                     code: 'NG-NI', countryCode: 'NG', capital: 'Minna',         capitalCoords: [9.6139, 6.5569] },
+  { name: 'Ogun',                      code: 'NG-OG', countryCode: 'NG', capital: 'Abeokuta',      capitalCoords: [7.1557, 3.3451] },
+  { name: 'Ondo',                      code: 'NG-ON', countryCode: 'NG', capital: 'Akure',         capitalCoords: [7.2508, 5.2103] },
+  { name: 'Osun',                      code: 'NG-OS', countryCode: 'NG', capital: 'Osogbo',        capitalCoords: [7.7669, 4.5566], aliases: ['Oshogbo'] },
+  { name: 'Oyo',                       code: 'NG-OY', countryCode: 'NG', capital: 'Ibadan',        capitalCoords: [7.3775, 3.947] },
+  { name: 'Plateau',                   code: 'NG-PL', countryCode: 'NG', capital: 'Jos',           capitalCoords: [9.8965, 8.8583] },
+  { name: 'Rivers',                    code: 'NG-RI', countryCode: 'NG', capital: 'Port Harcourt', capitalCoords: [4.8156, 7.0498] },
+  { name: 'Sokoto',                    code: 'NG-SO', countryCode: 'NG', capital: 'Sokoto',        capitalCoords: [13.0059, 5.2476] },
+  { name: 'Taraba',                    code: 'NG-TA', countryCode: 'NG', capital: 'Jalingo',       capitalCoords: [8.8833, 11.3667] },
+  { name: 'Yobe',                      code: 'NG-YO', countryCode: 'NG', capital: 'Damaturu',      capitalCoords: [11.7479, 11.9608] },
+  { name: 'Zamfara',                   code: 'NG-ZA', countryCode: 'NG', capital: 'Gusau',         capitalCoords: [12.1628, 6.6614] },
+
+  // --- South Africa (9 provinces) ---
+  // Self-hosted GeoJSON (geoBoundaries ADM1). NOTE the source misspells
+  // "Northern Cape" as "Nothern Cape"; the misspelling is kept as an alias so
+  // the feature still resolves. Capitals are the provincial (not national) seats.
+  { name: 'Eastern Cape',  code: 'ZA-EC',  countryCode: 'ZA', capital: 'Bhisho',           capitalCoords: [-32.847, 27.4424], aliases: ['Bisho'] },
+  { name: 'Free State',    code: 'ZA-FS',  countryCode: 'ZA', capital: 'Bloemfontein',     capitalCoords: [-29.0852, 26.1596] },
+  { name: 'Gauteng',       code: 'ZA-GP',  countryCode: 'ZA', capital: 'Johannesburg',     capitalCoords: [-26.2041, 28.0473] },
+  { name: 'KwaZulu-Natal', code: 'ZA-KZN', countryCode: 'ZA', capital: 'Pietermaritzburg', capitalCoords: [-29.6006, 30.3794] },
+  { name: 'Limpopo',       code: 'ZA-LP',  countryCode: 'ZA', capital: 'Polokwane',        capitalCoords: [-23.9045, 29.4689] },
+  { name: 'Mpumalanga',    code: 'ZA-MP',  countryCode: 'ZA', capital: 'Mbombela',         capitalCoords: [-25.4658, 30.9853], aliases: ['Nelspruit'] },
+  { name: 'North West',    code: 'ZA-NW',  countryCode: 'ZA', capital: 'Mahikeng',         capitalCoords: [-25.8652, 25.6442], aliases: ['Mafikeng'] },
+  { name: 'Northern Cape', code: 'ZA-NC',  countryCode: 'ZA', capital: 'Kimberley',        capitalCoords: [-28.7282, 24.7499], aliases: ['Nothern Cape'] },
+  { name: 'Western Cape',  code: 'ZA-WC',  countryCode: 'ZA', capital: 'Cape Town',        capitalCoords: [-33.9249, 18.4241] },
 ]
 
 // Parent countries supported by the States Quiz. The order here doesn't
@@ -226,6 +389,11 @@ export const STATES_COUNTRIES = [
   { code: 'BR', label: 'Brazil' },
   { code: 'AU', label: 'Australia' },
   { code: 'PH', label: 'Philippines' },
+  { code: 'IN', label: 'India' },
+  { code: 'MY', label: 'Malaysia' },
+  { code: 'ID', label: 'Indonesia' },
+  { code: 'NG', label: 'Nigeria' },
+  { code: 'ZA', label: 'South Africa' },
 ]
 
 export const STATES_COUNTRY_CODES = STATES_COUNTRIES.map((c) => c.code)

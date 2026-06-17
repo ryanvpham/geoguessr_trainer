@@ -20,6 +20,14 @@ import { normalizeString } from '../utils/answerValidation'
 //   - PH: 17 administrative regions, dissolved from the Natural Earth admin-1
 //         provinces (which give 118 features grouped into 17 regions).
 //         Self-hosted for the same CDN-size reason as Argentina.
+//   - IN: 35 states/UTs (click_that_hood). Boundaries predate the 2019/2020
+//         reorganizations — see the block notes in src/data/states.js.
+//   - MY: 13 states + KL + Putrajaya (click_that_hood; no Labuan in the file)
+//   - ID: 34 provinces — self-hosted from geoBoundaries ADM1 (simplified to
+//         tol=0.005°), `shapeName` remapped to `name`. click_that_hood doesn't
+//         ship Indonesia, same reason as Argentina/Philippines.
+//   - NG: 37 (36 states + FCT) — self-hosted from geoBoundaries ADM1.
+//   - ZA: 9 provinces — self-hosted from geoBoundaries ADM1.
 const GEO_URLS = {
   US: 'https://cdn.jsdelivr.net/gh/PublicaMundi/MappingAPI@master/data/geojson/us-states.json',
   MX: `${import.meta.env.BASE_URL}data/mexico-states.geojson`,
@@ -28,6 +36,11 @@ const GEO_URLS = {
   AU: 'https://cdn.jsdelivr.net/gh/codeforgermany/click_that_hood@main/public/data/australia.geojson',
   AR: `${import.meta.env.BASE_URL}data/argentina-provinces.geojson`,
   PH: `${import.meta.env.BASE_URL}data/philippines-regions.geojson`,
+  IN: 'https://cdn.jsdelivr.net/gh/codeforgermany/click_that_hood@main/public/data/india.geojson',
+  MY: 'https://cdn.jsdelivr.net/gh/codeforgermany/click_that_hood@main/public/data/malaysia.geojson',
+  ID: `${import.meta.env.BASE_URL}data/indonesia-provinces.geojson`,
+  NG: `${import.meta.env.BASE_URL}data/nigeria-states.geojson`,
+  ZA: `${import.meta.env.BASE_URL}data/south-africa-provinces.geojson`,
 }
 
 // Module-level cache — GeoJSON shouldn't refetch between quiz rounds.
