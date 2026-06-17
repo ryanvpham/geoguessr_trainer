@@ -10,8 +10,8 @@
 //     regions are the natural quiz unit, similar to Brazil/Argentina sizes
 //     and how Filipinos identify location. Codes use the unofficial
 //     "PH-RNN" pattern since regions don't have ISO 3166-2 codes.
-//   - India's 28 states + 7 union territories (per the click_that_hood
-//     GeoJSON, which still has the pre-2019/2020 boundaries — see block notes)
+//   - India's 28 states + 8 union territories (geoBoundaries ADM1, current
+//     boundaries — incl. Arunachal Pradesh, Ladakh, and the merged DNH&DD UT)
 //   - Malaysia's 13 states + KL & Putrajaya federal territories (no Labuan)
 //   - Indonesia's 34 provinces (pre-2022 Papua split)
 //   - Nigeria's 36 states + Federal Capital Territory
@@ -220,46 +220,48 @@ export const allStates = [
   { name: 'Cordillera Administrative Region', code: 'PH-CAR', countryCode: 'PH', capital: 'Baguio',        capitalCoords: [16.4023, 120.5960], aliases: ['CAR', 'Cordillera Region', 'Cordillera'] },
   { name: 'Metro Manila',                     code: 'PH-NCR', countryCode: 'PH', capital: 'Manila',        capitalCoords: [14.5995, 120.9842], aliases: ['NCR', 'National Capital Region'] },
 
-  // --- India (28 states + 7 union territories) ---
-  // GeoJSON (click_that_hood) predates recent reorganizations: it keeps the
-  // pre-2019 unified 'Jammu and Kashmir' (no separate Ladakh), the pre-2020
-  // separate 'Dadra and Nagar Haveli' / 'Daman and Diu' UTs, and labels
-  // Puducherry as 'Pondicherry' — handled via aliases / canonical-name choices.
-  { name: 'Andaman and Nicobar Islands', code: 'IN-AN', countryCode: 'IN', capital: 'Port Blair',         capitalCoords: [11.6234, 92.7265] },
-  { name: 'Andhra Pradesh',              code: 'IN-AP', countryCode: 'IN', capital: 'Amaravati',          capitalCoords: [16.515, 80.518] },
-  { name: 'Assam',                       code: 'IN-AS', countryCode: 'IN', capital: 'Dispur',             capitalCoords: [26.1433, 91.7898] },
-  { name: 'Bihar',                       code: 'IN-BR', countryCode: 'IN', capital: 'Patna',              capitalCoords: [25.5941, 85.1376] },
-  { name: 'Chandigarh',                  code: 'IN-CH', countryCode: 'IN', capital: 'Chandigarh',         capitalCoords: [30.7333, 76.7794] },
-  { name: 'Chhattisgarh',                code: 'IN-CT', countryCode: 'IN', capital: 'Raipur',             capitalCoords: [21.2514, 81.6296] },
-  { name: 'Dadra and Nagar Haveli',      code: 'IN-DN', countryCode: 'IN', capital: 'Silvassa',           capitalCoords: [20.2666, 73.0166] },
-  { name: 'Daman and Diu',               code: 'IN-DD', countryCode: 'IN', capital: 'Daman',              capitalCoords: [20.3974, 72.8328] },
-  { name: 'Delhi',                       code: 'IN-DL', countryCode: 'IN', capital: 'New Delhi',          capitalCoords: [28.6139, 77.209], aliases: ['NCT of Delhi', 'National Capital Territory of Delhi'] },
-  { name: 'Goa',                         code: 'IN-GA', countryCode: 'IN', capital: 'Panaji',             capitalCoords: [15.4909, 73.8278] },
-  { name: 'Gujarat',                     code: 'IN-GJ', countryCode: 'IN', capital: 'Gandhinagar',        capitalCoords: [23.2156, 72.6369] },
-  { name: 'Haryana',                     code: 'IN-HR', countryCode: 'IN', capital: 'Chandigarh',         capitalCoords: [30.7333, 76.7794] },
-  { name: 'Himachal Pradesh',            code: 'IN-HP', countryCode: 'IN', capital: 'Shimla',             capitalCoords: [31.1048, 77.1734] },
-  { name: 'Jammu and Kashmir',           code: 'IN-JK', countryCode: 'IN', capital: 'Srinagar',           capitalCoords: [34.0837, 74.7973], aliases: ['J&K'] },
-  { name: 'Jharkhand',                   code: 'IN-JH', countryCode: 'IN', capital: 'Ranchi',             capitalCoords: [23.3441, 85.3096] },
-  { name: 'Karnataka',                   code: 'IN-KA', countryCode: 'IN', capital: 'Bengaluru',          capitalCoords: [12.9716, 77.5946], aliases: ['Bangalore'] },
-  { name: 'Kerala',                      code: 'IN-KL', countryCode: 'IN', capital: 'Thiruvananthapuram', capitalCoords: [8.5241, 76.9366], aliases: ['Trivandrum'] },
-  { name: 'Lakshadweep',                 code: 'IN-LD', countryCode: 'IN', capital: 'Kavaratti',          capitalCoords: [10.5669, 72.642] },
-  { name: 'Madhya Pradesh',              code: 'IN-MP', countryCode: 'IN', capital: 'Bhopal',             capitalCoords: [23.2599, 77.4126] },
-  { name: 'Maharashtra',                 code: 'IN-MH', countryCode: 'IN', capital: 'Mumbai',             capitalCoords: [19.076, 72.8777], aliases: ['Bombay'] },
-  { name: 'Manipur',                     code: 'IN-MN', countryCode: 'IN', capital: 'Imphal',             capitalCoords: [24.817, 93.9368] },
-  { name: 'Meghalaya',                   code: 'IN-ML', countryCode: 'IN', capital: 'Shillong',           capitalCoords: [25.5788, 91.8933] },
-  { name: 'Mizoram',                     code: 'IN-MZ', countryCode: 'IN', capital: 'Aizawl',             capitalCoords: [23.7271, 92.7176] },
-  { name: 'Nagaland',                    code: 'IN-NL', countryCode: 'IN', capital: 'Kohima',             capitalCoords: [25.6751, 94.1086] },
-  { name: 'Odisha',                      code: 'IN-OR', countryCode: 'IN', capital: 'Bhubaneswar',        capitalCoords: [20.2961, 85.8245], aliases: ['Orissa'] },
-  { name: 'Puducherry',                  code: 'IN-PY', countryCode: 'IN', capital: 'Puducherry',         capitalCoords: [11.9416, 79.8083], aliases: ['Pondicherry'] },
-  { name: 'Punjab',                      code: 'IN-PB', countryCode: 'IN', capital: 'Chandigarh',         capitalCoords: [30.7333, 76.7794] },
-  { name: 'Rajasthan',                   code: 'IN-RJ', countryCode: 'IN', capital: 'Jaipur',             capitalCoords: [26.9124, 75.7873] },
-  { name: 'Sikkim',                      code: 'IN-SK', countryCode: 'IN', capital: 'Gangtok',            capitalCoords: [27.3389, 88.6065] },
-  { name: 'Tamil Nadu',                  code: 'IN-TN', countryCode: 'IN', capital: 'Chennai',            capitalCoords: [13.0827, 80.2707], aliases: ['Madras'] },
-  { name: 'Telangana',                   code: 'IN-TG', countryCode: 'IN', capital: 'Hyderabad',          capitalCoords: [17.385, 78.4867] },
-  { name: 'Tripura',                     code: 'IN-TR', countryCode: 'IN', capital: 'Agartala',           capitalCoords: [23.8315, 91.2868] },
-  { name: 'Uttar Pradesh',               code: 'IN-UP', countryCode: 'IN', capital: 'Lucknow',            capitalCoords: [26.8467, 80.9462] },
-  { name: 'Uttarakhand',                 code: 'IN-UT', countryCode: 'IN', capital: 'Dehradun',           capitalCoords: [30.3165, 78.0322], aliases: ['Uttaranchal'] },
-  { name: 'West Bengal',                 code: 'IN-WB', countryCode: 'IN', capital: 'Kolkata',            capitalCoords: [22.5726, 88.3639], aliases: ['Calcutta'] },
+  // --- India (28 states + 8 union territories) ---
+  // Self-hosted from geoBoundaries ADM1 (current boundaries): includes
+  // Arunachal Pradesh (absent from click_that_hood), Ladakh split from Jammu &
+  // Kashmir (2019), and the merged Dadra & Nagar Haveli and Daman & Diu UT
+  // (2020). geoBoundaries labels carry diacritics (e.g. "Bihār", "Gujarāt")
+  // which normalizeString strips, so the plain canonical names below match.
+  { name: 'Andaman and Nicobar Islands',              code: 'IN-AN', countryCode: 'IN', capital: 'Port Blair',         capitalCoords: [11.6234, 92.7265] },
+  { name: 'Andhra Pradesh',                           code: 'IN-AP', countryCode: 'IN', capital: 'Amaravati',          capitalCoords: [16.515, 80.518] },
+  { name: 'Arunachal Pradesh',                        code: 'IN-AR', countryCode: 'IN', capital: 'Itanagar',           capitalCoords: [27.0844, 93.6053] },
+  { name: 'Assam',                                    code: 'IN-AS', countryCode: 'IN', capital: 'Dispur',             capitalCoords: [26.1433, 91.7898] },
+  { name: 'Bihar',                                    code: 'IN-BR', countryCode: 'IN', capital: 'Patna',              capitalCoords: [25.5941, 85.1376] },
+  { name: 'Chandigarh',                               code: 'IN-CH', countryCode: 'IN', capital: 'Chandigarh',         capitalCoords: [30.7333, 76.7794] },
+  { name: 'Chhattisgarh',                             code: 'IN-CT', countryCode: 'IN', capital: 'Raipur',             capitalCoords: [21.2514, 81.6296] },
+  { name: 'Dadra and Nagar Haveli and Daman and Diu', code: 'IN-DH', countryCode: 'IN', capital: 'Daman',              capitalCoords: [20.3974, 72.8328], aliases: ['Dadra and Nagar Haveli', 'Daman and Diu'] },
+  { name: 'Delhi',                                    code: 'IN-DL', countryCode: 'IN', capital: 'New Delhi',          capitalCoords: [28.6139, 77.209], aliases: ['NCT of Delhi', 'National Capital Territory of Delhi'] },
+  { name: 'Goa',                                      code: 'IN-GA', countryCode: 'IN', capital: 'Panaji',             capitalCoords: [15.4909, 73.8278] },
+  { name: 'Gujarat',                                  code: 'IN-GJ', countryCode: 'IN', capital: 'Gandhinagar',        capitalCoords: [23.2156, 72.6369] },
+  { name: 'Haryana',                                  code: 'IN-HR', countryCode: 'IN', capital: 'Chandigarh',         capitalCoords: [30.7333, 76.7794] },
+  { name: 'Himachal Pradesh',                         code: 'IN-HP', countryCode: 'IN', capital: 'Shimla',             capitalCoords: [31.1048, 77.1734] },
+  { name: 'Jammu and Kashmir',                        code: 'IN-JK', countryCode: 'IN', capital: 'Srinagar',           capitalCoords: [34.0837, 74.7973], aliases: ['J&K'] },
+  { name: 'Jharkhand',                                code: 'IN-JH', countryCode: 'IN', capital: 'Ranchi',             capitalCoords: [23.3441, 85.3096] },
+  { name: 'Karnataka',                                code: 'IN-KA', countryCode: 'IN', capital: 'Bengaluru',          capitalCoords: [12.9716, 77.5946], aliases: ['Bangalore'] },
+  { name: 'Kerala',                                   code: 'IN-KL', countryCode: 'IN', capital: 'Thiruvananthapuram', capitalCoords: [8.5241, 76.9366], aliases: ['Trivandrum'] },
+  { name: 'Ladakh',                                   code: 'IN-LA', countryCode: 'IN', capital: 'Leh',                capitalCoords: [34.1526, 77.577] },
+  { name: 'Lakshadweep',                              code: 'IN-LD', countryCode: 'IN', capital: 'Kavaratti',          capitalCoords: [10.5669, 72.642] },
+  { name: 'Madhya Pradesh',                           code: 'IN-MP', countryCode: 'IN', capital: 'Bhopal',             capitalCoords: [23.2599, 77.4126] },
+  { name: 'Maharashtra',                              code: 'IN-MH', countryCode: 'IN', capital: 'Mumbai',             capitalCoords: [19.076, 72.8777], aliases: ['Bombay'] },
+  { name: 'Manipur',                                  code: 'IN-MN', countryCode: 'IN', capital: 'Imphal',             capitalCoords: [24.817, 93.9368] },
+  { name: 'Meghalaya',                                code: 'IN-ML', countryCode: 'IN', capital: 'Shillong',           capitalCoords: [25.5788, 91.8933] },
+  { name: 'Mizoram',                                  code: 'IN-MZ', countryCode: 'IN', capital: 'Aizawl',             capitalCoords: [23.7271, 92.7176] },
+  { name: 'Nagaland',                                 code: 'IN-NL', countryCode: 'IN', capital: 'Kohima',             capitalCoords: [25.6751, 94.1086] },
+  { name: 'Odisha',                                   code: 'IN-OR', countryCode: 'IN', capital: 'Bhubaneswar',        capitalCoords: [20.2961, 85.8245], aliases: ['Orissa'] },
+  { name: 'Puducherry',                               code: 'IN-PY', countryCode: 'IN', capital: 'Puducherry',         capitalCoords: [11.9416, 79.8083], aliases: ['Pondicherry'] },
+  { name: 'Punjab',                                   code: 'IN-PB', countryCode: 'IN', capital: 'Chandigarh',         capitalCoords: [30.7333, 76.7794] },
+  { name: 'Rajasthan',                                code: 'IN-RJ', countryCode: 'IN', capital: 'Jaipur',             capitalCoords: [26.9124, 75.7873] },
+  { name: 'Sikkim',                                   code: 'IN-SK', countryCode: 'IN', capital: 'Gangtok',            capitalCoords: [27.3389, 88.6065] },
+  { name: 'Tamil Nadu',                               code: 'IN-TN', countryCode: 'IN', capital: 'Chennai',            capitalCoords: [13.0827, 80.2707], aliases: ['Madras'] },
+  { name: 'Telangana',                                code: 'IN-TG', countryCode: 'IN', capital: 'Hyderabad',          capitalCoords: [17.385, 78.4867] },
+  { name: 'Tripura',                                  code: 'IN-TR', countryCode: 'IN', capital: 'Agartala',           capitalCoords: [23.8315, 91.2868] },
+  { name: 'Uttar Pradesh',                            code: 'IN-UP', countryCode: 'IN', capital: 'Lucknow',            capitalCoords: [26.8467, 80.9462] },
+  { name: 'Uttarakhand',                              code: 'IN-UT', countryCode: 'IN', capital: 'Dehradun',           capitalCoords: [30.3165, 78.0322], aliases: ['Uttaranchal'] },
+  { name: 'West Bengal',                              code: 'IN-WB', countryCode: 'IN', capital: 'Kolkata',            capitalCoords: [22.5726, 88.3639], aliases: ['Calcutta'] },
 
   // --- Malaysia (13 states + Kuala Lumpur & Putrajaya federal territories) ---
   // click_that_hood's Malaysia file omits the third federal territory, Labuan,
