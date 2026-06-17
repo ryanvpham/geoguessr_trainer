@@ -24,9 +24,10 @@ import { normalizeString } from '../utils/answerValidation'
 //         boundaries; click_that_hood's India was missing Arunachal Pradesh,
 //         had dated J&K/Dadra-Daman boundaries, and a crude Lakshadweep blob).
 //   - MY: 13 states + KL + Putrajaya (click_that_hood; no Labuan in the file)
-//   - ID: 34 provinces — self-hosted from geoBoundaries ADM1 (simplified to
-//         tol=0.005°), `shapeName` remapped to `name`. click_that_hood doesn't
-//         ship Indonesia, same reason as Argentina/Philippines.
+//   - ID: 38 provinces (current, incl. the 2022 Papua-region split) — self-
+//         hosted. geoBoundaries only has the pre-split 34, so this is sourced
+//         from a 38-province dataset; Indonesian `PROVINSI` labels remapped to
+//         `name`, rings re-oriented CW, simplified to tol=0.005°.
 //   - NG: 37 (36 states + FCT) — self-hosted from geoBoundaries ADM1.
 //   - ZA: 9 provinces — self-hosted from geoBoundaries ADM1.
 const GEO_URLS = {

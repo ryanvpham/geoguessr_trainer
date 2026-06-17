@@ -13,7 +13,7 @@
 //   - India's 28 states + 8 union territories (geoBoundaries ADM1, current
 //     boundaries — incl. Arunachal Pradesh, Ladakh, and the merged DNH&DD UT)
 //   - Malaysia's 13 states + KL & Putrajaya federal territories (no Labuan)
-//   - Indonesia's 34 provinces (pre-2022 Papua split)
+//   - Indonesia's 38 provinces (current, incl. the 2022 Papua-region split)
 //   - Nigeria's 36 states + Federal Capital Territory
 //   - South Africa's 9 provinces
 //
@@ -284,10 +284,11 @@ export const allStates = [
   { name: 'Kuala Lumpur',    code: 'MY-14', countryCode: 'MY', capital: 'Kuala Lumpur',     capitalCoords: [3.139, 101.6869], aliases: ['Federal Territory of Kuala Lumpur'] },
   { name: 'Putrajaya',       code: 'MY-16', countryCode: 'MY', capital: 'Putrajaya',        capitalCoords: [2.9264, 101.6964], aliases: ['Federal Territory of Putrajaya'] },
 
-  // --- Indonesia (34 provinces) ---
-  // Self-hosted GeoJSON (geoBoundaries ADM1, see StatesMap GEO_URLS). Uses the
-  // English province names; Indonesian forms (e.g. "Jawa Tengah") are aliases.
-  // This 34-province set predates the 2022 split of Papua into new provinces.
+  // --- Indonesia (38 provinces) ---
+  // Self-hosted GeoJSON with current (post-2022) provinces, incl. the four
+  // new Papua-region provinces (Central / Highland / South Papua, Southwest
+  // Papua). Source labels are Indonesian (PROVINSI), remapped to name; the
+  // English canonical names below resolve via the Indonesian aliases.
   { name: 'Aceh',                    code: 'ID-AC', countryCode: 'ID', capital: 'Banda Aceh',     capitalCoords: [5.5483, 95.3238] },
   { name: 'Bali',                    code: 'ID-BA', countryCode: 'ID', capital: 'Denpasar',       capitalCoords: [-8.6705, 115.2126] },
   { name: 'Bangka-Belitung Islands', code: 'ID-BB', countryCode: 'ID', capital: 'Pangkal Pinang', capitalCoords: [-2.1316, 106.1169], aliases: ['Kepulauan Bangka Belitung'] },
@@ -295,12 +296,14 @@ export const allStates = [
   { name: 'Bengkulu',                code: 'ID-BE', countryCode: 'ID', capital: 'Bengkulu',       capitalCoords: [-3.8004, 102.2655] },
   { name: 'Central Java',            code: 'ID-JT', countryCode: 'ID', capital: 'Semarang',       capitalCoords: [-6.9667, 110.4167], aliases: ['Jawa Tengah'] },
   { name: 'Central Kalimantan',      code: 'ID-KT', countryCode: 'ID', capital: 'Palangka Raya',  capitalCoords: [-2.2096, 113.9108], aliases: ['Kalimantan Tengah'] },
+  { name: 'Central Papua',           code: 'ID-PT', countryCode: 'ID', capital: 'Nabire',         capitalCoords: [-3.3667, 135.4833], aliases: ['Papua Tengah'] },
   { name: 'Central Sulawesi',        code: 'ID-ST', countryCode: 'ID', capital: 'Palu',           capitalCoords: [-0.8917, 119.8707], aliases: ['Sulawesi Tengah'] },
   { name: 'East Java',               code: 'ID-JI', countryCode: 'ID', capital: 'Surabaya',       capitalCoords: [-7.2575, 112.7521], aliases: ['Jawa Timur'] },
   { name: 'East Kalimantan',         code: 'ID-KI', countryCode: 'ID', capital: 'Samarinda',      capitalCoords: [-0.5022, 117.1536], aliases: ['Kalimantan Timur'] },
   { name: 'East Nusa Tenggara',      code: 'ID-NT', countryCode: 'ID', capital: 'Kupang',         capitalCoords: [-10.1772, 123.607], aliases: ['Nusa Tenggara Timur'] },
   { name: 'Gorontalo',               code: 'ID-GO', countryCode: 'ID', capital: 'Gorontalo',      capitalCoords: [0.5435, 123.0568] },
-  { name: 'Jakarta',                 code: 'ID-JK', countryCode: 'ID', capital: 'Jakarta',        capitalCoords: [-6.2088, 106.8456], aliases: ['Jakarta Special Capital Region', 'DKI Jakarta'] },
+  { name: 'Highland Papua',          code: 'ID-PE', countryCode: 'ID', capital: 'Wamena',         capitalCoords: [-4.0855, 138.9489], aliases: ['Papua Pegunungan'] },
+  { name: 'Jakarta',                 code: 'ID-JK', countryCode: 'ID', capital: 'Jakarta',        capitalCoords: [-6.2088, 106.8456], aliases: ['DKI Jakarta', 'Jakarta Special Capital Region'] },
   { name: 'Jambi',                   code: 'ID-JA', countryCode: 'ID', capital: 'Jambi',          capitalCoords: [-1.6101, 103.6131] },
   { name: 'Lampung',                 code: 'ID-LA', countryCode: 'ID', capital: 'Bandar Lampung', capitalCoords: [-5.3971, 105.2668] },
   { name: 'Maluku',                  code: 'ID-MA', countryCode: 'ID', capital: 'Ambon',          capitalCoords: [-3.6954, 128.1814] },
@@ -312,16 +315,18 @@ export const allStates = [
   { name: 'Riau',                    code: 'ID-RI', countryCode: 'ID', capital: 'Pekanbaru',      capitalCoords: [0.5071, 101.4478] },
   { name: 'Riau Islands',            code: 'ID-KR', countryCode: 'ID', capital: 'Tanjung Pinang', capitalCoords: [0.9186, 104.4555], aliases: ['Kepulauan Riau'] },
   { name: 'South Kalimantan',        code: 'ID-KS', countryCode: 'ID', capital: 'Banjarmasin',    capitalCoords: [-3.3194, 114.5908], aliases: ['Kalimantan Selatan'] },
+  { name: 'South Papua',             code: 'ID-PS', countryCode: 'ID', capital: 'Merauke',        capitalCoords: [-8.4932, 140.4018], aliases: ['Papua Selatan'] },
   { name: 'South Sulawesi',          code: 'ID-SN', countryCode: 'ID', capital: 'Makassar',       capitalCoords: [-5.1477, 119.4327], aliases: ['Sulawesi Selatan'] },
   { name: 'South Sumatra',           code: 'ID-SS', countryCode: 'ID', capital: 'Palembang',      capitalCoords: [-2.9761, 104.7754], aliases: ['Sumatera Selatan'] },
   { name: 'Southeast Sulawesi',      code: 'ID-SG', countryCode: 'ID', capital: 'Kendari',        capitalCoords: [-3.9985, 122.5127], aliases: ['Sulawesi Tenggara'] },
-  { name: 'Yogyakarta',              code: 'ID-YO', countryCode: 'ID', capital: 'Yogyakarta',     capitalCoords: [-7.7956, 110.3695], aliases: ['Special Region of Yogyakarta', 'DI Yogyakarta'] },
+  { name: 'Southwest Papua',         code: 'ID-PD', countryCode: 'ID', capital: 'Sorong',         capitalCoords: [-0.8762, 131.2558], aliases: ['Papua Barat Daya'] },
   { name: 'West Java',               code: 'ID-JB', countryCode: 'ID', capital: 'Bandung',        capitalCoords: [-6.9175, 107.6191], aliases: ['Jawa Barat'] },
   { name: 'West Kalimantan',         code: 'ID-KB', countryCode: 'ID', capital: 'Pontianak',      capitalCoords: [-0.0263, 109.3425], aliases: ['Kalimantan Barat'] },
   { name: 'West Nusa Tenggara',      code: 'ID-NB', countryCode: 'ID', capital: 'Mataram',        capitalCoords: [-8.5833, 116.1167], aliases: ['Nusa Tenggara Barat'] },
-  { name: 'West Papua',              code: 'ID-PB', countryCode: 'ID', capital: 'Manokwari',      capitalCoords: [-0.8615, 134.062] },
+  { name: 'West Papua',              code: 'ID-PB', countryCode: 'ID', capital: 'Manokwari',      capitalCoords: [-0.8615, 134.062], aliases: ['Papua Barat'] },
   { name: 'West Sulawesi',           code: 'ID-SR', countryCode: 'ID', capital: 'Mamuju',         capitalCoords: [-2.6748, 118.8885], aliases: ['Sulawesi Barat'] },
   { name: 'West Sumatra',            code: 'ID-SB', countryCode: 'ID', capital: 'Padang',         capitalCoords: [-0.9471, 100.4172], aliases: ['Sumatera Barat'] },
+  { name: 'Yogyakarta',              code: 'ID-YO', countryCode: 'ID', capital: 'Yogyakarta',     capitalCoords: [-7.7956, 110.3695], aliases: ['Daerah Istimewa Yogyakarta', 'Special Region of Yogyakarta', 'DI Yogyakarta'] },
 
   // --- Nigeria (36 states + Federal Capital Territory) ---
   // Self-hosted GeoJSON (geoBoundaries ADM1). The GeoJSON labels the FCT
