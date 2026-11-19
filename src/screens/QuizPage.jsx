@@ -8,20 +8,41 @@ import Seo from '../seo/Seo'
 // never renders (or imports) during prerender.
 const GameScreen = lazy(() => import('../components/GameScreen'))
 
+// Last-used settings per gameMode, so leaving a quiz and coming back to the same
+// mode restores the user's previous choices. Module-level (in-memory) on purpose:
+// it survives client-side navigation but starts empty on a fresh page load, so
+// the first render always matches the prerendered defaults — reading
+// localStorage in the initializer would cause a hydration mismatch.
+const savedSettings = new Map()
+
 // One generic page for every quiz mode (see src/quizModes.js). Holds the mode's
 // settings + a `started` flag, renders the mode's settings screen, then swaps to
 // the game on Start. Back from either returns to the menu.
 function QuizPage({ mode }) {
   const { gameMode, Settings, defaultSettings, meta } = mode
   const navigate = useNavigate()
-  const [settings, setSettings] = useState(defaultSettings)
+  const [settings, setSettings] = useState(() => savedSettings.get(gameMode) ?? defaultSettings)
+  const updateSettings = (next) => {
+    savedSettings.set(gameMode, next)
+    setSettings(next)
+  }
   const [started, setStarted] = useState(false)
+  // Bumped by GameScreen's Restart button. Keying GameScreen on it remounts the
+  // game with fresh state (same settings), so restart can't drift out of sync
+  // with GameScreen's own initialisation.
+  const [runId, setRunId] = useState(0)
   const goHome = () => navigate('/')
 
   if (started) {
     return (
       <Suspense fallback={null}>
-        <GameScreen gameMode={gameMode} settings={settings} onBack={goHome} />
+        <GameScreen
+          key={runId}
+          gameMode={gameMode}
+          settings={settings}
+          onBack={goHome}
+          onRestart={() => setRunId(id => id + 1)}
+        />
       </Suspense>
     )
   }
@@ -31,7 +52,7 @@ function QuizPage({ mode }) {
       <Seo {...meta} />
       <Settings
         settings={settings}
-        onSettingsChange={setSettings}
+        onSettingsChange={updateSettings}
         onBack={goHome}
         onStart={() => setStarted(true)}
       />
