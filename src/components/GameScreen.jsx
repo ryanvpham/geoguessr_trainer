@@ -6,6 +6,7 @@ import QuestionDisplay from './QuestionDisplay'
 import AnswerInput from './AnswerInput'
 import Feedback from './Feedback'
 import RoundSummary from './RoundSummary'
+import GameMenu from './GameMenu'
 
 // Per-mode display strings: header title plus the singular/plural item word
 // used in round-complete and end-of-game feedback messages.
@@ -16,7 +17,7 @@ const MODE_INFO = {
   stateCapital: { title: 'State & Province Capitals Quiz',  singular: 'capital', plural: 'capitals'  },
 }
 
-function GameScreen({ gameMode, settings, onBack }) {
+function GameScreen({ gameMode, settings, onBack, onRestart }) {
   const [countries, setCountries] = useState([])
   const [currentCountry, setCurrentCountry] = useState(null)
   const [correctCount, setCorrectCount] = useState(0)
@@ -316,7 +317,7 @@ function GameScreen({ gameMode, settings, onBack }) {
   return (
     <div className="screen">
       <header className="game-header">
-        <button className="back-arrow-btn" onClick={onBack} aria-label="Back to menu">←</button>
+        <GameMenu onMainMenu={onBack} onRestart={onRestart} />
         <h1 id="game-title">{gameTitle}</h1>
         <div className="score-badge" aria-label={`Score ${correctCount} of ${totalSeen}, ${percentage}%`}>
           <span>Round <span className="round-num">{currentRound}</span></span>
@@ -361,6 +362,12 @@ function GameScreen({ gameMode, settings, onBack }) {
         {showNext && (
           <button className="next-btn" onClick={handleNext}>
             {nextButtonText}
+          </button>
+        )}
+
+        {showNext && nextButtonText !== 'Next Question' && (
+          <button className="restart-quiz-btn" onClick={onRestart}>
+            Restart Quiz
           </button>
         )}
       </main>

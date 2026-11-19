@@ -176,6 +176,56 @@ header h1 {
   border-color: var(--border-strong);
 }
 
+/* ---------- In-game hamburger menu ---------- */
+.game-menu {
+  position: relative;
+}
+
+.hamburger {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 16px;
+  height: 12px;
+}
+.hamburger span {
+  display: block;
+  height: 2px;
+  border-radius: 1px;
+  background: currentColor;
+}
+
+.game-menu-list {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 20;
+  min-width: 160px;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+}
+.game-menu-list button {
+  padding: 10px 12px;
+  text-align: left;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--ink);
+  background: none;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.game-menu-list button:hover,
+.game-menu-list button:focus-visible {
+  background: var(--surface-hover);
+}
+
 /* ---------- Menu (landing) ---------- */
 .menu-hero {
   text-align: center;
@@ -526,6 +576,27 @@ header h1 {
 
 .next-btn {
   margin-top: 14px;
+}
+
+.restart-quiz-btn {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 12px 22px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-family: inherit;
+  color: var(--ink-soft);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.restart-quiz-btn:hover {
+  background: var(--surface-hover);
+  color: var(--ink);
+  border-color: var(--border-strong);
 }
 
 /* ---------- Game screen ---------- */
